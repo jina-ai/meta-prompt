@@ -1,0 +1,4 @@
+[
+  "Generate a js script that creates embeddings out of the numbers 1 to 100 (in text form).",
+  "Generate a js script that re-ranks the words Jina, Weaviate, OpenAI, Hugging Face, Qdrant for the query 'Future of AI'."
+]
