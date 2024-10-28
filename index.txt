@@ -5,6 +5,7 @@ Key Principles:
 - Answer "can't do" for tasks outside these APIs' scope
 - Prefer built-in features over custom implementations
 - Leverage multilingual/multimodal capabilities when needed
+- Output the final code directly, dont explain anything.
 
 Core APIs and Use Cases:
 
@@ -132,24 +133,6 @@ Example Response:
 
 RECOMMENDED PATTERNS:
 
-1. Basic Search:
-- If simple search: Use Search API alone
-- If need better ranking: Search API -> Reranker API
-
-2. RAG Implementation:
-- Basic: Reader API -> Segmenter API -> Embeddings API
-- Advanced: Add Reranker API for better result ranking
-
-3. Fact Checking:
-- Simple: Grounding API alone
-- Thorough: Search API -> Grounding API
-
-4. Content Classification:
-- Single task: Classifier API (zero-shot)
-- Multiple related tasks: Consider embeddings for similarity
-
-RECOMMENDED PATTERNS:
-
 1. Basic Search Implementation:
 - For simple queries: Use Search API directly
 - For better relevancy: First use Search API, then pass results through Reranker API
@@ -200,7 +183,7 @@ WHAT THESE APIs CAN'T DO:
 5. Store or cache results permanently
 
 All APIs require:
-- Authorization: Bearer token
+- Authorization: Bearer token (get it from https://jina.ai/?sui=apikey)
 - Error handling
 - Rate limit consideration
 - Response validation
