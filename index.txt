@@ -17,6 +17,22 @@ Example Request:
     "task": "text-matching",
     "input": ["search query", "document text"]
 }
+Example Response:
+{
+  "model": "jina-embeddings-v3",
+  "object": "list",
+  "usage": {
+    "total_tokens": 410,
+    "prompt_tokens": 410
+  },
+  "data": [
+    {
+      "object": "embedding",
+      "index": 0,
+      "embedding": [0.0086874915, 0.10442207, ...]
+    }
+  ]
+}
 
 2. RERANKER API (https://api.jina.ai/v1/rerank)
 Purpose: Improve search result relevancy
@@ -27,18 +43,49 @@ Example Request:
     "query": "search query",
     "documents": ["candidate1", "candidate2"]
 }
+Example Response:
+{
+  "model": "jina-reranker-v2-base-multilingual",
+  "usage": {
+    "total_tokens": 815,
+    "prompt_tokens": 815
+  },
+  "results": [
+    {
+      "index": 0,
+      "document": {
+        "text": "Organic skincare for sensitive skin with aloe vera and chamomile..."
+      },
+      "relevance_score": 0.8783142566680908
+    }
+  ]
+}
 
 3. READER API (https://r.jina.ai)
 Purpose: Convert URLs to LLM-friendly text
 Best for: Web content extraction, RAG input preparation
+Example Response:
+Title: Example Domain
+URL Source: https://example.com/
+Markdown Content:
+This domain is for use in illustrative examples in documents...
 
 4. SEARCH API (https://s.jina.ai)
 Purpose: Web search with LLM-friendly results
 Best for: Knowledge retrieval, RAG source gathering
+Example Response:
+[1] Title: Jina AI - Your Search Foundation, Supercharged.
+[1] URL Source: https://jina.ai/
+[1] Description: Our frontier models form the search foundation...
+[1] Markdown Content: Jina AI - Your Search Foundation, Supercharged.
 
 5. GROUNDING API (https://g.jina.ai)
 Purpose: Ground statements with web knowledge
 Best for: Fact verification, claim validation
+Example Response:
+Title: Example Domain
+URL Source: https://example.com/
+Markdown Content: [Fact verification results...]
 
 6. CLASSIFIER API (https://api.jina.ai/v1/classify)
 Purpose: Zero-shot/few-shot classification
@@ -49,10 +96,39 @@ Example Request:
     "input": [{"text": "content"}],
     "labels": ["category1", "category2"]
 }
+Example Response:
+{
+  "usage": {
+    "total_tokens": 196,
+    "prompt_tokens": 196
+  },
+  "data": [
+    {
+      "object": "classification",
+      "index": 0,
+      "prediction": "Simple task",
+      "score": 0.35216382145881653
+    }
+  ]
+}
 
 7. SEGMENTER API (https://segment.jina.ai)
 Purpose: Tokenize and segment long text
 Best for: Breaking down documents into manageable chunks
+Example Response:
+{
+  "num_tokens": 78,
+  "tokenizer": "cl100k_base",
+  "usage": {"tokens": 0},
+  "num_chunks": 4,
+  "chunk_positions": [[3,55], [55,93], [93,110], [110,135]],
+  "chunks": [
+    "Jina AI: Your Search Foundation, Supercharged! 🚀\n  ",
+    "Ihrer Suchgrundlage, aufgeladen! 🚀\n  ",
+    "您的搜索底座，从此不同！🚀\n  ",
+    "検索ベース,もう二度と同じことはありません！🚀\n"
+  ]
+}
 
 RECOMMENDED PATTERNS:
 
