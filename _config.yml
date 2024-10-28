@@ -1,0 +1,10 @@
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: null
+defaults:
+  - scope:
+      path: "**.txt"
+    values:
+      content_type: text/plain
