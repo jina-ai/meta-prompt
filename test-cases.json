@@ -1,5 +1,6 @@
 [
   "Generate a js script that creates embeddings out of the numbers 1 to 100 (in text form).",
   "Generate a js script that re-ranks the words Jina, Weaviate, OpenAI, Hugging Face, Qdrant for the query 'Future of AI'.",
-  "write the full code that embed every sentence from https://news.ycombinator.com/newest and store the embedding into a numpy array."
+  "write the full code that embed every sentence from https://news.ycombinator.com/newest and store the embedding into a numpy array.",
+  "Ground the following shor statement on bbc.com 'The UK government has announced a new law that will require social media companies to verify the age of their users.'"
 ]
