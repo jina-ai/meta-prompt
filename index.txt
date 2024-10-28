@@ -63,8 +63,8 @@ Example Response:
 }
 
 3. READER API (https://r.jina.ai)
-Purpose: Convert URLs to LLM-friendly text
-Best for: Web content extraction, RAG input preparation
+Purpose: Convert URLs to LLM-friendly text (basically a markdown)
+Best for: Web scraping, web content extraction, RAG input preparation
 Example Response:
 Title: Example Domain
 URL Source: https://example.com/
