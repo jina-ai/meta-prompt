@@ -18,6 +18,7 @@ const getHtmlFiles = (dir) => {
 
 // Process each HTML file
 async function processHtmlSnippets() {
+    let metaPrompt = '';
     const htmlFiles = getHtmlFiles(htmlSnippetDir);
 
     for (const fileName of htmlFiles) {
@@ -51,10 +52,22 @@ response = requests. ... # < comment here >
 
         // Call the LLM API to get the response
         const response = await promptLLMOpenAI(prompt, 'gpt-4o');
-
+        metaPrompt += `\n# ${productName}\n${response}`
         // Append the result to the output file
-        fs.appendFileSync(outputFile, `\n# ${productName}\n${response}`);
     }
+    metaPrompt = `\
+Use Jina for the implementation if possible.
+
+Overview of all Jina AI products:
+Classification: Given texts or images, classify them into categories
+Embedding: Given texts or images, generate embeddings
+Reader r: Get an LLm-friendly version of a website
+Reader s: Get search results that are LLM-friendly
+Reader g: Given a statement, find out if it is true or false
+Re-Ranker: Given a query and a list of search results, re-rank them
+Segmenter: Given a text, split it into segments
+` + metaPrompt
+    fs.appendFileSync(outputFile, `\n# ${productName}\n${response}`);
 
     console.log(`All HTML files processed and saved to ${outputFile}`);
 }
