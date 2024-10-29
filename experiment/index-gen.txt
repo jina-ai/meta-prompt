@@ -1,14 +1,116 @@
 
-# classifier
+# classifier-text-image
 ## request
 ```python
-endpoint = "https://api.jina.ai/v1/classify" # The base URL of the API endpoint, required, no default value.
+endpoint = "https://api.jina.ai/v1/classify" # The API endpoint to call for classification. Required. No default.
+
+# Headers for the request
 headers = {
-    "Content-Type": "application/json", # Indicates the media type of the resource, required, default value: "application/json".
-    "Authorization": "Bearer jina_ad42b3eb889c44db9f2190ec851c68c9o5LJmW9Glf5wP-V3JOweluX9WAE2" # The credentials to authenticate a user agent with a server, required, no default value.
-} 
+    "Content-Type": "application/json", # Specifies the format of the data being sent. Required. Default is None. Only value is "application/json".
+    "Authorization": "Bearer jina_ad42b3eb889c44db9f2190ec851c68c9o5LJmW9Glf5wP-V3JOweluX9WAE2" # For authenticating API requests. Required. Default is None. Format must be "Bearer [token]".
+}
+
+# Data payload for POST request, in dictionary format
 data = {
-    "model": "jina-embeddings-v3", # The model to be used for classification, required, no default value, possible values: model names provided by the API.
+    "model": "jina-clip-v1", # Specifies the classifier or embedding model to use for classification. Required. Default is None. Possible values depend on the API's supported models.
+    "input": [ # List of items to classify. Required. Default is an empty list. Each item must be a dictionary with either "text" or "image" key.
+        {
+            "text": "A sleek smartphone with a high-resolution display and multiple camera lenses" # Text to classify. Optional if "image" is provided. No default value.
+        },
+        {
+            "text": "Fresh sushi rolls served on a wooden board with wasabi and ginger" # Another text input example.
+        },
+        {
+            "image": "https://picsum.photos/id/11/367/267" # URL of an image to classify. Optional if "text" is provided. No default value. Can also be base64-encoded image data.
+        },
+        {
+            "image": "https://picsum.photos/id/22/367/267" # Another image URL example.
+        },
+        {
+            "text": "Vibrant autumn leaves in a dense forest with sunlight filtering through" # Additional text example.
+        },
+        {
+            "image": "https://picsum.photos/id/8/367/267" # Additional image URL example.
+        }
+    ],
+    "labels": [ # Candidate labels for classification. Required. Default is an empty list. The list can contain up to 256 labels.
+        "Technology and Gadgets",
+        "Food and Dining",
+        "Nature and Outdoors",
+        "Urban and Architecture"
+    ]
+}
+
+# Making a POST request
+response = requests.post(endpoint, headers=headers, json=data) # Sends a request to the API endpoint using the prepared headers and data. The API response will be stored in `response`.
+```
+
+## response
+```json
+{
+  "usage": {
+    "total_tokens": 12065 # Total number of tokens processed in the request. Helps keep track of usage based on the text and image inputs provided.
+  },
+  "data": [
+    {
+      "object": "classification", # Type of the API response object. Indicates that this is a classification response.
+      "index": 0, # The index of the input item in the request's input list that this result corresponds to.
+      "prediction": "Technology and Gadgets", # The top classification label predicted for the input item.
+      "score": 0.30329811573028564, # The confidence score for the top prediction.
+      "predictions": [ # Detailed list of predictions including their labels and respective scores.
+        {
+          "label": "Technology and Gadgets",
+          "score": 0.30329811573028564
+        },
+        {
+          "label": "Food and Dining",
+          "score": 0.22840788960456848
+        },
+        {
+          "label": "Nature and Outdoors",
+          "score": 0.2357397824525833
+        },
+        {
+          "label": "Urban and Architecture",
+          "score": 0.23255419731140137
+        }
+      ]
+    },
+    {
+      "index": 1,
+      "prediction": "Food and Dining",
+      "score": 0.2765541970729828,
+      "predictions": [
+        {
+          "label": "Technology and Gadgets",
+          "score": 0.2461480349302292
+        },
+        { "label": "Food and Dining", "score": 0.2765541970729828 },
+        { "label": "Nature and Outdoors", "score": 0.2472768872976303 },
+        { "label": "Urban and Architecture", "score": 0.23002085089683533 }
+      ]
+    },
+    {
+      "index": 2,
+      "prediction": "Nature and Outdoors",
+      "score": 0.29503121972084045
+    },
+    // Additional entries omitted for brevity...
+  ]
+}
+```
+# classifier-text
+## request
+```python
+endpoint = "https://api.jina.ai/v1/classify" # The endpoint URL for the classification service; required, no default value.
+
+headers = {
+    "Content-Type": "application/json", # Indicates the media type of the resource; required, default is application/json.
+    "Authorization": "Bearer jina_ad42b3eb889c44db9f2190ec851c68c9o5LJmW9Glf5wP-V3JOweluX9WAE2" # Provides the authentication token; required, no default value.
+}
+
+data = {
+    "model": "jina-embeddings-v3", # The model used for classification; required, no default value. Possible values: [specific model names].
     "input": [
         "Calculate the compound interest on a principal of $10,000 invested for 5 years at an annual rate of 5%, compounded quarterly.",
         "分析使用CRISPR基因编辑技术在人类胚胎中的伦理影响。考虑潜在的医疗益处和长期社会后果。",
@@ -16,32 +118,32 @@ data = {
         "Erklären Sie die Unterschiede zwischen Merge-Sort und Quicksort-Algorithmen in Bezug auf Zeitkomplexität, Platzkomplexität und Leistung in der Praxis.",
         "Write a poem about the beauty of nature and its healing power on the human soul.",
         "Translate the following sentence into French: The quick brown fox jumps over the lazy dog."
-    ], # The input data to classify, required, no default value.
+    ], # The input data to classify; required, no default value.
     "labels": [
         "Simple task",
         "Complex reasoning",
         "Creative writing"
-    ] # The candidate labels for classification, optional, default value: [], possible values: any string representing a label.
+    ] # The candidate labels for classification; optional, default value is []. It can be up to 256 classes.
 }
-response = requests.post(endpoint, json=data, headers=headers) # Sends a POST request to the specified url.
-```
 
+response = requests.post(endpoint, headers=headers, json=data) # Sends a post request to the classification endpoint.
+```
 ## response
 ```json
 {
   "usage": {
-    "total_tokens": 196 # The total number of tokens/predictions made by the model in this request.
+    "total_tokens": 196 # The total number of tokens processed in the request; required, no default value.
   },
   "data": [
     {
-      "object": "classification", # Indicates the type of object, in this case, a classification.
-      "index": 0, # The index of the input in the original array.
-      "prediction": "Simple task", # The predicted label for the input.
-      "score": 0.35216382145881653, # The confidence score of the prediction.
+      "object": "classification", # Indicates the type of the object; required, default value is "classification".
+      "index": 0, # The index of the input in the batch; required, no default value.
+      "prediction": "Simple task", # The predicted label for the input; required, no default value.
+      "score": 0.35216382145881653, # The confidence score of the prediction; required, no default value.
       "predictions": [
         {
-          "label": "Simple task", # A possible label.
-          "score": 0.35216382145881653 # The score for this label.
+          "label": "Simple task", # The predicted label; required, no default value.
+          "score": 0.35216382145881653 # The confidence score of the label; required, no default value.
         },
         {
           "label": "Complex reasoning",
@@ -51,27 +153,46 @@ response = requests.post(endpoint, json=data, headers=headers) # Sends a POST re
           "label": "Creative writing",
           "score": 0.3065665662288666
         }
-      ] # An array of possible labels and their scores.
+      ] # A list of all label predictions and their scores; required, no default value.
     },
-    ... # Similar structure for other inputs.
-  ]
+    {
+      "object": "classification",
+      "index": 1,
+      "prediction": "Complex reasoning",
+      "score": 0.34310275316238403,
+      "predictions": [
+        {
+          "label": "Simple task",
+          "score": 0.32429200410842896
+        },
+        {
+          "label": "Complex reasoning",
+          "score": 0.34310275316238403
+        },
+        {
+          "label": "Creative writing",
+          "score": 0.3326052129268646
+        }
+      ]
+    },
+    ...
+  ] # A detailed list of classifications for each input; required, no default value.
 }
 ```
 # embeddings
 ## request
-```python
-endpoint = "https://api.jina.ai/v1/embeddings"  # The endpoint URL for embedding requests, required
+endpoint = "https://api.jina.ai/v1/embeddings" # API endpoint URL for embedding requests.
 headers = {
-    "Content-Type": "application/json",  # Indicates the media type of the resource, required
-    "Authorization": "Bearer jina_ad42b3eb889c44db9f2190ec851c68c9o5LJmW9Glf5wP-V3JOweluX9WAE2"  # Token for authentication, required
+    "Content-Type": "application/json", # Required. Specifies the format of the data being sent.
+    "Authorization": "Bearer jina_ad42b3eb889c44db9f2190ec851c68c9o5LJmW9Glf5wP-V3JOweluX9WAE2" # Required. The token used for authorization.
 }
 data = {
-    "model": "jina-embeddings-v3",  # Specifies the embedding model to use, required
-    "task": "text-matching",  # Defines the task for which the embeddings will be optimized, required. Possible values: "text-matching", "text-classification", "text-generation"
-    "dimensions": 1024,  # Sets the dimensionality of the resulting embeddings, required. Must be a positive integer.
-    "late_chunking": False,  # Enables or disables the late chunking feature, optional, default is False
-    "embedding_type": "float",  # Defines the data type of the returned embeddings, optional, default is "float". Possible values: "float", "binary", "base64"
-    "input": [  # The input texts to be embedded, required. Must be a list of strings.
+    "model": "jina-embeddings-v3", # Required. The model ID.
+    "task": "text-matching", # Required. The task for which the embeddings are optimized. Value: "text-matching".
+    "dimensions": 1024, # Optional. The number of dimensions in the resulting embeddings. Default: 1024.
+    "late_chunking": False, # Optional. Whether to apply late chunking technique for long-context embeddings. Default: False. Values: True, False.
+    "embedding_type": "float", # Optional. The data type of the returned embeddings. Default: "float". Values: "float", "binary", "base64".
+    "input": [ # Required. The input texts to get embeddings for.
         "Organic skincare for sensitive skin with aloe vera and chamomile: Imagine the soothing embrace of nature with our organic skincare range, crafted specifically for sensitive skin. Infused with the calming properties of aloe vera and chamomile, each product provides gentle nourishment and protection. Say goodbye to irritation and hello to a glowing, healthy complexion.",
         "Bio-Hautpflege für empfindliche Haut mit Aloe Vera und Kamille: Erleben Sie die wohltuende Wirkung unserer Bio-Hautpflege, speziell für empfindliche Haut entwickelt. Mit den beruhigenden Eigenschaften von Aloe Vera und Kamille pflegen und schützen unsere Produkte Ihre Haut auf natürliche Weise. Verabschieden Sie sich von Hautirritationen und genießen Sie einen strahlenden Teint.",
         "Cuidado de la piel orgánico para piel sensible con aloe vera y manzanilla: Descubre el poder de la naturaleza con nuestra línea de cuidado de la piel orgánico, diseñada especialmente para pieles sensibles. Enriquecidos con aloe vera y manzanilla, estos productos ofrecen una hidratación y protección suave. Despídete de las irritaciones y saluda a una piel radiante y saludable.",
@@ -79,22 +200,21 @@ data = {
         "新しいメイクのトレンドは鮮やかな色と革新的な技術に焦点を当てています: 今シーズンのメイクアップトレンドは、大胆な色彩と革新的な技術に注目しています。ネオンアイライナーからホログラフィックハイライターまで、クリエイティビティを解き放ち、毎回ユニークなルックを演出しましょう。"
     ]
 }
-response = requests.post(endpoint, json=data, headers=headers)  # Sends request to the endpoint, expects JSON response
-```
+response = requests.post(endpoint, json=data, headers=headers) # Sends the request and receives the response.
+
 ## response
-```json
 {
-  "model": "jina-embeddings-v3",  # The model used for generating embeddings
-  "object": "list",  # Indicates the type of response object
+  "model": "jina-embeddings-v3", # The model used for the embedding generation.
+  "object": "list", # The type of the returned object.
   "usage": {
-    "total_tokens": 410,  # Total number of tokens processed
-    "prompt_tokens": 410  # Tokens generated from the input prompts
+    "total_tokens": 410, # The total number of tokens processed.
+    "prompt_tokens": 410 # The number of tokens from the input prompt.
   },
   "data": [
     {
-      "object": "embedding",  # Type of object, here representing an embedding
-      "index": 0,  # Index of the input in the request array
-      "embedding": [0.0086874915, 0.10442207, 0.049341407, -0.09133959, 0.035539553, ...]  # The embedding vector, truncated for brevity
+      "object": "embedding", # Type of the object in the data list.
+      "index": 0, # The index of the input for which this embedding corresponds.
+      "embedding": [0.0086874915, 0.10442207, 0.049341407, -0.09133959, 0.035539553, ...] # The embedding array. Only a portion is shown for brevity.
     },
     {
       "object": "embedding",
@@ -118,38 +238,54 @@ response = requests.post(endpoint, json=data, headers=headers)  # Sends request 
     }
   ]
 }
-```
 # g.reader
 ## request
 ```python
-endpoint = "https://g.jina.ai"  # The API endpoint for grounding. Required. No default value.
-query = "Jina AI was founded in 2020 in Berlin."  # The text to be fact-checked. Required. No default value.
+endpoint = "https://g.jina.ai"  # The endpoint for the grounding API; required.
+
+# Request headers are required for authorization and specifying the response format.
 headers = {
-    "Authorization": "Bearer jina_ad42b3eb889c44db9f2190ec851c68c9o5LJmW9Glf5wP-V3JOweluX9WAE2",  # The API key for authorization. Required. No default value.
-    "Accept": "application/json"  # The format of the response. Required. Default: application/json. Possible values: application/json.
+    "Authorization": "Bearer YOUR_ACCESS_TOKEN",  # Required. Token to authenticate the API request.
+    "Accept": "application/json"  # Required. Specifies the format of the response. The only accepted value is 'application/json'.
 }
-response = requests.get(endpoint, params={"q": query}, headers=headers)  # Sends a GET request. Response is expected in JSON format.
+
+# Query parameters or body content (for POST method) including the statement for fact-checking.
+data = {
+    "query": "Jina AI was founded in 2020 in Berlin.",  # Required. The statement to be grounded or fact-checked.
+    "reference_urls": ["https://www.cbinsights.com/company/jina-ai", "https://www.crunchbase.com/organization/jina-ai"],  # Optional. Default: None. A list of reference URLs to support the grounding process.
+    "use_proxy": False,  # Optional. Default: False. If true, uses a proxy server for the request.
+    "proxy_server": "",  # Optional. Default: "". The proxy server URL if use_proxy is true.
+    "bypass_cache": False,  # Optional. Default: False. If true, bypasses the cached results.
+    "browser_locale": "en-US"  # Optional. Default: "en-US". Sets the locale for the browser used in scraping references.
+}
+
+response = requests.post(endpoint, headers=headers, json=data)  # Sends a POST request to the API endpoint.
 ```
 
 ## response
 ```json
 {
-  "code": 200,  # HTTP status code indicating success. Required. Possible values: 200 OK, 400 Bad Request, 401 Unauthorized, 403 Forbidden, 404 Not Found, 500 Internal Server Error.
-  "status": 20000,  # Custom status code indicating the specific outcome of the request. Required. Possible values vary depending on the API's own documentation.
+  "code": 200,  # The HTTP status code of the response.
+  "status": 20000,  # A more detailed status code specific to the API's internal processing.
   "data": {
-    "factuality": 1,  # The factual score of the provided text. Required. Possible values range from 0 to 1 where 1 indicates high factual accuracy.
-    "result": true,  # The boolean result of the fact-checking. Required. Possible values: true (statement is factual), false (statement is not factual).
-    "reason": "The statement that Jina AI was founded in 2020 in Berlin is supported by multiple references. Several sources confirm that Jina AI was established in February 2020 and is based in Berlin, Germany. The references provide consistent information regarding both the founding year and the location, indicating that the statement is accurate and well-supported by credible sources.",  # Explanation for the factuality assessment. Required. No default value.
+    "factuality": 1,  # The degree of factuality of the statement, ranges from 0 (unlikely true) to 1 (very likely true).
+    "result": true,  # The overall result of the grounding process. True if the statement is supported by references.
+    "reason": "The statement that Jina AI was founded in 2020 in Berlin is supported by multiple references. Several sources confirm that Jina AI was established in February 2020 and is based in Berlin, Germany. The references provide consistent information regarding both the founding year and the location, indicating that the statement is accurate and well-supported by credible sources.",  # A detailed explanation of the result.
     "references": [
       {
-        "url": "https://www.cbinsights.com/company/jina-ai",  # URL of a supporting reference. Required. No default value.
-        "keyQuote": "It was founded in 2020 and is based in Berlin, Germany.",  # A quote from the reference supporting the fact check. Required. No default value.
-        "isSupportive": true  # Indicates if the reference supports the fact check. Required. Possible values: true, false.
+        "url": "https://www.cbinsights.com/company/jina-ai",
+        "keyQuote": "It was founded in 2020 and is based in Berlin, Germany.",
+        "isSupportive": true  # Indicates if the reference supports the original statement.
       },
-      ...  # Other references follow the same format.
+      {
+        "url": "https://www.crunchbase.com/organization/jina-ai",
+        "keyQuote": "It provides an open-source neural search ecosystem for businesses and developers, enabling everyone to search for information in all kinds of data with high availability and scalability. ... Berlin, Berlin, Germany.",
+        "isSupportive": true
+      }
+      # Additional references omitted for brevity.
     ],
     "usage": {
-      "tokens": 8265  # The number of tokens processed for the request. Required. No default value.
+      "tokens": 8265  # The number of tokens used by the request. Important for billing and rate limiting.
     }
   }
 }
@@ -157,154 +293,185 @@ response = requests.get(endpoint, params={"q": query}, headers=headers)  # Sends
 # r.reader
 ## request
 ```python
-endpoint = "https://r.jina.ai"  # Required. The base URL of the Jina Reader API.
-url = "https://example.com/"  # Required. The target URL to fetch and process.
+endpoint = "https://r.jina.ai/https://example.com"  # The URL endpoint for the request; required
 headers = {
-    "Authorization": "Bearer jina_ad42b3eb889c44db9f2190ec851c68c9o5LJmW9Glf5wP-V3JOweluX9WAE2"  # Optional. For authenticated requests.
-}  # Required if authentication is needed. Contains API credentials.
+    "Authorization": "Bearer jina_ad42b3eb889c44db9f2190ec851c68c9o5LJmW9Glf5wP-V3JOweluX9WAE2",  # Authorization token; required
+    "Content-Type": "application/json",  # The content type of the request; required; default value: application/json; possible values: application/json
+    "Accept": "application/json",  # The response format; optional; default value: application/json; possible values: application/json, text/html
+    # Additional adjustable request headers for custom use cases; optional
+    "X-Custom-Header": "Value",  # Custom header; optional; no default value; value is as provided
+}
 params = {
-    "stream": False,  # Optional. Default is False. When True, uses stream mode for large pages.
-    "locale": "en-US",  # Optional. Default is "en-US". Sets the browser locale.
-    "bypass_cache": False,  # Optional. Default is False. When True, bypasses the internal cache.
-    "gather_links": False,  # Optional. Default is False. When True, gathers all links at the page end.
-    "gather_images": False,  # Optional. Default is False. When True, gathers all images at the page end.
-    "use_post": False,  # Optional. Default is False. When True, uses POST method for the request.
-    "json_response": True,  # Optional. Default is False. When True, returns the response in JSON format.
-    "forward_cookie": False,  # Optional. Default is False. When True, forwards custom cookies.
-    "iframe": False,  # Optional. Default is False. Includes the content of iframes.
-    "shadow_dom": False,  # Optional. Default is False. Includes the content of shadow DOM.
-}  # Optional. Contains query parameters to customize the API request.
-
-response = requests.get(endpoint, params=params, headers=headers)  # Sends a GET request with optional parameters and headers.
+    "stream": False,  # Stream mode for large pages; optional; default value: False; possible values: True, False
+    "locale": "en-US",  # Browser locale; optional; default value: en-US; possible values include all valid BCP 47 language tags
+    "timeout": 10,  # Timeout for the webpage loading in seconds; optional; default value: 10; value is integer
+    # Other query parameters for custom use cases; optional
+    "custom_param": "value",  # Custom query parameter; optional; no default value; value is as provided
+}
+response = requests.get(endpoint, headers=headers, params=params)  # The HTTP request to get the response; method can be GET or POST based on the endpoint requirement
 ```
 ## response
 ```python
 {
-    "status": "200 OK",  # Indicates the HTTP status code of the response.
-    "time_taken": "3.3 s",  # Time taken to process the request.
-    "title": "Example Domain",  # The title of the target webpage.
-    "url_source": "https://example.com/",  # The original URL requested.
-    "markdown_content": "This domain is for use in illustrative examples in documents. You may use this domain in literature without prior coordination or asking for permission.\n\n[More information...](https://www.iana.org/domains/example)"  # The main content extracted from the target URL, formatted in Markdown.
+    "status_code": 200,  # The HTTP status code of the response; indicates success (200 OK)
+    "content": {
+        "title": "Example Domain",  # The title retrieved from the webpage
+        "url_source": "https://example.com/",  # The original URL of the source
+        "markdown_content": "This domain is for use in illustrative examples in documents. You may use this domain in literature without prior coordination or asking for permission.\n\n[More information...](https://www.iana.org/domains/example)",  # The content of the page converted in Markdown format
+    },
+    "elapsed_time": "3.3 s",  # The time taken to get the response
 }
 ```
-Note: The "..." is a placeholder for the actual code or data element and is not to be used as a literal in the implementation.
 # reranker
 ## request
-```python
-endpoint = "https://api.jina.ai/v1/rerank"  # The endpoint URL to POST the rerank request, required, no default value.
+endpoint = "https://api.jina.ai/v1/rerank" # The endpoint URL to which the rerank request will be sent - required
 headers = {
-    "Authorization": "Bearer jina_ad42b3eb889c44db9f2190ec851c68c9o5LJmW9Glf5wP-V3JOweluX9WAE2",  # The authorization token to access the API, required, no default value.
-    "Content-Type": "application/json"  # Indicates the media type of the resource, required, default value: "application/json".
+    "Content-Type": "application/json", # Specifies the format of the payload being sent - required
+    "Authorization": "Bearer jina_ad42b3eb889c44db9f2190ec851c68c9o5LJmW9Glf5wP-V3JOweluX9WAE2" # Provides the authentication token for the request - required
 }
-payload = {
-    "model": "jina-reranker-v2-base-multilingual",  # The model used for re-ranking, required, no default value.
-    "query": "Organic skincare products for sensitive skin",  # The query text based on which documents are re-ranked, required, no default value.
-    "top_n": 3,  # The number of most relevant documents to return for the query, optional, default value: 5, maximum value: 10.
-    "documents": [
-        # List of candidate documents provided for re-ranking, required, no default value.
+data = {
+    "model": "jina-reranker-v2-base-multilingual", # Specifies the model to be used for reranking - required, no default value
+    "query": "Organic skincare products for sensitive skin", # The user's search query - required, no default value
+    "top_n": 3, # The number of top documents to return after reranking - optional, default is 5
+    "documents": [ # A list of documents to be reranked based on the query - required, no default value
         "Organic skincare for sensitive skin with aloe vera and chamomile: Imagine the soothing embrace of nature with our organic skincare range, crafted specifically for sensitive skin. Infused with the calming properties of aloe vera and chamomile, each product provides gentle nourishment and protection. Say goodbye to irritation and hello to a glowing, healthy complexion.",
-        # Additional documents...
+        "New makeup trends focus on bold colors and innovative techniques: Step into the world of cutting-edge beauty with this seasons makeup trends. Bold, vibrant colors and groundbreaking techniques are redefining the art of makeup. From neon eyeliners to holographic highlighters, unleash your creativity and make a statement with every look.",
+        "Bio-Hautpflege für empfindliche Haut mit Aloe Vera und Kamille: Erleben Sie die wohltuende Wirkung unserer Bio-Hautpflege, speziell für empfindliche Haut entwickelt. Mit den beruhigenden Eigenschaften von Aloe Vera und Kamille pflegen und schützen unsere Produkte Ihre Haut auf natürliche Weise. Verabschieden Sie sich von Hautirritationen und genießen Sie einen strahlenden Teint.",
     ]
 }
-response = requests.post(endpoint, headers=headers, json=payload)  # Sends a POST request to the specified endpoint, required, no default value.
-```
+response = requests.post(endpoint, headers=headers, json=data) # Sends the reranking request and receives the response - required
 
 ## response
-```json
 {
-  "model": "jina-reranker-v2-base-multilingual",  # The model used for re-ranking, as specified in the request.
+  "model": "jina-reranker-v2-base-multilingual", # The model that was used for reranking
   "usage": {
-    "total_tokens": 815  # The total number of tokens processed in the re-ranking task.
+    "total_tokens": 815 # The total number of tokens processed by the model in this request
   },
   "results": [
     {
-      "index": 0,  # The original index of the document in the provided list of documents.
+      "index": 0, # Index of the document in the original list before reranking
       "document": {
         "text": "Organic skincare for sensitive skin with aloe vera and chamomile: Imagine the soothing embrace of nature with our organic skincare range, crafted specifically for sensitive skin. Infused with the calming properties of aloe vera and chamomile, each product provides gentle nourishment and protection. Say goodbye to irritation and hello to a glowing, healthy complexion."
-        # The actual text content of the document.
       },
-      "relevance_score": 0.8783142566680908  # The relevance score assigned to the document based on the query.
+      "relevance_score": 0.8783142566680908 # The relevance score of the document computed by the reranker, higher scores indicate higher relevance
     },
-    # Additional results...
+    {
+      "index": 6,
+      "document": {
+        "text": "针对敏感肌专门设计的天然有机护肤产品：体验由芦荟和洋甘菊提取物带来的自然呵护。我们的护肤产品特别为敏感肌设计，温和滋润，保护您的肌肤不受刺激。让您的肌肤告别不适，迎来健康光彩。"
+      },
+      "relevance_score": 0.8783142566680908
+    },
+    {
+      "index": 4,
+      "document": {
+        "text": "Cuidado de la piel orgánico para piel sensible con aloe vera y manzanilla: Descubre el poder de la naturaleza con nuestra línea de cuidado de la piel orgánico, diseñada especialmente para pieles sensibles. Enriquecidos con aloe vera y manzanilla, estos productos ofrecen una hidratación y protección suave. Despídete de las irritaciones y saluda a una piel radiante y saludable."
+      },
+      "relevance_score": 0.8633915781974792
+    }
   ]
 }
-```
 # s.reader
 ## request
 ```python
-endpoint = "https://s.jina.ai"  # Required. No default value.
-query = "When was Jina AI founded?"  # Required. The search query string. No default value.
+endpoint = "https://s.jina.ai" # The API endpoint URL. Required.
+
+query = "When was Jina AI founded?" # The search query string. Required.
+
+# Headers dictionary to include in the request. Required.
 headers = {
-    "Authorization": "Bearer jina_ad42b3eb889c44db9f2190ec851c68c9o5LJmW9Glf5wP-V3JOweluX9WAE2"  # Required for authorization. No default value.
+    "Authorization": "Bearer jina_ad42b3eb889c44db9f2190ec851c68c9o5LJmW9Glf5wP-V3JOweluX9WAE2" # Authentication token. Required.
 }
+
+# Additional search parameters and configuration. Optional.
 params = {
-    "stream": False,  # Optional. Default value: False. Possible values: True, False. 
-    "locale": "en-US",  # Optional. Default value: "en-US". Possible values: Any valid IETF language tag.
-    "bypass_cache": False,  # Optional. Default value: False. Possible values: True, False.
-    "proxy": "",  # Optional. Default value: "". Specify the proxy server address, e.g., "http://your_proxy_server.com".
-    "forward_cookie": False,  # Optional. Default value: False. Possible values: True, False. 
-    "json_response": False,  # Optional. Default value: False. Possible values: True, False. Returns response in JSON format.
-    "gather_all_links": False,  # Optional. Default value: False. Possible values: True, False. 
-    "gather_all_images": False,  # Optional. Default value: False. Possible values: True, False.
-    "image_caption": False,  # Optional. Default value: False. Possible values: True, False. Adds captions to all images.
-    "use_post_method": False  # Optional. Default value: False. Possible values: True, False. Uses POST instead of GET.
+    "lang": "en-US", # Language code for the search results. Optional. Default: "en-US". Possible values: ISO 639-1 language codes.
+    "proxy": "", # Proxy server URL. Optional. Default: "". Use format http://your_proxy_server.com for requests through a specific proxy.
+    "use_cache": True, # Flag to indicate if the cache should be used or bypassed. Optional. Default: True. Possible values: True, False.
+    "stream": False, # Flag to enable stream mode for large target pages. Optional. Default: False. Possible values: True, False.
+    "json_response": False, # Flag to get the response in JSON format. Optional. Default: False. Possible values: True, False.
+    "in_site": "", # Specific site or domain to search in. Optional. Default: "". Use format example.com to limit search to a particular site.
+    "api_key": "", # API key for higher rate limits. Optional. Default: "".
+    "cookie": "", # Custom cookie settings for the request. Optional. Default: "".
+    "forward_cookie": False, # Flag to forward cookie settings in the request. Optional. Default: False. Possible values: True, False.
+    "gather_links": False, # Flag to gather all links at the end of the content. Optional. Default: False. Possible values: True, False.
+    "gather_images": False, # Flag to gather all images at the end of the content. Optional. Default: False. Possible values: True, False.
+    "content_format": "default", # Content format and detail level. Optional. Default: "default". Possible values: "default", "detailed".
+    "browser_locale": "en-US" # Browser locale to use when rendering pages. Optional. Default: "en-US".
 }
-response = requests.get(endpoint, params=params, headers=headers)  # Sends a GET request to the specified endpoint with query parameters and authorization headers.
+
+# Perform the GET request with the specified params and headers.
+response = requests.get(endpoint, headers=headers, params=params) # Perform a GET request to the endpoint.
 ```
 ## response
 ```python
 {
-    "status": "200 OK",  # The HTTP status code of the response.
-    "response_time": 3.3,  # Time in seconds it took to receive the response.
-    "title": "Example Domain",  # Title of the page or document.
-    "url_source": "https://example.com/",  # The URL source of the retrieved document.
-    "markdown_content": "This domain is for use in illustrative examples in documents. You may use this domain in literature without prior coordination or asking for permission.\n\n[More information...](https://www.iana.org/domains/example)"  # The main content of the document, formatted in Markdown.
+    "status": 200, # HTTP status code indicating the request was successful.
+    "response_time": "3.3 s", # Time it took for the request to be processed and a response generated.
+    "title": "Example Domain", # The title of the content returned by the request.
+    "URL Source": "https://example.com/", # The source URL of the content.
+    "Markdown Content": "This domain is for use in illustrative examples in documents. You may use this domain in literature without prior coordination or asking for permission.\n\n[More information...](https://www.iana.org/domains/example)", # The main content of the response, formatted in Markdown.
+    "response_format": "text/markdown" # The format of the response content. Indicates the content is in Markdown format.
 }
 ```
 # segmenter
 ## request
 ```python
-endpoint = "https://segment.jina.ai/" # base URL for the API
-payload = {
-  "content": "Jina AI: Your Search Foundation, Supercharged! 🚀\nIhrer Suchgrundlage, aufgeladen! 🚀\n您的搜索底座，从此不同！🚀\n検索ベース,もう二度と同じことはありません！🚀", # input text to process, required, no default
-  "return_tokens": True, # whether to return tokens in the response, optional, default False
-  "return_chunks": True, # whether to return chunks in the response, optional, default False
-  "max_chunk_length": 1000, # maximum length of each chunk, optional, default 500, min 500, max 2000
-  "api_key": "jina_ad42b3eb889c44db9f2190ec851c68c9o5LJmW9Glf5wP-V3JOweluX9WAE2", # API key for higher rate limit, optional, no default
-  "return_first_n_tokens": {"enabled": False, "value": 5}, # optional, default {"enabled": False, "value": 5}, returns the first N tokens; "enabled" (True, False), "value" (int, 1 to 100)
-  "return_last_n_tokens": {"enabled": False, "value": 5}, # optional, default {"enabled": False, "value": 5}, returns the last N tokens; "enabled" (True, False), "value" (int, 1 to 100)
-  "tokenizer": "cl100k_base" # tokenizer to use, required, default "cl100k_base"; possible values: "cl100k_base", "cl100k_large", "othertokenizer1", "othertokenizer2", ...
+endpoint = f"https://segment.jina.ai"  # Base URL of the endpoint - required
+headers = {
+    "Content-Type": "application/json",  # Indicates the media type of the resource - required
+    "Authorization": "Bearer YOUR_API_KEY"  # Authorization credentials for the request - optional, no default value
 }
-response = requests.post(endpoint, json=payload) # executes POST request with provided payload
+data = {
+    "content": "YOUR_TEXT_HERE",  # Text to be processed - required
+    "return_tokens": True,  # Whether to return tokens or not - optional, default value: False
+    "return_chunks": True,  # Whether to return chunks or not - optional, default value: False
+    "max_chunk_length": 1000,  # Maximum length of each chunk - optional, default value: 1000, possible values range from 500 to 2000
+    "api_key": "YOUR_API_KEY",  # API Key for higher rate limit - optional, no default value
+    "segmenter": "cl100k_base"  # Segmenter model to use - optional, default value: "cl100k_base", possible values: ["cl100k_base", "other_model_names"]
+}
+response = requests.post(endpoint, headers=headers, json=data)  # Sends a POST request to the specified endpoint
 ```
 ## response
 ```json
 {
-  "num_tokens": 78, # total number of tokens analyzed
-  "tokenizer": "cl100k_base", # tokenizer used for the task
-  "usage": {
-    "tokens": 0 # number of tokens used from your quota
+  "num_tokens": 78,  # Number of tokens generated - required
+  "tokenizer": "cl100k_base",  # Tokenizer used for processing - required
+  "usage": {  # Information about usage - required
+    "tokens": 0  # Tokens used in the current billing period - required
   },
-  "num_chunks": 4, # number of generated chunks based on "max_chunk_length"
-  "chunk_positions": [
+  "num_chunks": 4,  # Number of chunks generated - required
+  "chunk_positions": [  # Positions of the chunks in the input text - required
     [3, 55],
     [55, 93],
     [93, 110],
     [110, 135]
-  ], # start and end positions of each chunk in the text
-  "tokens": [
+  ],
+  "tokens": [  # Generated tokens with their corresponding positions and IDs - required
     [
-      [["Jina", [41]], [" AI", [15592]], [":", [25]], [" Your", [4718]], [" Search", [7694]], [" Foundation", [5114]], ["!", [0]], [" 🚀", [248, 222]]],
-      [["Ihrer", [4171]], [" Suchgrundlage", [15483]], [",", [11]], [" aufgeladen", [7367]], ["!", [0]], [" 🚀", [248, 222]]],
-      [["您的", [88126]], [" 搜索底座", [80073]], ["，", [3922]], [" 从此不同", [46281]], ["！", [6447]], [" 🚀", [9468, 248, 222]]],
-      [["検索ベース", [162, 97, 250]], [",", [11]], [" もう二度と同じことはありません", [42016]], ["！", [6447]], [" 🚀", [9468, 248, 222]]]
-    ]
-  ], # tokens and corresponding token IDs for each chunk
-  "chunks": [
+      ["J", [41]],
+      ["ina", [2259]],
+      [" AI", [15592]],
+      [":", [25]],
+      [" Your", [4718]],
+      [" Search", [7694]],
+      [" Foundation", [5114]],
+      [",", [11]],
+      [" Super", [7445]],
+      ["charged", [38061]],
+      ["!", [0]],
+      [" ", [11410]],
+      ["🚀", [248, 222]],
+      ["\n", [198]],
+      ["  ", [256]]
+    ],
+    [...more tokens...]
+  ],
+  "chunks": [  # Segmented chunks of the input text - required
     "Jina AI: Your Search Foundation, Supercharged! 🚀\n  ",
     "Ihrer Suchgrundlage, aufgeladen! 🚀\n  ",
     "您的搜索底座，从此不同！🚀\n  ",
     "検索ベース,もう二度と同じことはありません！🚀\n"
-  ] # generated text chunks based on "return_chunks" flag
+  ]
 }
 ```
