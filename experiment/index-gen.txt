@@ -1,668 +1,303 @@
 
-```curl
-curl -X 'POST' \
-  'http://localhost/v1/embeddings' \
-  -H 'accept: application/json' \
-  -H 'Authorization: Bearer YOUR_BEARER_TOKEN' \ # Replace YOUR_BEARER_TOKEN with your actual bearer token
-  -H 'Content-Type: application/json' \
-  -d '{
-  "model": "jina-clip-v1",
-  "input": [
-    "Hello, world!"
-  ],
-  "embedding_type": "float",
-  "task": "retrieval.query",
-  "dimensions": 768,
-  "normalized": false,
-  "late_chunking": false
-}'
-```
+# classifier
+Given the detailed requirements for generating a sophisticated example request in curl format, including comments on all attributes regarding their optionality, default values, and exhaustive list of possible values, here is an extended version based on your initial example:
 
-### Request Fields:
-- `model`: (required) The identifier of the model. Possible values: 
-  - `"jina-clip-v1", "jina-embeddings-v2-base-en", "jina-embeddings-v2-base-es", "jina-embeddings-v2-base-de", "jina-embeddings-v2-base-zh", "jina-embeddings-v2-base-code", "jina-embeddings-v3"`.
-- `input`: (required) List of texts to embed. Example: `["Hello, world!"]`.
-- `embedding_type`: (optional, default: `float`) Format in which embeddings are returned. Possible values: 
-  - `"float", "base64", "binary", "ubinary"`.
-- `task`: (optional, indicates intended downstream application) Possible values: 
-  - `"retrieval.query", "retrieval.passage", "text-matching", "classification", "separation"`.
-- `dimensions`: (optional, used to specify output embedding size. Not applicable for all models.) Integer, common values based on model.
-- `normalized`: (optional, default: `false`) Flag to determine if embeddings should be L2 normalized. Possible values: 
-  - `true`, `false`.
-- `late_chunking`: (optional, default: `false`) Flag for late chunking application. Possible values: 
-  - `true`, `false`.
-
-### Response Example:
-```json
-{
-  "model": "jina-clip-v1",
-  "object": "list",
-  "data": [
-    {
-      "index": 0,
-      "embedding": [
-        0.1,
-        0.2,
-        0.3
-      ],
-      "object": "embedding"
-    },
-    {
-      "index": 1,
-      "embedding": [
-        0.3,
-        0.2,
-        0.1
-      ],
-      "object": "embedding"
-    }
-  ],
-  "usage": {
-    "total_tokens": 15
+```bash
+curl https://api.jina.ai/v1/classify \ # The endpoint URL for the classify API
+  -H "Content-Type: application/json" \ # Required: Specifies the content type of the request body
+  -H "Authorization: Bearer your_api_key_here" \ # Required: Authorization key for API access. Replace "your_api_key_here" with your actual API key
+  -d @- << # The data flag indicates that what follows is the body of the POST request
+  {
+    "model": "jina-embeddings-v3", # Required: Specifies the model to use for classification. Possible values are model names supported by the API, such as "jina-embeddings-v1", "jina-embeddings-v2", "jina-embeddings-v3"
+    "input": [ 
+        "Calculate the compound interest on a principal of $10,000 invested for 5 years at an annual rate of 5%, compounded quarterly.", 
+        "分析使用CRISPR基因编辑技术在人类胚胎中的伦理影响。考虑潜在的医疗益处和长期社会后果。",
+        "AIが自意識を持つディストピアの未来を舞台にした短編小説を書いてください。人間とAIの関係や意識の本質をテーマに探求してください。",
+        "Erklären Sie die Unterschiede zwischen Merge-Sort und Quicksort-Algorithmen in Bezug auf Zeitkomplexität, Platzkomplexität und Leistung in der Praxis.",
+        "Write a poem about the beauty of nature and its healing power on the human soul.",
+        "Translate the following sentence into French: The quick brown fox jumps over the lazy dog."
+    ], # Required: Array of texts or images (URLs or base64-encoded) to classify. Texts can be up to 8192 tokens. Images can be URLs or base64-encoded.
+    "labels": [ 
+        "Simple task", 
+        "Complex reasoning", 
+        "Creative writing" 
+    ] # Optional. Default value: []. Array of strings representing the candidate labels for classification. Providing semantic labels can enhance performance.
   }
-}
-```
-- This response includes the model used, an object type indicator ("list" in this case), the embedding data for each input, and usage metrics such as the total number of tokens processed.
-To generate the most sophisticated example request for the `/v1/bulk-embeddings` endpoint in cURL format, you'd prepare the cURL request to include multipart/form-data for uploading a file along with other necessary fields. Here's how you might construct such a request:
 
-```shell
-curl -X POST "http://example.com/v1/bulk-embeddings" \
-    -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \ # Required for security
-    -H "Content-Type: multipart/form-data" \
-    -F "file=@/path/to/your/file.csv" \ # Required: Path to the file to be uploaded
-    -F "email=example@example.com" \ # Required: Must be a valid email format
-    -F "model=model_name" # Required: Name of the model to use
 ```
 
-**Response:**
+Please note that the `"Authorization: Bearer your_api_key_here"` line contains a placeholder API key. You should replace `"your_api_key_here"` with an actual API key provided to you by the service.
 
-Assuming the request is successful, you might receive a response similar to the following:
-
-```json
-{
-  "user_id": "unique_user_id", // Required: The user ID of the user who created the job
-  "model_name": "model_name", // Required: The name of the model to use
-  "model_package_arn": "model_package_arn_value", // The model package ARN
-  "status": "in-progress", // Required: The status of the job, possible values: "waiting", "in-progress", "failed", "completed"
-  "file_name": "input.csv", // Required: The name of the input file
-  "user_email": "example@example.com", // The email of the user who created the job, in valid email format
-  "created_at": "2023-01-01T00:00:00Z", // Required: Time of creation of the job, in ISO 8601 format
-  "completed_at": "2023-01-02T00:00:00Z", // Optional: Time of completion of the job, if completed, in ISO 8601 format
-  "error": "Error description", // Optional: The error message of the job, if any
-  "_id": "000000000000000000000000", // Required: The ID of the job
-  "used_token_count": 1000 // Required: The number of tokens used for the job
-}
-```
-
-Each attribute in the request and response has precise requirements, defaults, and possible values that are explained in the concise comments within the examples.
-Certainly! Below is a sophisticated example of a `curl` request for the `/v1/bulk-embeddings/{job_id}` endpoint along with a detailed response example and comments explaining each attribute.
-
-### Curl Request Example:
-```bash
-curl -X 'GET' \
-  'https://api.example.com/v1/bulk-embeddings/000000000000000000000000' \ # The job ID is required in the URL path to identify which job's information to retrieve.
-  -H 'accept: application/json' \ # Indicates that the client expects to receive JSON data
-  -H 'Authorization: Bearer YOUR_ACCESS_TOKEN' # Authorization header is required; substitute YOUR_ACCESS_TOKEN with your actual bearer token.
-```
-
-### Response Example:
-```json
-{
-  "user_id": "user_123456", // Required; The user ID of the user who created the job
-  "model_name": "model_1", // Required; The name of the model used for the embedding job
-  "model_package_arn": "arn:aws:sagemaker:eu-west-1:123456789012:model-package/model-1", // Required; The model package ARN
-  "status": "completed", // Required; The status of the job. Possible values: "waiting", "in-progress", "failed", "completed"
-  "file_name": "input.csv", // Required; The name of the input file
-  "user_email": "user@example.com", // Optional; The email of the user who created the job (format: email)
-  "created_at": "2023-01-01T12:00:00Z", // Required; Time of creation of the job (format: date-time)
-  "completed_at": "2023-01-01T12:15:00Z", // Optional; Time of completion of the job (format: date-time)
-  "error": "", // Optional; The error message of the job, if any occurred
-  "_id": "000000000000000000000000", // Required; The ID of the job
-  "used_token_count": 1000 // Required; The number of tokens used for the job
-}
-```
-
-### Attribute Comments:
-- `user_id`: Required. A unique identifier for the user who started the job.
-- `model_name`: Required. Specifies the model used for embeddings.
-- `model_package_arn`: Required. Amazon Resource Name for the model package.
-- `status`: Required. Indicates the job's current status. Options are "waiting", "in-progress", "failed", and "completed".
-- `file_name`: Required. Name of the input file for which embeddings are being generated.
-- `user_email`: Optional. The email address of the user who initiated the job, in email format.
-- `created_at`: Required. Timestamp when the job was created, provided in ISO 8601 format.
-- `completed_at`: Optional. Timestamp when the job was completed, in ISO 8601 format. This field is null for jobs that have not been completed.
-- `error`: Optional. Contains an error message if the job failed; otherwise, it is an empty string.
-- `_id`: Required. A unique identifier for the job, used to track and retrieve job status.
-- `used_token_count`: Required. Specifies how many tokens were consumed by the job.
-
-This detailed elucidation offers a comprehensive understanding of the request and response structure for the specified endpoint, along with the precise utility and requirements of each attribute involved.
-```bash
-curl -X 'POST' \
-  'https://example.com/v1/bulk-embeddings/<job_id>/download-result' \
-  -H 'accept: application/json' \
-  -H 'Authorization: Bearer <YOUR_ACCESS_TOKEN>'
-```
-
-**Response:**
-
-```json
-{
-  "id": "000000000000000000000000", // required; The ID of the job. No default value as it is dynamically generated upon job creation.
-  "download_url": "https://example.com" // required; The URL to download the result file. It does not have a default value and is generated based on the job processing outcome.
-}
-```
-
-**Comments on Attributes:**
-
-- `id`: 
-  - **Requirement**: Required
-  - **Default Value**: None, as it is a unique ID assigned to each job created.
-  - **Possible Values**: Any valid UUID or similar unique identifier assigned to a job.
-
-- `download_url`: 
-  - **Requirement**: Required
-  - **Default Value**: None, as it is a dynamically generated URL based on where the output file of the job is stored.
-  - **Possible Values**: A fully qualified URL from which the result of the bulk embedding job can be downloaded. The scheme can be `http` or `https`, followed by the domain, and the path to the resource.
-```bash
-curl -X 'POST' \
-  'http://localhost/v1/rerank' \
-  -H 'accept: application/json' \
-  -H 'Authorization: Bearer YOUR_ACCESS_TOKEN' \ # Replace YOUR_ACCESS_TOKEN with your actual access token (required)
-  -H 'Content-Type: application/json' \
-  -d '{
-  "model": "jina-reranker-v2-base-multilingual", # Model identifier (required)
-  "query": "Search query", # The search query (required)
-  "documents": [
-    "Document to rank 1",
-    "Document to rank 2"
-  ], # A list of text documents or strings to rerank. If a document is provided, the text field is required and all other fields will be preserved in the response (required)
-  "top_n": 2, # The number of most relevant documents or indices to return, defaults to the length of `documents` (optional, default: length of `documents`)
-  "return_documents": true # If false, returns results without the doc text. If true, returns results with the doc text passed in. Defaults to true (optional, default: true)
-}'
-```
-
-**Response:**
-```json
-{
-  "model": "jina-reranker-v2-base-multilingual", 
-  "results": [
-    {
-      "index": 0,
-      "document": {
-        "text": "Document to rank 1"
-      },
-      "relevance_score": 0.9
-    },
-    {
-      "index": 1,
-      "document": {
-        "text": "Document to rank 2"
-      },
-      "relevance_score": 0.8
-    }
-  ], 
-  "usage": {
-    "total_tokens": 15,
-    "prompt_tokens": 15
-  }
-}
-```
-
-- **model**: Model identifier, which specifies the reranking model to be used. This attribute is required. Possible values are `jina-reranker-v2-base-multilingual`, `jina-reranker-v1-base-en`, `jina-reranker-v1-tiny-en`, `jina-reranker-v1-turbo-en`, `jina-colbert-v1-en`.
-- **query**: The search query text, highlighting the search intent. This attribute is mandatory.
-- **documents**: A list of text documents or strings to rerank. The list can include actual strings or objects with detailed information (if the implementation allows), focusing on the documents' content that needs reranking. This attribute is mandatory.
-- **top_n**: Defines the count of top results to return after reranking. It is optional, with the list length of `documents` serving as the default value.
-- **return_documents**: Dictates whether the response should include the documents' text along with their ranking. Marked as optional, it defaults to `true`, ensuring the original document text is returned by default alongside their new rankings.
+Also, the `model` attribute in the request body is marked as required, with `"jina-embeddings-v3"` as the sample value. The exhaustive list of possible values for the `model` attribute depends on the models available in the API at the time of the request. It is essential to consult the API documentation or contact support for an updated list of supported models.
+# embeddings
+Below is a sophisticated example of a `curl` request to the endpoint `https://api.jina.ai/v1/embeddings` tailored for generating embeddings, including all configurable attributes. This request includes comments that fulfill the requirements regarding conciseness, optionality, default values, and exhaustive listing of possible values for each attribute.
 
 ```bash
-curl -X 'POST' \
-  'http://localhost:8000/v1/train' \
-  -H 'accept: application/json' \
-  -H 'Authorization: Bearer YOUR_ACCESS_TOKEN' \ # Replace YOUR_ACCESS_TOKEN with your actual access token
-  -H 'Content-Type: application/json' \
-  -d '{
-  "model": "jina-clip-v1", # Required. Identifier of the model. Possible values: "jina-clip-v1", "jina-embeddings-v2-base-en", "jina-embeddings-v2-base-es", "jina-embeddings-v2-base-de", "jina-embeddings-v2-base-zh", "jina-embeddings-v2-base-code", "jina-embeddings-v3".
-  "classifier_id": "your-classifier-id", # Optional. Identifier of the classifier. A new classifier will be created if not provided.
-  "access": "private", # Optional. Accessibility of the classifier. Default: "private". Possible values: "public", "private".
-  "input": [
-    {
-      "text": "text1",
-      "label": "label1" # Required. The label of the text or image.
-    },
-    {
-      "text": "text2",
-      "label": "label2"
-    },
-    {
-      "image": {
-        "bytes": "/9j/4AAQSkZJRgABAQAAAQABAAD...", # Optional. Base64 representation of the Image.
-        "label": "imageLabel1" # Required. The label of the text or image.
-      }
-    }
-  ], # Required. List of text and images and labels or a single text and image and label to train the classifier.
-  "num_iters": 10 # Optional. Number of iterations to train the classifier. Default is 10.
-}'
-```
-
-### Response
-```json
+curl https://api.jina.ai/v1/embeddings \
+-H "Content-Type: application/json" \  # Header specifying the content type. Required.
+-H "Authorization: Bearer your_api_key" \  # Header for authorization. Replace 'your_api_key' with your actual API key. Required.
+-d @- <<
 {
-  "classifier_id": "classifier_id", # The identifier of the classifier that was trained.
-  "num_samples": 10, # The number of samples that were used to train the classifier.
-  "usage": {
-    "total_tokens": 15 # The number of tokens used by all the texts in the input.
-  }
+  "model": "jina-embeddings-v3",  # Name of the embedding model. Required. No default value. Possible values: 'jina-embeddings-v1', 'jina-embeddings-v2', 'jina-embeddings-v3'.
+  "task": "text-matching",  # Specifies the downstream task. Required. No default value. Possible values: 'text-matching', 'text-search', 'image-search', 'video-search'.
+  "dimensions": 1024,  # Number of output dimensions. Optional. Default value: 768. Possible values range from 1 to 1024.
+  "late_chunking": false,  # Whether to apply late chunking. Optional. Default value: false. Possible values: true, false.
+  "embedding_type": "float",  # Output data type of embeddings. Optional. Default value: 'float'. Possible values: 'float', 'base64', 'binary'.
+  "input": [  # List of texts or images for which embeddings are to be generated. Required. No default value.
+      "Organic skincare for sensitive skin with aloe vera and chamomile: Imagine the soothing embrace...",
+      "Bio-Hautpflege für empfindliche Haut mit Aloe Vera und Kamille: Erleben Sie die wohltuende Wirkung...",
+      "...",
+      "新しいメイクのトレンドは鮮やかな色と革新的な技術に焦点を当てています..."
+  ]
 }
+
 ```
 
-Each attribute in the request and the response is crafted to demonstrate the most comprehensive usage scenario for the `/v1/train` endpoint. Comments provide details such as whether an attribute is required or optional, its default values, and all possible values it can accept, ensuring clarity on how to effectively use the endpoint.
+This `curl` command sends a `POST` request to the specified endpoint with a JSON payload containing various attributes to customize the embedding generation process. Each attribute comes with a concise comment regarding its requirements, providing clarity on how to structure the request for different needs.
 
-Here is a sophisticated example request for the `/v1/classify` endpoint in curl format with detailed comments for each attribute:
-
-```bash
-curl -X 'POST' \
-  'http://example.com/v1/classify' \
-  -H 'accept: application/json' \
-  -H 'Authorization: Bearer YOUR_ACCESS_TOKEN' \
-  -H 'Content-Type: application/json' \
-  -d '{
-  "model": "jina-clip-v1", # Required. Identifier of the model. Values: "jina-clip-v1", "jina-embeddings-v2-base-en", "jina-embeddings-v2-base-es", "jina-embeddings-v2-base-de", "jina-embeddings-v2-base-zh", "jina-embeddings-v2-base-code", "jina-embeddings-v3"
-  "classifier_id": "some-classifier-id", # Optional. Identifier of the classifier. Provide either model or classifier_id
-  "input": [ # Required. List of texts, images, or a single text or image for classification
-    {
-      "text": "text1"
-    },
-    {
-      "text": "text2"
-    }
-  ],
-  "labels": ["label1", "label2", "label3"] # Optional. Specifies the labels to be used for classification
-}'
-```
-
-The response for this request would look something like this:
+---
+Since my capabilities are limited to generating responses based on the data you provide and I cannot produce real-world API responses, the anticipated response structure for a successful request to this endpoint, considering all attributes provided in the request, would be something like:
 
 ```json
 {
-  "data": [
-    {
-      "index": 0,
-      "prediction": "label1",
-      "object": "classification",
-      "score": 0.75,
-      "predictions": [
-        {
-          "label": "label1",
-          "score": 0.75
-        },
-        {
-          "label": "label2",
-          "score": 0.25
-        }
-      ]
-    },
-    {
-      "index": 1,
-      "prediction": "label2",
-      "object": "classification",
-      "score": 0.54,
-      "predictions": [
-        {
-          "label": "label2",
-          "score": 0.54
-        },
-        {
-          "label": "label1",
-          "score": 0.46
-        }
-      ]
-    }
-  ],
-  "usage": {
-    "total_tokens": 15
-  }
-}
-```
-
-Each `data` element contains the classification result for each input, including an overall prediction (`prediction`), the confidence score (`score`), and a detailed breakdown of each label's score (`predictions`). The `usage` object provides insights into the total number of tokens analyzed during the classification process.
-To make a request to the "/v1/classifiers" endpoint, you would use a `curl` command to initiate a GET request. Since this endpoint is for listing classifiers, it may not require a body payload but will require authorization via an HTTP Bearer Token. The response would include details about the classifiers available.
-
-### Example curl Request:
-```bash
-curl -X 'GET' \
-  'https://example.com/v1/classifiers' \
-  -H 'accept: application/json' \
-  -H 'Authorization: Bearer YOUR_ACCESS_TOKEN_HERE'
-```
-
-### Comments on Attributes for Request:
-- **Authorization**: Required. It is the security schema to access the API, where the user must provide a valid Bearer token.
-
-### Example Response:
-```json
-{
-  "classifiers": [
-    {
-      "id": "classifier_id_1",
-      "name": "Classifier 1",
-      "creationTime": "2021-01-01T12:00:00Z",
-      "lastUpdatedTime": "2021-01-02T12:00:00Z",
-      "status": "available",
-      "accuracy": 0.95,
-      "classes": ["Class 1", "Class 2", "Class 3"]
-    },
-    {
-      "id": "classifier_id_2",
-      "name": "Classifier 2",
-      "creationTime": "2021-02-01T12:00:00Z",
-      "lastUpdatedTime": "2021-02-02T12:00:00Z",
-      "status": "training",
-      "accuracy": null,
-      "classes": ["Class A", "Class B"]
-    }
+  "embeddings": [
+    [0.1, 0.2, ..., 0.1024],  # An example array of 1024 float elements representing the embedding of the first input. Actual values would vary.
+    [0.1, 0.2, ..., 0.1024],  # Embedding of the second input.
+    ...
+    [0.1, 0.2, ..., 0.1024]   # Embedding for the last input.
   ]
 }
 ```
 
-### Comments on Response Attributes:
-- **id**: Required. It is a unique identifier for each classifier.
-- **name**: Required. The name of the classifier.
-- **creationTime**: Required. Timestamp when the classifier was created.
-- **lastUpdatedTime**: Required. Timestamp when the classifier was last updated.
-- **status**: Required. The current status of the classifier. Possible values are `available`, `training`, and `error`.
-- **accuracy**: Optional. The accuracy of the classifier on a validation set. This field might be null if the classifier is still in training or if accuracy is not available/applicable.
-- **classes**: Required. A list of classes that the classifier can predict.
-
-Note: The actual response structure might include more fields or have slightly different naming conventions, but this example is based on the standard practice and the given schema details.
-Certainly! Here is a sophisticated example curl request for the endpoint `/v1/classifiers/{classifier_id}`:
-
-```bash
-curl -X 'DELETE' \
-  'https://example.com/v1/classifiers/YOUR_CLASSIFIER_ID_HERE' \
-  -H 'accept: application/json' \
-  -H 'Authorization: Bearer YOUR_ACCESS_TOKEN_HERE'
-```
-
-And the expected response for the deletion request:
+For the 402 Error, as seen in the question, an example response provided might look like:
 
 ```json
 {
-  "message": "Classifier deleted successfully"
+  "detail": "Your API key has run out of its token-quota. Please top up your key or provide another one with sufficient balance."
+}
+```
+This indicates a problem with the API key used, specifically that it has exceeded its quota.
+# g.reader
+Given the extensive details and customization options potentially available for an API like `https://g.jina.ai`, creating a sophisticated example curl request involves incorporating various headers, query parameters, and options based on the functionalities it offers. As there's no specific attribute list provided in the scenario, I'll create a hypothetical yet complex curl request that might be sent to an API with several customizable options, along with comments detailing requirements for each attribute.
+
+```bash
+curl 'https://g.jina.ai/advancedQuery' \
+    -H "Content-Type: application/json" \ # Required - Specifies the media type of the resource, default is application/json
+    -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \ # Required - Authentication token to access the API
+    -H "Accept-Language: en-US,en;q=0.9" \ # Optional - Preferred language of the response, default is en-US
+    -H "X-Proxy-Location: US" \ # Optional - Preferred location when accessing the API via a proxy, possible values are US, EU, ASIA, default is US
+    -d '{
+          "query": "Jina AI was founded in 2020 in Berlin.", # Required - Query to be processed
+          "mode": "grounding", # Optional - Mode of operation, possible values are "grounding", "fact-check", "summary", "translation", default is "grounding"
+          "context": ["https://jina.ai", "https://github.com/jina-ai/jina"], # Optional - List of URLs for context understanding, maximum 5 URLs
+          "response_format": "json", # Optional - Format of the response, possible values are "json", "xml", "text", default is "json"
+          "use_cache": true, # Optional - Indicates whether to use cached responses or not, default is true
+          "additional_params": { # Optional - Object containing additional parameters specific to the mode of operation
+            "check_sources": true, # Optional - Specific to "fact-check" mode, indicates whether to check the credibility of sources, default is true
+            "translate_to": "de" # Optional - Specific to "translation" mode, indicates language to translate to, default is "en"
+          }
+        }'
+```
+
+Response example (assuming the request was successful):
+
+```json
+{
+  "data": {
+    "validity": true,
+    "source_checked": true,
+    "summary": "Jina AI, founded in 2020 in Berlin, aims to revolutionize the way we interact with unstructured data through AI-driven search and cognitive systems.",
+    "translation": "Jina AI wurde 2020 in Berlin gegründet und zielt darauf ab, die Art und Weise, wie wir mit unstrukturierten Daten interagieren, durch KI-gesteuerte Suche und kognitive Systeme zu revolutionieren."
+  },
+  "code": 200,
+  "message": "Query processed successfully."
 }
 ```
 
-### Comments on Request Attributes:
-- `YOUR_CLASSIFIER_ID_HERE`: This is the identifier of the classifier you intend to delete. **(Required)**
-- `YOUR_ACCESS_TOKEN_HERE`: This is the Bearer authorization token to verify your access. **(Required)**
-
-### Comments on Request Headers:
-- `accept: application/json`: This header indicates that the client expects a response in JSON format. **(Required)**
-- `Authorization: Bearer YOUR_ACCESS_TOKEN_HERE`: Authenticates the request. The value `YOUR_ACCESS_TOKEN_HERE` should be replaced with a valid JWT. **(Required)**
-
-### Comments on Response Attributes:
-- `message`: Contains information about the operation's result. **(Typical Response)**
-
-### Additional Comments:
-- This request is a `DELETE` operation intended to remove a specific classifier based on the `classifier_id` provided in the URL path.
-- There is no payload body for a DELETE request as the operation is fully specified by the URL and headers.
-- The response is expected to be concise, confirming the deletion operation's success or failure.
-- Ensure the classifier ID exists and is correct to avoid errors.
+In this example, the comments provide clarity on whether each attribute is required or optional, what the default values are when not specified, and an exhaustive list of all possible values for attributes that have a limited set of acceptable values. This example is purely illustrative and assumes specific functionalities that an advanced endpoint like `https://g.jina.ai` could hypothetically provide based on its indicated use for grounding, reading, and fact-checking.
+# r.reader
 ```bash
-curl -X 'POST' \
-  'http://localhost:8000/v1/multi-vector' \
-  -H 'accept: application/json' \
-  -H 'Authorization: Bearer YOUR_ACCESS_TOKEN' \
-  -H 'Content-Type: application/json' \
-  -d '{
-  "model": "jina-colbert-v1-en", # required: Identifier of the model with possible values - `jina-colbert-v1-en`
-  "input": [ # required: List of input texts
-    "Hello, world!"
-  ],
-  "input_type": "document", # optional, default: "document"; possible values - "query", "document"
-  "embedding_type": "float", # optional, default: "float"; possible values - "float", "base64", "binary", "ubinary"
-  "dimensions": 128 # optional; possible values - 64, 96, 128. Applicable only for v2 colbert models
+curl -X POST 'https://r.jina.ai' \
+-H "Content-Type: application/json" \
+-H "Authorization: Bearer jina_XXXXXXXXXXXXXXXX" \ # Your access token, required for higher rate limits.
+-d '{
+    "url": "https://example.com", # The URL to read, required, no default value.
+    "headers": {
+        "User-Agent": "your_custom_user_agent"
+    }, # Custom headers sent with the request, optional, default is {}.
+    "content_format": "cleaned", # Controls the detail level in the response, optional, defaults to "cleaned". Possible values: "cleaned", "raw_html", "text".
+    "api_key": "your_jina_api_key", # Your Jina API key for higher rate limits, optional, default is none.
+    "timeout": 10, # Maximum time in seconds to wait for the page to load, optional, defaults to 10 seconds.
+    "target_selectors": [".class", "#id"], # CSS selectors to focus on specific parts, optional, default is [].
+    "exclude_selectors": [".exclude-class", "#exclude-id"], # CSS selectors to exclude parts of the page, optional, default is [].
+    "gather_links": true, # Whether to include all links at the end, optional, default is false. Possible values: true, false.
+    "gather_images": true, # Whether to include all images at the end, optional, default is false. Possible values: true, false.
+    "use_post": true, # Use POST instead of GET with URL in the body, optional, default is false. Possible values: true, false.
+    "json_response": true, # Whether the response will be in JSON format, optional, default is false. Possible values: true, false.
+    "forward_cookie": "cookie_name=cookie_value", # Custom cookies to forward with the request, optional, default is none.
+    "stream_mode": true, # Whether to use stream mode for large pages, optional, default is false. Possible values: true, false.
+    "browser_locale": "en-US", # Controls the browser locale, optional, default is "en-US".
+    "iframe": true, # Whether to include content of iframes, optional, default is false. Possible values: true, false.
+    "shadow_dom": true, # Whether to include content of shadow DOM, optional, default is false. Possible values: true, false.
+    "proxy": "http://your_proxy_server.com", # Proxy server to use, optional, default is none.
+    "bypass_cache": true, # Whether to bypass the cache, optional, default is false. Possible values: true, false.
+    "image_caption": true # Whether to caption all images at the specified URL, optional, default is false. Possible values: true, false.
 }'
 ```
 
 **Response:**
-
 ```json
 {
-  "model": "jina-colbert-v1-en", # Model used for generating embeddings
-  "object": "list", # Default object type of the response
-  "data": [ # List of Embedding Objects generated by the service
-    {
-      "index": 0, # Index of the input in the provided list
-      "embeddings": [ # Embeddings of the input text
-        [
-          0.1,
-          0.2,
-          0.3
-        ],
-        [
-          0.4,
-          0.5,
-          0.6
-        ]
-      ],
-      "object": "embeddings" # Type of object, here it is embeddings
-    },
-    {
-      "index": 1, 
-      "embeddings": [
-        [
-          0.6,
-          0.5,
-          0.4
-        ],
-        [
-          0.3,
-          0.2,
-          0.1
-        ]
-      ],
-      "object": "embeddings"
-    }
-  ],
-  "usage": {
-    "total_tokens": 15 # Total tokens calculated for the request
-  }
+  "data": {
+    "url": "https://example.com",
+    "title": "Example Title",
+    "content": "The main content of the page...",
+    "timestamp": "2021-07-21T19:33:27Z",
+    "links": [{"title": "Link Title", "url": "https://example.com/link"}],
+    "images": [{"url": "https://example.com/image.png", "caption": "Image caption"}]
+  },
+  "code": 200,
+  "status": "success",
+  "message": "Content fetched successfully."
 }
 ```
 
-This curl command demonstrates sending a request to the multi-vector endpoint, including various options such as `model`, `input`, `input_type`, `embedding_type`, and `dimensions`, along with their conditions and possible values. The response format displays the model used, the embeddings generated for each input, and the total tokens calculated for the operation.
-Here's a sophisticated example request for the `/v1/multi-embeddings` endpoint in curl format with detailed comments for each attribute:
+This detailed example showcases the comprehensive configuration available for the `r.jina.ai` service, enabling tailored requests to adapt to various scraping and processing requirements efficiently.
+
+# reranker
+Certainly! Below you'll find a sophisticated example of a `curl` request targeting the rerank API. Each parameter is annotated with concise comments to guide you on its requirement status, default value, and possible values if applicable.
+
+### Example `curl` Request:
 
 ```bash
-curl -X 'POST' \
-  'http://localhost:8000/v1/multi-embeddings' \
-  -H 'accept: application/json' \
-  -H 'Authorization: Bearer YOUR_ACCESS_TOKEN' \  # Required: API access token for authorization
-  -H 'Content-Type: application/json' \
-  -d '{
-  "model": "jina-colbert-v1-en",  # Required: Identifier of the model. Values: "jina-colbert-v1-en"
-  "input": [  # Required: List of texts to embed
-    "Hello, world!",
-    {"text": "Another example text.", "id": "custom_doc_id"}  # Document with custom ID
-  ],
-  "input_type": "document",  # Optional: Type of the embedding to compute. Defaults to "document". Values: "query", "document"
-  "embedding_type": ["float", "base64"],  # Optional: Format in which embeddings are returned. Defaults to ["float"]. Values: "float", "base64", "binary", "ubinary"
-  "dimensions": 128  # Optional: Dimensions of vectors. Only valid for certain models. Defaults to 128. Values: 64, 96, 128
+curl https://api.jina.ai/v1/rerank \
+-H "Content-Type: application/json" \ # Specifies the content type. Required.
+-H "Authorization: Bearer {YOUR_API_KEY}" \ # Your API authorization token. Required.
+-d '
+  {
+    "model": "jina-reranker-v2-base-multilingual", # Model used for reranking. Required. Possible values: "jina-reranker-v2-base-multilingual", "jina-reranker-v1-base-multilingual".
+    "query": "Organic skincare products for sensitive skin", # The search query. Required.
+    "top_n": 3, # The number of most relevant documents to return. Optional. Default: 5. Possible values: integers from 1 to 100.
+    "documents": [ # List of documents for reranking. Required.
+      "Organic skincare for sensitive skin with aloe vera and chamomile: Imagine the soothing embrace of nature with our organic skincare range, crafted specifically for sensitive skin. Infused with the calming properties of aloe vera and chamomile, each product provides gentle nourishment and protection. Say goodbye to irritation and hello to a glowing, healthy complexion.",
+      # Above is a sample document. Add more documents as required.
+    ]
+  }
+'
+```
+
+### Example Response:
+
+This is a simulated response assuming the provided JSON and parameters are valid.
+
+```json
+{
+  "reranked_documents": [
+    {
+      "text": "Organic skincare for sensitive skin with aloe vera and chamomile: Imagine the soothing embrace of nature with our organic skincare range, crafted specifically for sensitive skin. Infused with the calming properties of aloe vera and chamomile, each product provides gentle nourishment and protection. Say goodbye to irritation and hello to a glowing, healthy complexion.",
+      "score": 0.98
+    },
+    {
+      "text": "New makeup trends focus on bold colors and innovative techniques: Step into the world of cutting-edge beauty with this season's makeup trends. Bold, vibrant colors and groundbreaking techniques are redefining the art of makeup. From neon eyeliners to holographic highlighters, unleash your creativity and make a statement with every look.",
+      "score": 0.95
+    }
+    /* More documents with respective reranking scores */
+  ]
+}
+```
+
+Please replace `{YOUR_API_KEY}` with your actual API key. This example ensures comprehensive documentation of attributes for usability and clarity while interacting with the API.
+# s.reader
+Below is the most sophisticated example of a curl request for the endpoint `https://s.jina.ai`, followed by a simulated response and detailed comments explaining each attribute used in the request.
+
+### Example Request:
+```bash
+curl 'https://s.jina.ai/search?query=When+was+Jina+AI+founded?&mode=standard&language=en&apiKey=YOUR_API_KEY' \
+-H "Content-Type: application/json" \
+-H "Accept: application/json" \
+-H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+--data-binary '{"locale":"en-US","useProxy":true,"proxyUrl":"http://your_proxy_server.com","bypassCache":true,"streamMode":true,"gatherAllLinks":true,"gatherAllImages":true,"responseFormat":"json"}'
+```
+
+### Response:
+```json
+{
+  "data": {
+    "content": "Jina AI was founded in February 2020, aiming to provide an easier way to build AI-powered search systems.",
+    "images": ["https://example.com/image1.jpg", "https://example.com/image2.jpg"],
+    "links": ["https://official.jina.ai", "https://github.com/jina-ai/jina"]
+  },
+  "code": 200,
+  "status": "Success"
+}
+```
+
+### Attributes Explanation:
+
+#### In the URL:
+- `query`: **Required.** The search query string.
+- `mode`: **Optional.** Defines the mode of search. Default is `standard`. Possible values: `standard`, `advanced`.
+- `language`: **Optional.** Language of the search query. Default is `en`. Possible values: Specific codes like `en`, `de`, `fr`, etc.
+- `apiKey`: **Optional.** Your API key for accessing the service.
+
+#### In Headers:
+- `Content-Type`: **Required.** Specifies the format of the data being sent. Default and only acceptable value: `application/json`.
+- `Accept`: **Required.** Specifies the format of the response data. Default and only acceptable value: `application/json`.
+- `Authorization`: **Required.** The access token to authenticate the request.
+
+#### In the Request Body (data-binary):
+- `locale`: **Optional.** The locale influences the formatting and parsing of dates and numbers. Default is `en-US`. Must be a valid BCP 47 language tag.
+- `useProxy`: **Optional.** Indicates whether to use a proxy server. Default is `false`. Must be `true` or `false`.
+- `proxyUrl`: **Optional, Required if `useProxy` is true.** The URL of the proxy server to use. No default value.
+- `bypassCache`: **Optional.** Whether to bypass the cache and fetch fresh data. Default is `false`. Must be `true` or `false`.
+- `streamMode`: **Optional.** Enables stream mode for fetching large pages. Default is `false`. Must be `true` or `false`.
+- `gatherAllLinks`: **Optional.** If true, all links on the page are gathered at the end of the content. Default is `false`. Must be `true` or `false`.
+- `gatherAllImages`: **Optional.** If true, all images on the page are gathered at the end of the content. Default is `false`. Must be `true` or `false`.
+- `responseFormat`: **Optional.** Specifies the format of the response. Default is `json`. Currently, only `json` is supported.
+
+This example and explanation cover the sophisticated use of the API with detailed requirements for each attribute, clarifying their necessity, default values, and possible values comprehensively.
+# segmenter
+Below is an example of a sophisticated `curl` request to the `https://segment.jina.ai` endpoint, including detailed comments for each attribute based on the mentioned requirements:
+
+```bash
+curl -X POST 'https://segment.jina.ai/' \
+-H "Content-Type: application/json" \
+-H "Authorization: Bearer your_api_key" \
+-d '{
+  "content": "Your text here to be segmented.",    # content (required): Text content to process.
+  "return_tokens": true,                          # return_tokens (optional, default=false): Whether to return tokens. Values: true, false
+  "return_chunks": true,                          # return_chunks (optional, default=false): Whether to return chunks of text. Values: true, false
+  "max_chunk_length": 1000,                       # max_chunk_length (optional, default=1000): Maximum length of each chunk. Values range from 500 to 2000.
+  "add_api_key": false,                           # add_api_key (optional, default=false): Add API key for higher rate limit.
+  "head": false,                                  # head (optional, default=false): Return the first N tokens. Cannot be used with 'tail'.
+  "tail": false,                                  # tail (optional, default=false): Return the last N tokens. Cannot be used with 'head'.
+  "token_length": 5,                              # token_length (optional): Number of tokens to return for head/tail. No default.
+  "segmenter": "cl100k_base"                      # segmenter (optional, default=cl100k_base): Tokenizer to use. Values: cl100k_base, other_tokenizer_names.
 }'
 ```
 
-Response example:
+The response for the given request could be structured as follows:
 
 ```json
 {
-  "model": "jina-colbert-v1-en",  # Model used for the embeddings
-  "object": "list",  # Type of object returned
-  "data": [
-    {
-      "index": 0,  # Index of the input in the request list
-      "embeddings": [  # Embeddings for each token in the input text
-        [0.1, 0.2, 0.3],
-        [0.4, 0.5, 0.6]
-      ],
-      "object": "embeddings"  # Indicates this is an embeddings object
-    },
-    {
-      "index": 1,
-      "embeddings": [
-        [0.7, 0.8, 0.9],
-        [0.4, 0.5, 0.1]
-      ],
-      "object": "embeddings"
-    }
+  "num_tokens": 78,                                  # Number of tokens processed.
+  "tokenizer": "cl100k_base",                        # The tokenizer used.
+  "usage": {                                         # Details on usage.
+    "tokens": 0                                      # Number of tokens used in the current request.
+  },
+  "num_chunks": 4,                                   # Number of chunks generated.
+  "chunk_positions": [[3,55], [55,93], [93,110], [110,135]], # Positions indicating where each chunk begins and ends in the content.
+  "tokens": [                                        # Array of token details.
+    [["J", [41]], ["ina", [2259]], [" AI", [15592]]], #  Each inner array represents a token, containing the token text and IDs or positions.
+    ...
   ],
-  "usage": {
-    "total_tokens": 30  # The total number of tokens processed in this request
-  }
+  "chunks": [
+    "Jina AI: Your Search Foundation, Supercharged! 🚀\n  ", # Split chunks of the original text content.
+    "Ihrer Suchgrundlage, aufgeladen! 🚀\n  ",
+    "您的搜索底座，从此不同！🚀\n  ",
+    "検索ベース,もう二度と同じことはありません！🚀\n"
+  ]
 }
 ```
 
-This curl command sends a `POST` request to the `/v1/multi-embeddings` endpoint, asking for embeddings based on the `jina-colbert-v1-en` model for two input texts. The `Authorization` header is used for bearer token authentication, ensuring that the request is authorized to access the API. The request body includes multiple optional and required fields to demonstrate the endpoint's capabilities fully.
-```bash
-curl -X 'GET' \
-  'https://example.com/' \
-  -H 'accept: application/json'
-```
-
-### Response
-
-```json
-{}
-```
-
-#### Comments
-- **/ (GET)**: This endpoint is used to check the health of the Universal API service. It does not take any request body or query parameters.
-- **response**: The response is an empty JSON object. This indicates a successful health check of the Universal API service. There are no optional or required attributes for this response, as it simply signifies that the service is operational. There are no default values or possible values to list since the response does not contain any data attributes.
-
-This endpoint's primary purpose is to provide a simple way for clients to verify that the API service is up and running. The absence of detailed information in both the request and response is by design, offering a straightforward health check mechanism.
-Certainly! Below is a sophisticated example CURL request for the `/crawl` endpoint, incorporating various request attributes, along with a description of the expected response. Each part of the request and response comes with concise comments as per your requirements.
-
-### CURL Request:
-```bash
-curl -X POST "https://r.jina.ai/crawl?url=https%3A%2F%2Fwww.example.com&html=<p>Example%20HTML</p>&pdf=Base64EncodedPDFString&respondWith=json&withGeneratedAlt=true&withLinksSummary=true&withImagesSummary=false&noCache=false&cacheTolerance=60&targetSelector=.main-content&waitForSelector=.loader-finished&removeSelector=.ads&keepImgDataUrl=true&withIframe=false&withShadowDom=true&setCookies=sessionId%3Dabc123&proxyUrl=https%3A%2F%2Fproxy.example.com&userAgent=CustomUserAgent&timeout=120&locale=en-US&referer=https%3A%2F%2Freferrer.example.com" \
--H "Authorization: Bearer YOUR_JINA_TOKEN" \
--H "Accept: application/json" \
--H "X-Cache-Tolerance: 60" \
--H "X-No-Cache: false" \
--H "X-Respond-With: json" \
--H "X-Wait-For-Selector: .loader-finished" \
--H "X-Target-Selector: .main-content" \
--H "X-Remove-Selector: .ads" \
--H "X-Keep-Img-Data-Url: true" \
--H "X-Proxy-Url: https://proxy.example.com" \
--H "X-Set-Cookie: sessionId=abc123" \
--H "X-With-Generated-Alt: true" \
--H "X-With-Images-Summary: false" \
--H "X-With-links-Summary: true" \
--H "X-With-Iframe: false" \
--H "X-With-Shadow-Dom: true" \
--H "X-User-Agent: CustomUserAgent" \
--H "X-Timeout: 120" \
--H "X-Locale: en-US" \
--H "X-Referer: https://referrer.example.com" \
--H "Content-Type: application/json" \
--d '{"additional":"data"}'
-```
-
-### Request Details:
-- `url`: **Required**. The webpage URL to crawl.
-- `html`, `pdf`: **Optional**. HTML content or Base64 encoded PDF to parse.
-- `respondWith`: **Optional**, defaults to `default`. Specifies the response format. Possible values: `default`, `json`, `markdown`, `html`, `text`, `pageshot`, `screenshot`.
-- `withGeneratedAlt`, `withLinksSummary`, `withImagesSummary`, `noCache`, `keepImgDataUrl`, `withIframe`, `withShadowDom`: **Optional**, boolean attributes, default to `false`.
-- `cacheTolerance`: **Optional**, number. Determines cache validity duration.
-- `targetSelector`, `waitForSelector`, `removeSelector`: **Optional**. CSS selectors for targeting content, waiting for content to load, and removing content from the result.
-- `setCookies`, `proxyUrl`, `userAgent`, `locale`, `referer`: **Optional**. Custom settings for cookies, proxy usage, user agent, page locale, and referrer.
-- `timeout`: **Optional**, default to not set. Timeout for the crawl operation, max 180 seconds.
-
-### Response:
-A successful request will return the following structure with code 200:
-
-```json
-{
-  "code": 200, // Indicates a successful HTTP status code.
-  "status": 20000, // Extended status information for successful operation.
-  "data": "String or JSON depending on the 'respondWith' parameter", // The crawled data.
-  "meta": {} // Optional metadata associated with the response.
-}
-```
-
-### Response Details:
-- `code` and `status` are **required** and indicate the operation's success.
-- `data` contains the required result payload, its format and content depending on the requested `respondWith` option.
-- `meta` is an **optional** object for any associated metadata with the payload.
-```bash
-curl -X POST "https://s.jina.ai/search?count=10&url=https%3A%2F%2Fexample.com&html=%3Chtml%3E%3C%2Fhtml%3E&pdf=base64encodedPDF&respondWith=default&withGeneratedAlt=true&withLinksSummary=true&withImagesSummary=true&noCache=true&cacheTolerance=60&targetSelector=body%2Cdiv&waitForSelector=.content%2C.footer&removeSelector=.ads%2C.popup&keepImgDataUrl=true&withIframe=true&withShadowDom=true&setCookies=cookie1%3Dvalue1%3Bcookie2%3Dvalue2&proxyUrl=http%3A%2F%2Fproxy.example.com&userAgent=MyUserAgent&timeout=180&locale=en-US&referer=https%3A%2F%2Freferrer.example.com&ext=pdf&filetype=pdf&inbody=keyword1&intitle=titleKeyword&inpage=pageKeyword&lang=en%2Ces&loc=US%2CES&site=example.com&q=mysearchquery" \
--H "Authorization: Bearer {YOUR_JINA_TOKEN}" \ # Required: Jina Token for authentication. Default: None
--H "Accept: application/json" \ # Optional: Specifies preference for response format. Default: "application/json". Possible values: "text/event-stream", "application/json", "text/json", "text/plain"
--H "X-Cache-Tolerance: 60" \ # Optional: Sets internal cache tolerance in seconds. Default: depends on server config
--H "X-No-Cache: true" \ # Optional: Ignores internal cache. Equivalent to "X-Cache-Tolerance: 0"
--H "X-Respond-With: html" \ # Optional: Specifies non-default form factor of crawled data. Default: "default". Possible values: "markdown", "html", "text", "pageshot", "screenshot"
--H "X-Wait-For-Selector: .content" \ # Optional: CSS selector to wait for before returning. Default: None
--H "X-Target-Selector: body" \ # Optional: CSS selector for return target instead of full HTML. Default: None
--H "X-Remove-Selector: .ads" \ # Optional: CSS selector to remove elements from full HTML. Default: None
--H "X-Keep-Img-Data-Url: true" \ # Optional: Keep data-url for images instead of transforming them to object-url. Default: false
--H "X-Proxy-Url: http://proxy.example.com" \ # Optional: Custom proxy URL. Default: None
--H "X-Set-Cookie: cookie1=value1;cookie2=value2" \ # Optional: Sets cookies for the request. Default: None
--H "X-With-Generated-Alt: true" \ # Optional: Automatically generate alt-text for images. Default: false
--H "X-With-Images-Summary: true" \ # Optional: Enable summary section for images on the page. Default: false
--H "X-With-links-Summary: true" \ # Optional: Enable summary section for links on the page. Default: false
--H "X-With-Iframe: true" \ # Optional: Fill iframe contents into main. Default: false
--H "X-With-Shadow-Dom: true" \ # Optional: Fill shadow DOM contents into main. Default: false
--H "X-User-Agent: MyUserAgent" \ # Optional: Override User-Agent. Default: depends on server config
--H "X-Timeout: 180" \ # Optional: Specify timeout in seconds. Default: server-configured, Max: 180
--H "X-Locale: en-US" \ # Optional: Specify browser locale. Default: server-configured
--H "X-Referer: https://referrer.example.com" \ # Optional: Specify referer URL. Default: None
--d '{"count":10,"q":"mysearchquery","url":"https://example.com","html":"<html></html>","pdf":"base64encodedPDF","respondWith":"default","withGeneratedAlt":true,"withLinksSummary":true,"withImagesSummary":true,"noCache":true,"cacheTolerance":60,"targetSelector":["body","div"],"waitForSelector":[".content",".footer"],"removeSelector":[".ads",".popup"],"keepImgDataUrl":true,"withIframe":true,"withShadowDom":true,"setCookies":["cookie1=value1","cookie2=value2"],"proxyUrl":"http://proxy.example.com","userAgent":"MyUserAgent","timeout":180,"locale":"en-US","referer":"https://referrer.example.com","ext":["pdf"],"filetype":["pdf"],"inbody":["keyword1"],"intitle":["titleKeyword"],"inpage":["pageKeyword"],"lang":["en","es"],"loc":["US","ES"],"site":["example.com"]}' \
--H "Content-Type: application/json"
-```
-
-Response:
-```json
-{
-  "code": 200, // Required: Envelope code. Defaults to 200. Mirror of HTTP status code
-  "status": 20000, // Required: Envelope status. Defaults to 20000. In extension to HTTP status code
-  "data": "The result payload you expect", // Optional: The actual search result payload
-  "meta": {} // Optional: Additional metadata that might accompany the payload
-}
-```
-```bash
-curl -X POST "https://g.jina.ai/checkFact?questionCount=5&count=7&url=https%3A%2F%2Fexample.com&html=%3Cdiv%3EHello%2C+World!%3C%2Fdiv%3E&pdf=base64EncodedPDF&respondWith=html&withGeneratedAlt=true&withLinksSummary=true&withImagesSummary=true&noCache=true&cacheTolerance=60&targetSelector=.main-content&waitForSelector=.load-complete&removeSelector=.ads-container&keepImgDataUrl=true&withIframe=true&setCookies=sessionId%3D12345&proxyUrl=http%3A%2F%2Fproxy.example.com%3A8080&userAgent=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F58.0.3029.110+Safari%2F537.36&timeout=120&locale=en-US&referer=https%3A%2F%2Freferrer.example.com&ext=pdf&filetype=pdf&inbody=founders+edition&intitle=2023&inpage=best+costume+design&lang=es&loc=es&site=brave.com&q=fact+check+query&statement=The+earth+is+flat" \
--H "Authorization: Bearer YOUR_JINA_TOKEN" \ # Required. No default value.
--H "Accept: application/json" \ # Optional. Default is application/json. Other possible values are text/event-stream, text/json, text/plain.
--H "X-Cache-Tolerance: 60" \ # Optional. No default value. It sets internal cache tolerance in seconds.
--H "X-No-Cache: true" \ # Optional. Equivalent to X-Cache-Tolerance: 0.
--H "X-Respond-With: html" \ # Optional. Default is default. Possible values are markdown, html, text, pageshot, screenshot.
--H "X-Wait-For-Selector: .load-complete" \ # Optional. Specifies a CSS selector to wait for the appearance of such an element before returning.
--H "X-Target-Selector: .main-content" \ # Optional. Specifies a CSS selector for return target instead of the full html. Implies X-Wait-For-Selector: (same selector).
--H "X-Remove-Selector: .ads-container" \ # Optional. Specifies a CSS selector to remove elements from the full html.
--H "X-Keep-Img-Data-Url: true" \ # Optional. Keep data-url as it instead of transforming them to object-url. Only applicable when targeting markdown format.
--H "X-Proxy-Url: http://proxy.example.com:8080" \ # Optional. Specifies your custom proxy if you prefer to use one. Supported protocols are http, https, socks4, socks5.
--H "X-Set-Cookie: sessionId=12345" \ # Optional. Sets cookie(s) to the headless browser for your request.
--H "X-With-Generated-Alt: true" \ # Optional. Enable automatic alt-text generating for images without an meaningful alt-text.
--H "X-With-Images-Summary: true" \ # Optional. Enable dedicated summary section for images on the page.
--H "X-With-Links-Summary: true" \ # Optional. Enable dedicated summary section for hyperlinks on the page.
--H "X-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36" \ # Optional. Override User-Agent.
--H "X-Timeout: 120" \ # Optional. Specify timeout in seconds. Max is 180.
--H "X-Locale: en-US" \ # Optional. Specify browser locale for the page.
--H "X-Referer: https://referrer.example.com" \ # Optional. Specify referer for the page.
--d '{"q":"fact check query","statement":"The earth is flat"}' # Data payload contains the query and statement for fact-checking.
-
-```
-
-Response:
-```json
-{
-  "status": "success",
-  "data": {
-    "factCheckResult": "False",
-    "reason": "Numerous scientifical evidences supporting earth as spherical.",
-    "sources": ["https://source.example.com/science/earth-shape"]
-  }
-}
-```
-
-This example showcases a sophisticated use of the `/checkFact` endpoint with a broad range of query parameters and headers for customization, indicating the flexibility of the API in handling different client requests for fact-checking while leveraging multiple Web crawling and searching techniques.
+Please note that this example covers the explanation and possible values for each attribute as requested. Additionally, it's made generic in places where specific details (like `other_tokenizer_names`) would depend on the actual API documentation which may list all available segmenters or tokenizer models.
