@@ -16,7 +16,7 @@ Example Request:
 {
     "model": "jina-embeddings-v3",
     "task": "text-matching",
-    "input": ["search query", "document text"]
+    "input": ["search query", "document text", ...]
 }
 Example Response:
 {
