@@ -27,14 +27,27 @@ async function processHtmlSnippets() {
 
         // Generate prompt using HTML content directly
         const prompt = `\
+#### start file content
 ${fileContent}
+#### end file content
 
-Generate the most sophisticated example request possible in curl format and the response of the request.
+Generate the most sophisticated example request possible in python format without imports. Also generate the example response of the request.
 For all attributes make a comment with the following requirements:
 - The comment must be concise
 - The comment must indicate if the attribute is optional or required
 - The comment must indicate the default value
-- The comment must provide an exhaustive list of all possible values for the attribute even if this means the comment is long. Nothing like etc. or similar is allowed.`;
+- The comment must provide an exhaustive list of all possible values for the attribute even if this means the comment is long. Nothing like etc. or similar is allowed.
+
+Note:
+you must only generate output in the following format:
+## request
+endpoint = f"https://..." # < comment here >
+... # < comment here >
+...
+response = requests. ... # < comment here >
+## response
+... # < comment here >
+...`;
 
         // Call the LLM API to get the response
         const response = await promptLLMOpenAI(prompt, 'gpt-4o');
