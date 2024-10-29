@@ -1,122 +1,206 @@
 JINA AI SEARCH FOUNDATION APIs - IMPLEMENTATION GUIDE
 
 Key Principles:
-- Choose simplest solution: Use single API when possible
-- Answer "can't do" for tasks outside these APIs' scope
-- Prefer built-in features over custom implementations
-- Leverage multilingual/multimodal capabilities when needed
-- Output the final code directly, dont explain anything.
+Choose simplest solution: Use single API when possible
+Answer "can't do" for tasks outside these APIs' scope
+Prefer built-in features over custom implementations
+Leverage multilingual (jina-embeddings-v3)/multimodal (jina-clip-v1) capabilities when needed
+Output the final code directly, dont explain anything.
 
 Core APIs and Use Cases:
 
 1. EMBEDDINGS API (https://api.jina.ai/v1/embeddings)
-Purpose: Convert text/images to fixed-length vectors
-Best for: Semantic search, similarity matching, clustering
-Example Request:
+Purpose: Convert text/images to fixed-length vectors, default use v3 as the model, for image data use jina-clip-v1
+Best for: Embedding, vectorizing, semantic search, similarity matching, clustering
+Request:
+curl -X 'POST' \
+  'http://api.jina.ai/v1/embeddings' \
+  -H 'accept: application/json' \
+  -H 'Authorization: Bearer YOUR_BEARER_TOKEN' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "model": "jina-clip-v1",
+  "input": ["Input sent1", "Input sent2", "Input sent3", ...],
+  "embedding_type": "float",
+  "task": "retrieval.query", 
+  "dimensions": 768,
+  "normalized": false,
+  "late_chunking": false
+}'
+Fields:
+model: (required) Model ID. Values: "jina-clip-v1", "jina-embeddings-v3"
+input: (required) List of texts to embed
+embedding_type: (optional, default: float) Format. Values: "float", "base64", "binary", "ubinary"
+task: (optional) Intended use. Values: "retrieval.query", "retrieval.passage", "text-matching", "classification", "separation"
+dimensions: (optional) Output size
+normalized: (optional, default: false) L2 normalization
+late_chunking: (optional, default: false) Late chunking flag
+Response:
 {
-    "model": "jina-embeddings-v3",
-    "task": "text-matching",
-    "input": ["search query", "document text", ...]
-}
-Example Response:
-{
-  "model": "jina-embeddings-v3",
-  "object": "list",
-  "usage": {
-    "total_tokens": 410,
-    "prompt_tokens": 410
-  },
+  "model": "jina-clip-v1",
+  "object": "list", 
   "data": [
     {
-      "object": "embedding",
       "index": 0,
-      "embedding": [0.0086874915, 0.10442207, ...]
+      "embedding": [0.1, 0.2, 0.3],
+      "object": "embedding"
     }
-  ]
+  ],
+  "usage": {
+    "total_tokens": 15
+  }
 }
 
-2. RERANKER API (https://api.jina.ai/v1/rerank)
+3. RERANKER API (https://api.jina.ai/v1/rerank)
 Purpose: Improve search result relevancy
 Best for: Refining search results, RAG accuracy
-Example Request:
-{
-    "model": "jina-reranker-v2-base-multilingual",
-    "query": "search query",
-    "documents": ["candidate1", "candidate2"]
-}
-Example Response:
+Request:
+curl -X 'POST' \
+  'http://api.jina.ai/v1/rerank' \
+  -H 'accept: application/json' \
+  -H 'Authorization: Bearer YOUR_ACCESS_TOKEN' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "model": "jina-reranker-v2-base-multilingual",
+  "query": "Search query",
+  "documents": ["Document 1", "Document 2", "Document 3", ...],
+  "top_n": 2,
+  "return_documents": true
+}'
+Fields:
+model: (required) Model ID
+query: (required) Search query
+documents: (required) List to rerank
+top_n: (optional) Number of results
+return_documents: (optional) Include doc text
+Response:
 {
   "model": "jina-reranker-v2-base-multilingual",
-  "usage": {
-    "total_tokens": 815,
-    "prompt_tokens": 815
-  },
   "results": [
     {
       "index": 0,
-      "document": {
-        "text": "Organic skincare for sensitive skin with aloe vera and chamomile..."
-      },
-      "relevance_score": 0.8783142566680908
+      "document": {"text": "Document 1"},
+      "relevance_score": 0.9
     }
-  ]
+  ],
+  "usage": {
+    "total_tokens": 15,
+    "prompt_tokens": 15
+  }
 }
 
 3. READER API (https://r.jina.ai)
-Purpose: Convert URLs to LLM-friendly text (basically a markdown)
-Best for: Web scraping, web content extraction, RAG input preparation
-Example Response:
-Title: Example Domain
-URL Source: https://example.com/
-Markdown Content:
-This domain is for use in illustrative examples in documents...
+Purpose: Convert URLs to LLM-friendly text
+Best for: Web scraping, content extraction, RAG input
+Request:
+curl -X POST "https://r.jina.ai/" \
+-H "Authorization: Bearer YOUR_JINA_TOKEN" \
+-H "Accept: application/json" \
+-H "X-Cache-Tolerance: 60" \
+-H "X-No-Cache: false" \
+-d '{
+  "url": "https://example.com",
+  "respondWith": "json",
+  "withGeneratedAlt": true,
+  "withLinksSummary": true,
+  "targetSelector": ".main-content",
+  "waitForSelector": ".loader-finished",
+  "removeSelector": ".ads",
+  "timeout": 120
+}'
+Fields:
+url: (required) URL to crawl
+respondWith: (optional) Response format. Values: "default", "json", "markdown", "html", "text"
+Other fields control crawling behavior like selectors, timeouts etc.
+Response:
+{
+  "code": 200,
+  "status": 20000,
+  "data": "The crawled content",
+  "meta": {}
+}
 
 4. SEARCH API (https://s.jina.ai)
 Purpose: Web search with LLM-friendly results
-Best for: Knowledge retrieval, RAG source gathering
-Example Response:
-[1] Title: Jina AI - Your Search Foundation, Supercharged.
-[1] URL Source: https://jina.ai/
-[1] Description: Our frontier models form the search foundation...
-[1] Markdown Content: Jina AI - Your Search Foundation, Supercharged.
+Best for: Knowledge retrieval, RAG sources
+Request:
+curl -X POST "https://s.jina.ai/" \
+-H "Authorization: Bearer YOUR_JINA_TOKEN" \
+-H "Accept: application/json" \
+-d '{
+  "q": "search query",
+  "count": 10,
+  "respondWith": "json",
+  "withGeneratedAlt": true,
+  "withLinksSummary": true,
+  "timeout": 120
+}'
+Fields:
+q: (required) Search query
+count: (optional) Result count
+Other fields control search behavior and response format
+Response:
 
-5. GROUNDING API (https://g.jina.ai)
+{
+  "code": 200,
+  "status": 20000,
+  "data": "The search results",
+  "meta": {}
+}
+
+GROUNDING API (https://g.jina.ai)
 Purpose: Ground statements with web knowledge
 Best for: Fact verification, claim validation
-Example Response:
-Title: Example Domain
-URL Source: https://example.com/
-Markdown Content: [Fact verification results...]
+Request:
+curl -X POST "https://g.jina.ai/" \
+-H "Authorization: Bearer YOUR_JINA_TOKEN" \
+-H "Accept: application/json" \
+-d '{
+  "q": "fact check query",
+  "statement": "Statement to verify"
+}'
+Response:
+{
+  "status": "success",
+  "data": {
+    "factCheckResult": "True/False",
+    "reason": "Explanation",
+    "sources": ["source1", "source2"]
+  }
+}
 
-6. CLASSIFIER API (https://api.jina.ai/v1/classify)
+5. CLASSIFIER API (https://api.jina.ai/v1/classify)
 Purpose: Zero-shot/few-shot classification
 Best for: Content categorization without training
-Example Request:
-{
-    "model": "jina-embeddings-v3",
-    "input": [{"text": "content"}],
-    "labels": ["category1", "category2"]
-}
-Example Response:
+Request:
+curl -X POST "https://api.jina.ai/v1/classify" \
+-H "Authorization: Bearer YOUR_JINA_TOKEN" \
+-H "Accept: application/json" \
+-d '{
+  "model": "jina-embeddings-v3",
+  "input": [{"text": "sent 1"}, {"text": "sent 2"}, {"text": "sent 3"}],
+  "labels": ["category1", "category2"]
+}'
+Response:
 {
   "usage": {
-    "total_tokens": 196,
-    "prompt_tokens": 196
+    "total_tokens": 196
   },
   "data": [
     {
       "object": "classification",
       "index": 0,
-      "prediction": "Simple task",
-      "score": 0.35216382145881653
+      "prediction": "category1",
+      "score": 0.35
     }
   ]
 }
 
-7. SEGMENTER API (https://segment.jina.ai)
+6. SEGMENTER API (https://segment.jina.ai)
 Purpose: Tokenize and segment long text
-Best for: Breaking down documents into manageable chunks
-Example Response:
+Best for: Breaking down documents into chunks
+Response Example:
+
 {
   "num_tokens": 78,
   "tokenizer": "cl100k_base",
@@ -124,66 +208,37 @@ Example Response:
   "num_chunks": 4,
   "chunk_positions": [[3,55], [55,93], [93,110], [110,135]],
   "chunks": [
-    "Jina AI: Your Search Foundation, Supercharged! 🚀\n  ",
-    "Ihrer Suchgrundlage, aufgeladen! 🚀\n  ",
-    "您的搜索底座，从此不同！🚀\n  ",
-    "検索ベース,もう二度と同じことはありません！🚀\n"
+    "Chunk 1",
+    "Chunk 2",
+    "Chunk 3",
+    "Chunk 4"
   ]
 }
 
-RECOMMENDED PATTERNS:
-
-1. Basic Search Implementation:
-- For simple queries: Use Search API directly
-- For better relevancy: First use Search API, then pass results through Reranker API
-- Consider using embedding comparison only when semantic matching is crucial
-
-2. RAG (Retrieval-Augmented Generation) Pipeline:
-- Basic flow: Reader API -> Segmenter -> Embeddings
-- Enhanced flow: Add Reranker as final step
-- When to use each step:
-  * Reader: When source is a URL
-  * Segmenter: When content is long
-  * Embeddings: For semantic matching
-  * Reranker: When result ordering is critical
-
-3. Fact Checking Implementation:
-- Simple verification: Use Grounding API directly
-- Enhanced verification: Search API first, then Grounding API
-- Use X-Site header to specify trusted sources
-
-4. Classification Tasks:
-- Single-language: Use Classifier API directly
-- Multilingual: Use embeddings-v3 model
-- Multiple categories: Provide semantic labels
-
-5. Content Processing:
-- URL content: Reader API only
-- Long text: Segmenter API only
-- Mixed content: Reader -> Segmenter
-
 INTEGRATION GUIDELINES:
-- Always handle API errors and rate limits
-- Implement retries for network failures
-- Cache results when appropriate
-- Validate inputs before API calls
-- Handle multilingual content properly
+
+Handle API errors and rate limits
+Implement retries
+Cache appropriately
+Validate inputs
+Handle multilingual content
 
 ANTI-PATTERNS TO AVOID:
-1. Don't chain APIs unnecessarily
-2. Don't segment already short text
-3. Don't rerank without query-document pairs
-4. Don't use grounding for open questions
+
+Don't chain APIs unnecessarily
+Don't segment short text
+Don't rerank without query-document pairs
+Don't use grounding for open questions
 
 WHAT THESE APIs CAN'T DO:
-1. Generate new text or images
-2. Modify or edit content
-3. Execute code or perform calculations
-4. Real-time data processing
-5. Store or cache results permanently
+
+Generate new text/images
+Modify/edit content
+Execute code/calculations
+Permanent storage
 
 All APIs require:
-- Authorization: Bearer token (get it from https://jina.ai/?sui=apikey)
-- Error handling
-- Rate limit consideration
-- Response validation
+
+Authorization: Bearer token (https://jina.ai/?sui=apikey)
+Rate limit consideration (https://jina.ai/contact-sales#rate-limit)
+Error handling
