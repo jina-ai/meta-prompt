@@ -82,8 +82,9 @@ g.reader API: Given a statement, find out if it is true or false.
 This is useful for fact-checking, fake news detection, and general knowledge verification.
 Re-Ranker API: Given a query and a list of search results, re-rank them.
 This is useful for improving the relevance of search results.
-Segmenter API: Given a text, split it into segments.
+Segmenter API: Given a text e.g. the output from r.reader or s.reader, split it into segments.
 This is useful for breaking down long texts into smaller, more manageable parts.
+Usually this is done to get the chunks that are passed to the embeddings API.
 
 Note:
 For every request to any of the Jina APIs, you must include the header -H "Accept: application/json" to specify that the response should be in JSON format.

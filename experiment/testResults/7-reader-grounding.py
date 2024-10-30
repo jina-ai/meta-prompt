@@ -1,17 +1,16 @@
-import os
 import requests
+import os
 
 token = os.environ["JINA_API_KEY"]
-
-# Use the g.reader API to check the validity of the statement from bbc.com
 endpoint = "https://g.jina.ai"
-headers = {"Accept": "application/json", "Authorization": f"Bearer {token}"}
-data = {
-    "statement": "The UK government has announced a new law that will require social media companies to verify the age of their users.",
-    "source": ["https://bbc.com"]
+query = "The UK government has announced a new law that will require social media companies to verify the age of their users."
+
+headers = {
+  "Accept": "application/json",
+  "Authorization": f"Bearer {token}"
 }
 
-response = requests.post(endpoint, json=data, headers=headers)
+response = requests.get(f"{endpoint}", params={"q": query}, headers=headers)
+data = response.json()
 
-# Output the response from the API call
-print(response.json())
+print(data)

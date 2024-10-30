@@ -1,32 +1,37 @@
 import requests
 import os
+import json
 
-# Load the Jina API key from environment variable
+# Load the token from environment variables
 token = os.environ["JINA_API_KEY"]
 
-endpoint = "https://api.jina.ai/v1/embeddings"  # The API endpoint for retrieving embeddings.
-
+# API endpoint for generating embeddings
+endpoint = "https://api.jina.ai/v1/embeddings"
 headers = {
     "Content-Type": "application/json",
     "Authorization": f"Bearer {token}",
     "Accept": "application/json"
 }
 
+# Preparing the data - converting numbers 1 to 100 into text
+numbers_in_text = [{"text": str(number)} for number in range(1, 101)]
+
 data = {
     "model": "jina-clip-v1",
     "normalized": True,
     "embedding_type": "float",
-    "input": [{"text": str(number)} for number in range(1, 101)]
+    "input": numbers_in_text
 }
 
 response = requests.post(endpoint, json=data, headers=headers)
+embeddings_response = response.json()
 
-# Assuming the response JSON structure
-if response.status_code == 200:
-    embeddings = response.json().get("data", [])
-    # Process or handle the embeddings as needed
-    # For instance, printing the embeddings
-    for embedding in embeddings:
-        print(f"Index: {embedding['index']}, Embedding: {embedding['embedding'][:5]}...")  # Example of handling the response
+# Check if the request was successful
+if embeddings_response["code"] == 200:
+    # Output the embeddings
+    for item in embeddings_response["data"]:
+        index = item["index"]
+        embedding = item["embedding"]
+        print(f"Number: {numbers_in_text[index]['text']}, Embedding: {embedding[:5]}...") # Displaying only the first 5 dimensions for brevity
 else:
-    print(f"Error: {response.json().get('message', 'Unable to retrieve embeddings.')}")
+    print("Error generating embeddings:", embeddings_response.get("message", "Unknown error"))
