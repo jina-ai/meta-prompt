@@ -17,7 +17,7 @@ endpoint = "https://api.jina.ai/v1/classify" # The API endpoint to call for clas
 # Headers for the request
 headers = {
     "Content-Type": "application/json", # Specifies the format of the data being sent. Required. Default is None. Only value is "application/json".
-    "Authorization": "Bearer jina_ad42b3eb889c44db9f2190ec851c68c9o5LJmW9Glf5wP-V3JOweluX9WAE2" # For authenticating API requests. Required. Default is None. Format must be "Bearer [token]".
+    "Authorization": "Bearer <token here>" # For authenticating API requests. Required. Default is None. Format must be "Bearer [token]".
 }
 
 # Data payload for POST request, in dictionary format
@@ -116,7 +116,7 @@ endpoint = "https://api.jina.ai/v1/classify" # The endpoint URL for the classifi
 
 headers = {
     "Content-Type": "application/json", # Indicates the media type of the resource; required, default is application/json.
-    "Authorization": "Bearer jina_ad42b3eb889c44db9f2190ec851c68c9o5LJmW9Glf5wP-V3JOweluX9WAE2" # Provides the authentication token; required, no default value.
+    "Authorization": "Bearer <token here>" # Provides the authentication token; required, no default value.
 }
 
 data = {
@@ -194,7 +194,7 @@ response = requests.post(endpoint, headers=headers, json=data) # Sends a post re
 endpoint = "https://api.jina.ai/v1/embeddings" # API endpoint URL for embedding requests.
 headers = {
     "Content-Type": "application/json", # Required. Specifies the format of the data being sent.
-    "Authorization": "Bearer jina_ad42b3eb889c44db9f2190ec851c68c9o5LJmW9Glf5wP-V3JOweluX9WAE2" # Required. The token used for authorization.
+    "Authorization": "Bearer <token here>" # Required. The token used for authorization.
 }
 data = {
     "model": "jina-embeddings-v3", # Required. The model ID.
@@ -305,7 +305,7 @@ response = requests.post(endpoint, headers=headers, json=data)  # Sends a POST r
 ```python
 endpoint = "https://r.jina.ai/https://example.com"  # The URL endpoint for the request; required
 headers = {
-    "Authorization": "Bearer jina_ad42b3eb889c44db9f2190ec851c68c9o5LJmW9Glf5wP-V3JOweluX9WAE2",  # Authorization token; required
+    "Authorization": "Bearer <token here>",  # Authorization token; required
     "Content-Type": "application/json",  # The content type of the request; required; default value: application/json; possible values: application/json
     "Accept": "application/json",  # The response format; optional; default value: application/json; possible values: application/json, text/html
     # Additional adjustable request headers for custom use cases; optional
@@ -337,7 +337,7 @@ response = requests.get(endpoint, headers=headers, params=params)  # The HTTP re
 endpoint = "https://api.jina.ai/v1/rerank" # The endpoint URL to which the rerank request will be sent - required
 headers = {
     "Content-Type": "application/json", # Specifies the format of the payload being sent - required
-    "Authorization": "Bearer jina_ad42b3eb889c44db9f2190ec851c68c9o5LJmW9Glf5wP-V3JOweluX9WAE2" # Provides the authentication token for the request - required
+    "Authorization": "Bearer <token here>" # Provides the authentication token for the request - required
 }
 data = {
     "model": "jina-reranker-v2-base-multilingual", # Specifies the model to be used for reranking - required, no default value
@@ -390,7 +390,7 @@ query = "When was Jina AI founded?" # The search query string. Required.
 
 # Headers dictionary to include in the request. Required.
 headers = {
-    "Authorization": "Bearer jina_ad42b3eb889c44db9f2190ec851c68c9o5LJmW9Glf5wP-V3JOweluX9WAE2" # Authentication token. Required.
+    "Authorization": "Bearer <token here>" # Authentication token. Required.
 }
 
 # Additional search parameters and configuration. Optional.
