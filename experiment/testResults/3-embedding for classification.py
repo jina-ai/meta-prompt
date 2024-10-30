@@ -1,9 +1,9 @@
-import os
 import requests
+import os
 
 token = os.environ["JINA_API_KEY"]
-
 endpoint = "https://api.jina.ai/v1/embeddings"
+
 headers = {
     "Content-Type": "application/json",
     "Authorization": f"Bearer {token}",
