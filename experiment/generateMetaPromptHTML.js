@@ -38,7 +38,7 @@ For all attributes make a comment with the following requirements:
 - The comment must indicate if the attribute is optional or required
 - The comment must indicate the default value
 - The comment must provide an exhaustive list of all possible values for the attribute even if this means the comment is long. Nothing like etc. or similar is allowed.
-
+- instead of the actual jina token put the place holder <token here>
 Note:
 you must only generate output in the following format:
 ## request
