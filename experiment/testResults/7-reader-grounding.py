@@ -1,32 +1,38 @@
 import os
 import requests
+from datetime import datetime
 
-# Environment variable for Jina API Key
-jina_api_key = os.getenv('JINA_API_KEY')
+# Load the environment variable for the Jina API key
+token = os.environ["JINA_API_KEY"]
 
-# S.reader API endpoint for searching
-endpoint = 'https://s.jina.ai'
+# Endpoint and headers for the g.reader API to check the statement's validity
+endpoint = "https://g.jina.ai"
 headers = {
-    'Authorization': f'Bearer {jina_api_key}'
-}
-params = {
-    'query': 'The UK government has announced a new law that will require social media companies to verify the age of their users.',
-    'lang': 'en-US'
+    "Authorization": f"Bearer {token}",  # Use the loaded API key for authorization
+    "Accept": "application/json"  # Request JSON response for ease of parsing
 }
 
-# Sending the GET request
-response = requests.get(endpoint, headers=headers, params=params)
+# The statement to check
+statement = "The UK government has announced a new law that will require social media companies to verify the age of their users."
 
-# Parsing the response
+# Prepare and send the request
+response = requests.get(endpoint, params={"query": statement}, headers=headers)
+
+# Parsing the response to handle the JSON data
 if response.status_code == 200:
     data = response.json()
-    articles = data.get('data', {})
-    relevant_articles = [article for article in articles if 'bbc.com' in article.get('url', '')]
-    if relevant_articles:
-        print("Found relevant articles on BBC.com:")
-        for article in relevant_articles:
-            print(article.get('title'), '-', article.get('url'))
+    # Check if the statement is found to be true or false based on the g.reader API response
+    if data["data"]["result"] == True:
+        result = "verified as true"
     else:
-        print("No relevant articles found on BBC.com regarding the statement.")
+        result = "found to be false"
+    references = data["data"].get("references", "No references provided")
+    print(f"The statement was {result}.\nReferences: {references}")
 else:
-    print("Failed to fetch data from API.")
+    # Handle API errors or issues
+    print("Failed to verify the statement due to an error with the g.reader API.")
+
+# Optionally, log or handle the verification result further, e.g., by storing it in a database or file for record-keeping.
+# Record the date and time of the verification attempt for future reference.
+verification_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+print(f"Verification attempt time: {verification_time}")

@@ -2,3 +2,9 @@ requests
 scikit-learn
 umap-learn
 matplotlib
+requests
+beautifulsoup4
+numpy
+umap-learn
+matplotlib
+nltk==3.8.1

@@ -1,19 +1,21 @@
 import requests
+import os
+import json
+
+token = os.environ["JINA_API_KEY"]
 
 endpoint = "https://api.jina.ai/v1/embeddings"
 headers = {
     "Content-Type": "application/json",
-    "Authorization": f"Bearer {os.getenv('JINA_API_KEY')}"
+    "Authorization": f"Bearer {token}"
 }
 data = {
-    "model": "jina-embeddings-v3",
-    "task": "text-matching",
-    "dimensions": 1024,
-    "late_chunking": True,
-    "embedding_type": "float",
+    "model": "jina-clip-v1",
+    "normalized": True,
     "input": [
-        "Jina"
+        {"text": "Jina"}
     ]
 }
-response = requests.post(endpoint, json=data, headers=headers)
+
+response = requests.post(endpoint, headers=headers, json=data)
 print(response.json())
