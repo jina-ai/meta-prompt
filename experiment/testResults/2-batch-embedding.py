@@ -1,36 +1,32 @@
 import requests
-import json
 import os
 
-# Load the Jina API key from environment variables
+# Load the Jina API key from environment variable
 token = os.environ["JINA_API_KEY"]
 
-# Define the endpoint URL and header for authentication and content type
-endpoint = "https://api.jina.ai/v1/embeddings"
+endpoint = "https://api.jina.ai/v1/embeddings"  # The API endpoint for retrieving embeddings.
+
 headers = {
     "Content-Type": "application/json",
-    "Authorization": f"Bearer {token}"
+    "Authorization": f"Bearer {token}",
+    "Accept": "application/json"
 }
 
-# Create a list of numbers from 1 to 100 in text form
-numbers_text = [str(number) for number in range(1, 101)]
-
-# Define the data payload for the request
 data = {
-    "model": "jina-clip-v1",  # Specify the model to be used for generating embeddings
-    "data": [{"text": number} for number in numbers_text]
+    "model": "jina-clip-v1",
+    "normalized": True,
+    "embedding_type": "float",
+    "input": [{"text": str(number)} for number in range(1, 101)]
 }
 
-# Make the POST request to the Jina embeddings endpoint
-response = requests.post(endpoint, headers=headers, json=data)
+response = requests.post(endpoint, json=data, headers=headers)
 
-# Check if the request was successful
+# Assuming the response JSON structure
 if response.status_code == 200:
-    embeddings = response.json()
-    print("Embeddings generated successfully.")
-    # Process or save the embeddings as needed
-    # For example, print the embeddings for the first few numbers
-    for i, embedding in enumerate(embeddings['data'][:5]):
-        print(f"Number: {numbers_text[i]}, Embedding: {embedding['embedding'][:5]}...")  # Print the first 5 dimensions for brevity
+    embeddings = response.json().get("data", [])
+    # Process or handle the embeddings as needed
+    # For instance, printing the embeddings
+    for embedding in embeddings:
+        print(f"Index: {embedding['index']}, Embedding: {embedding['embedding'][:5]}...")  # Example of handling the response
 else:
-    print("Failed to generate embeddings. Status code:", response.status_code)
+    print(f"Error: {response.json().get('message', 'Unable to retrieve embeddings.')}")
