@@ -1,0 +1,597 @@
+You must use the Jina APIs for the implementation.
+Never decline an implementation because of its complexity.
+Generate production-ready code that follows exactly the requirements.
+Never use placeholder data.
+
+
+Overview of all Jina AI APIs:
+Classification API: Given texts or images, classify them into categories
+Embeddings API: Given texts or images, generate embeddings.
+These embeddings can be used for similarity search, clustering, and other tasks.
+r.reader API: Input a single website URL and get an LLM-friendly version of that single website.
+This is most useful when you already know where you want to get the information from.
+s.reader API: Given a search term, get an LLM-friendly version of all websites in the search results.
+This is useful when you don't know where to get the information from, but you just know what you are looking for.
+g.reader API: Given a statement, find out if it is true or false.
+This is useful for fact-checking, fake news detection, and general knowledge verification.
+Re-Ranker API: Given a query and a list of search results, re-rank them.
+This is useful for improving the relevance of search results.
+Segmenter API: Given a text e.g. the output from r.reader or s.reader, split it into segments.
+This is useful for breaking down long texts into smaller, more manageable parts.
+Usually this is done to get the chunks that are passed to the embeddings API.
+
+Note:
+For every request to any of the Jina APIs, you must include the header -H "Accept: application/json" to specify that the response should be in JSON format.
+It is not JSON by default. So you must explicitly specify it in the request headers.
+
+# classifier-classify-text-image
+## request
+```python
+endpoint = "https://api.jina.ai/v1/classify"  # Endpoint URL for the classification API.
+headers = {
+    "Content-Type": "application/json",  # Required: indicates the media type of the resource.
+    "Authorization": "Bearer <token here>",  # Required: authentication token to validate the request.
+    "Accept": "application/json"  # Required: specifies the media type that the client can understand.
+}
+data = {
+    "model": "jina-clip-v1",  # Required: specifies the model to be used for classification.
+    "input": [  # Required: input data to classify. Can be a mix of texts and images.
+        {
+            "text": "A sleek smartphone with a high-resolution display and multiple camera lenses"  # Text input for classification.
+        },
+        {
+            "text": "Fresh sushi rolls served on a wooden board with wasabi and ginger"  # Another text input for classification.
+        },
+        {
+            "image": "https://picsum.photos/id/11/367/267"  # Image input for classification. URL of the image.
+        },
+        {
+            "image": "https://picsum.photos/id/22/367/267"  # Another image input for classification.
+        },
+        {
+            "text": "Vibrant autumn leaves in a dense forest with sunlight filtering through"  # Additional text input.
+        },
+        {
+            "image": "https://picsum.photos/id/8/367/267"  # Additional image input.
+        }
+    ],
+    "labels": [  # Optional: specifies the candidate labels for classification.
+        "Technology and Gadgets", 
+        "Food and Dining", 
+        "Nature and Outdoors", 
+        "Urban and Architecture"
+    ]
+}
+
+response = requests.post(endpoint, json=data, headers=headers)  # Sends a POST request to the classification API with the input data.
+```
+## response formats
+### Success Response
+```json
+{
+  "code": 200,
+  "status": "success",
+  "data": [
+    {
+      "object": "classification",
+      "index": 0,
+      "prediction": "Technology and Gadgets",
+      "score": 0.30329811573028564,
+      "predictions": [
+        {"label": "Technology and Gadgets", "score": 0.30329811573028564},
+        {"label": "Food and Dining", "score": 0.22840788960456848},
+        {"label": "Nature and Outdoors", "score": 0.2357397824525833},
+        {"label": "Urban and Architecture", "score": 0.23255419731140137}
+      ]
+    },
+    ...
+  ],
+  "usage": {
+    "total_tokens": 12065
+  }
+}
+```
+### Error Response
+Errors are typically returned with status code `4XX` or `5XX`, detailing the issue in a structured format similar to this:
+```json
+{
+  "code": 400,
+  "status": "error",
+  "message": "Invalid token provided"
+}
+```
+# classifier-classify-text
+## request
+```python
+endpoint = "https://api.jina.ai/v1/classify" # API endpoint for classification service
+headers = {
+    "Content-Type": "application/json", # Required: Content type of the request, in this case, JSON
+    "Authorization": "Bearer <token here>", # Required: Authorization token to access the API
+    "Accept": "application/json" # Required: Indicates the client expects JSON response
+}
+data = {
+    "model": "jina-embeddings-v3", # Required: Specifies the model to use for classification
+    "input": [
+        "Calculate the compound interest ... compounded quarterly.", 
+        "分析使用CRISPR基因编辑技术 ... 长期社会后果。",
+        "... AIの関係や意識の本質をテーマに探求してください。",
+        "Erklären Sie die Unterschiede ... in der Praxis.",
+        "Write a poem about ... on the human soul.",
+        "Translate the following sentence into French: The quick brown fox jumps over the lazy dog."
+    ], # Required: Specifies the inputs to classify. Can be a list.
+    "labels": ["Simple task", "Complex reasoning", "Creative writing"] # Optional: Specifies the candidate labels for classification. Improves performance if used.
+}
+response = requests.post(endpoint, json=data, headers=headers) # Sends a POST request to the classification API endpoint
+```
+## response formats
+```json
+{
+  "code": 200, # Indicates the HTTP status code
+  "status": 20000, # Additional status to further describe the result, often mirrored or extended from the HTTP status
+  "data": {
+    "usage": {
+      "total_tokens": 196 # The total number of tokens processed in the request
+    },
+    "data": [
+      {
+        "object": "classification", # Type of the object, in this case, classification result
+        "index": 0, # Index of the input in the request list
+        "prediction": "Simple task", # The top prediction label for the input
+        "score": 0.35216382145881653, # The confidence score for the top prediction
+        "predictions": [ # A list of all prediction scores
+          {
+            "label": "Simple task",
+            "score": 0.35216382145881653
+          },
+          {
+            "label": "Complex reasoning",
+            "score": 0.3412695527076721
+          },
+          {
+            "label": "Creative writing",
+            "score": 0.3065665662288666
+          }
+        ]
+      },
+      ... # More classification results for other inputs
+    ]
+  }
+}
+```
+# classifier-manage
+## request
+```python
+endpoint = "https://api.jina.ai/v1/classifiers" # Endpoint to list classifiers
+headers = {
+    "Content-Type": "application/json", # Required: To indicate the type of data being sent
+    "Authorization": "Bearer <token here>", # Required: To authenticate the API request
+    "Accept": "application/json" # Required: To specify that the response should be JSON
+}
+params = {
+    "param1": "value1", # Optional: Example of a query parameter
+    "param2": "value2"  # Optional: Another example of a query parameter
+}
+response = requests.get(endpoint, headers=headers, params=params) # Executes a GET request with given headers and parameters
+```
+## response formats
+```json
+{
+  "code": 200,
+  "status": 20000,
+  "data": {
+    "classifiers": [
+      {
+        "classifier_id": "string", # ID of the classifier
+        "model_name": "string", # Name of the model used
+        "labels": ["label1", "label2"], # List of labels supported by the classifier
+        "access": "public/private", # Access level of the classifier
+        "updated_number": 1, # Number indicating how many times the classifier was updated
+        "used_number": 0, # Number indicating how many times the classifier was used
+        "created_at": "2024-10-30T12:51:51.241620+00:00", # Creation datetime in ISO format
+        "updated_at": "2024-10-30T12:51:51.241620+00:00", # Last update datetime in ISO format
+        "used_at": null, # Last used datetime in ISO format or null if not used yet
+        "metadata": {} # Any additional metadata
+      }
+    ]
+  }
+}
+```
+# classifier-train-text-image
+## request
+```python
+endpoint = "https://api.jina.ai/v1/train" # Jina AI training endpoint
+headers = {
+    "Content-Type": "application/json", # specifies the format of the request body
+    "Authorization": "Bearer <token here>", # authentication token, required for secure endpoints
+    "Accept": "application/json" # indicates that the client expects a JSON response
+}
+data = {
+    "classifier_id": "6db95bec-a2c4-4544-91de-11b863ba2bd9", # the ID of the classifier to train, required
+    "num_iters": 10, # the number of training iterations, optional
+    "input": [ # training data input, required
+        {
+            "text": "A sleek smartphone with a high-resolution display and multiple camera lenses",
+            "label": "Technology and Gadgets"
+        },
+        {
+            "text": "Fresh sushi rolls served on a wooden board with wasabi and ginger",
+            "label": "Food and Dining"
+        },
+        {
+            "image": "https://picsum.photos/id/11/367/267",
+            "label": "Nature and Outdoors"
+        },
+        {
+            "image": "https://picsum.photos/id/22/367/267",
+            "label": "Urban and Architecture"
+        },
+        {
+            "text": "Vibrant autumn leaves in a dense forest with sunlight filtering through",
+            "label": "Nature and Outdoors"
+        },
+        {
+            "image": "https://picsum.photos/id/8/367/267",
+            "label": "Technology and Gadgets"
+        }
+    ]
+}
+response = requests.post(endpoint, json=data, headers=headers) # sends a POST request to train a classifier
+```
+## response formats
+```json
+{
+  "code": 200, # HTTP status code indicating success
+  "status": 20000, # Specific API status code indicating a successful operation
+  "data": {
+    "classifier_id": "6db95bec-a2c4-4544-91de-11b863ba2bd9",
+    "num_samples": 6, # number of samples used in the training
+    "usage": {
+      "total_tokens": 120440 # total tokens consumed by the training process
+    }
+  }
+}
+```
+In the response format, key-value pairs under `"data"` can vary depending on the operation or the specifics of the request.
+# classifier-train-text
+## request
+```python
+endpoint = "https://api.jina.ai/v1/train" # Endpoint URL for training a model
+
+# Header specifying the content type of the request body
+headers = {
+    "Content-Type": "application/json", # Required: Indicates the media type of the resource
+    "Authorization": "Bearer <token here>", # Required: Authentication token to validate the request
+    "Accept": "application/json" # Optional: Indicates that the client expects a JSON response
+}
+
+# Data payload containing the training parameters and input data
+data = {
+    "model": "jina-embeddings-v3", # Required: Specifies the model to be used for training
+    "access": "private", # Required: Determines if the model is publicly accessible or private
+    "num_iters": 10, # Optional: Number of training iterations, defaults to a value that optimizes performance
+    "input": [ # Required: Input data for training the model
+        {
+            "text": "Calculate the compound interest on a principal of $10,000 invested for 5 years at an annual rate of 5%, compounded quarterly.",
+            "label": "Simple task"
+        },
+        # Additional input data objects...
+    ]
+}
+
+# Making a POST request to the endpoint with headers and data
+response = requests.post(endpoint, json=data, headers=headers)
+```
+
+## response formats
+```json
+{
+  "code": 200,
+  "status": 20000,
+  "data": {
+    "usage": {
+      "total_tokens": 196
+    },
+    "data": [
+      {
+        "object": "classification",
+        "index": 0,
+        "prediction": "Simple task",
+        "score": 0.35216382145881653,
+        "predictions": [
+          {
+            "label": "Simple task",
+            "score": 0.35216382145881653
+          },
+          # Additional predictions for the input...
+        ]
+      },
+      # Additional classification results for other inputs...
+    ]
+  }
+}
+```
+- The response includes a status code, the total tokens consumed by the request, and an array of classification results for each input. Each classification result includes the input index, the predicted label, its score, and an array of all possible labels with their scores.
+# embeddings
+## request
+```python
+endpoint = "https://api.jina.ai/v1/embeddings"  # The API endpoint for retrieving embeddings.
+
+headers = {
+    "Content-Type": "application/json",  # Required: Specifies the format of the payload in the request is JSON.
+    "Authorization": "Bearer <token here>",  # Required: Authentication token for using the API.
+    "Accept": "application/json"  # Optional: Specifies that the response should be in JSON format.
+}
+
+data = {
+    "model": "jina-clip-v1",  # Required: The model ID for generating embeddings.
+    "normalized": True,  # Optional: Whether to apply L2 normalization to the embeddings.
+    "embedding_type": "float",  # Optional: The data type of the embeddings (float, binary, base64).
+    "input": [  # Required: The input texts or images to generate embeddings for.
+        {"text": "A blue cat"},
+        {"text": "A red dog"},
+        {"text": "btw to represent image u can either use URL or encode image into base64 like below."},
+        {"image": "https://i.pinimg.com/600x315/21/48/7e/21487e8e0970dd366dafaed6ab25d8d8.jpg"},
+        {"image": "R0lGODlhEAAQAMQAAORHHOVSKudfOulrSOp3WOyDZu6QdvCchPGolfO0o/XBs/fNwfjZ0frl3/zy7////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAkAABAALAAAAAAQABAAAAVVICSOZGlCQAosJ6mu7fiyZeKqNKToQGDsM8hBADgUXoGAiqhSvp5QAnQKGIgUhwFUYLCVDFCrKUE1lBavAViFIDlTImbKC5Gm2hB0SlBCBMQiB0UjIQA7"}
+    ]
+}
+
+response = requests.post(endpoint, json=data, headers=headers)  # Sends a POST request to the specified endpoint.
+```
+
+## response formats
+For both text and image input:
+
+```json
+{
+  "code": 200,
+  "status": "success",
+  "data": [
+    {
+      "object": "embedding",
+      "index": 0,
+      "embedding": [-0.008161531, 0.0040345504, -0.037822176, -0.012172974, -0.06706689, ...]
+    },
+    ...
+  ],
+  "usage": {
+    "total_tokens": 5033,
+    "prompt_tokens": 5033
+  }
+}
+```
+In this structure:
+- `code` and `status` indicate the success of the request.
+- `data` contains an array of embeddings per input.
+- Each embedding includes `object` (type), `index` (the order of input), and the `embedding` vector values.
+- `usage` reports on tokens used in processing the request.
+# g.reader
+## request
+```python
+endpoint = "https://g.jina.ai"  # The base URL to the grounding API (required)
+query = "Jina AI was founded in 2020 in Berlin."  # Query string to be fact-checked (required)
+headers = {
+  "Accept": "application/json",  # Indicates that the response should be in JSON format (required)
+  "Authorization": "Bearer <token here>"  # Authentication token to access the API (required)
+}
+params = {
+  "search_parameters": "",  # Additional search parameters or headers (optional)
+  "reference_urls": "",  # Comma-separated list of URLs for grounding references (optional)
+  "use_post": False,  # Use POST instead of GET method, boolean value (optional)
+  "json_response": True,  # Indicates if the response will be in JSON format, boolean value (required)
+  "use_proxy": False,  # Whether to use a proxy server, boolean value (optional)
+  "bypass_cache": False,  # To bypass the cache, boolean value (optional)
+  "browser_locale": ""  # To control the browser locale, string value (optional)
+}
+response = requests.get(endpoint, params=params, headers=headers)  # Sends a GET request to the API
+```
+
+## response formats
+```json
+{
+  "code": 200,  # Indicates the HTTP status code as 200 OK
+  "status": 20000,  # Custom status code for further detailing the response status
+  "data": {
+    "factuality": 1,  # Indicates the factuality score of the input query
+    "result": true,  # The boolean result of the fact-checking process
+    "reason": "The statement that Jina AI was founded in 2020 in Berlin is supported by multiple references. ...",  # Detailed reasonings from the grounding process
+    "references": [  # Array of references supporting the fact-checking process
+      {
+        "url": "https://medium.com/jina-ai/2020-year-in-review-4896f7208fb0",
+        "keyQuote": "Jina AI was founded in February 2020, in the midst of a global pandemic and economic slowdown.",
+        "isSupportive": true
+      },
+      ...
+    ],
+    "usage": {
+      "tokens": 7520  # Number of tokens used in processing the request
+    }
+  }
+}
+```
+# r.reader
+## request
+```python
+endpoint = "https://r.jina.ai/https://example.com"  # Endpoint to send the request
+headers = {
+    "Authorization": "Bearer <token here>",  # Required: Your Jina AI access token
+    "Accept": "application/json",  # Required: Specifies the format of the response
+    "Content-Type": "application/json"  # Optional: Indicates the media type of the resource
+}
+params = {
+    "stream": False,  # Optional: Enable stream mode for large web pages
+    "locale": "en-US",  # Optional: Set the browser's locale
+    "iframe": True,  # Optional: Include iframe content in the response
+    "shadow_dom": True,  # Optional: Include Shadow DOM content in the response
+    "cookies": "<cookie here>",  # Optional: Custom cookies to use when requesting the URL
+    "proxy": "<proxy server here>",  # Optional: Use a proxy server to access the URL
+    "bypass_cache": True,  # Optional: Bypass the server's cache
+    "timeout": 10,  # Optional: Maximum time to wait for the page to load
+    "target_selector": ".main-content",  # Optional: CSS selector to target specific content
+    "excluded_selector": ".header,.footer",  # Optional: CSS selector to exclude specific content
+    "wait_for_selector": ".loaded",  # Optional: CSS selector to wait for before returning the content
+}
+response = requests.get(endpoint, headers=headers, params=params)  # Sends a GET request to the server
+```
+## response formats
+The response will be in JSON format containing the following structure:
+```json
+{
+  "code": 200,  "status": 20000,  "data": {
+    "title": "Example Domain",  "description": "",  "url": "https://example.com/",  
+    "content": "This domain is for use in illustrative examples in documents. You may use this domain in literature without prior coordination or asking for permission.\n\n[More information...](https://www.iana.org/domains/example)",
+    "usage": {
+      "tokens": 42
+    }
+  }
+}
+```
+- `code` and `status`: Indicate the response code and status.
+- `data`: Contains the fetched information such as the title, description, URL, content, and usage.
+   - `title`: The title of the fetched webpage.
+   - `description`: A brief description of the webpage (if available).
+   - `url`: The actual URL of the webpage.
+   - `content`: The main content extracted from the webpage, structured in plain text.
+   - `usage`: Provides data usage information, like the number of tokens used for the request.
+# reranker
+## request
+```python
+endpoint = "https://api.jina.ai/v1/rerank" # The endpoint to send rerank requests
+headers = {
+    "Content-Type": "application/json", # Required: Specifies the media type of the resource
+    "Authorization": "Bearer <token here>", # Required: Authorization token for API access
+    "Accept": "application/json" # Optional: Specifies that the response must be in JSON format
+}
+data = {
+    "model": "jina-colbert-v2", # Required: Specifies the model to use for reranking
+    "query": "Organic skincare products for sensitive skin", # Required: The query text to rerank documents for
+    "top_n": 3, # Required: The number of top relevant documents to return
+    "documents": [ # Required: List of documents to rerank
+        "Organic skincare for sensitive skin with aloe vera and chamomile...",
+        "New makeup trends focus on bold colors and innovative techniques...",
+        "...",
+    ]
+}
+
+response = requests.post(endpoint, headers=headers, json=data) # Sends a POST request to rerank documents
+```
+## response formats
+```json
+{
+  "code": 200,
+  "status": "success",
+  "data": {
+    "model": "jina-colbert-v2",
+    "usage": {
+      "total_tokens": 838
+    },
+    "results": [
+      {
+        "index": 0,
+        "document": {
+          "text": "Organic skincare for sensitive skin with aloe vera and chamomile: Imagine the soothing embrace of nature with our organic skincare range, crafted specifically for sensitive skin. Infused with the calming properties of aloe vera and chamomile, each product provides gentle nourishment and protection. Say goodbye to irritation and hello to a glowing, healthy complexion."
+        },
+        "relevance_score": 22.3125
+      },
+      ... # More results here
+    ]
+  }
+}
+```
+- The `data` structure includes the model used for the request, the total tokens involved in the rerank process, and a list of the reranked documents with their respective relevance scores.
+- `code` and `status` provide information about the request's success or failure state.
+# s.reader
+## request
+```python
+endpoint = f"https://s.jina.ai/When%20was%20Jina%20AI%20founded?" # Base endpoint, required
+headers = {
+    "Accept": "application/json", # Response format, required
+    "Authorization": "Bearer <token here>", # Authentication token, required
+    "Content-Type": "application/json", # Request body format, optional
+    "X-Custom-Header": "value" # Example of a custom header, optional
+}
+params = {
+    "param_key": "param_value", # Example URL parameter, optional
+}
+data = {
+    "request_key": "request_value", # Example request body data, optional
+}
+response = requests.get(endpoint, headers=headers, params=params, json=data) # Sends a GET request
+```
+
+## response formats
+### JSON Response Structure:
+```json
+{
+  "code": 200, // HTTP status code indicating success
+  "status": 20000, // Application-specific status code
+  "data": [
+    {
+      "title": "Jina AI - Your Search Foundation, Supercharged.",
+      "description": "Description of the response",
+      "url": "https://jina.ai/",
+      "content": "Detailed content of the response ...",
+      "usage": {
+        "tokens": 11091 // Example of a nested attribute
+      }
+    },
+    // Additional items can be included in the data array
+  ]
+}
+```
+
+### Text Response Structure (if not JSON):
+The response is structured as plain text, potentially containing key-value pairs or summaries of information reflecting the outcome of the request.
+# segmenter
+## request
+```python
+endpoint = "https://segment.jina.ai"  # The base URL of the API endpoint, required
+headers = {
+    "Content-Type": "application/json",  # Specifies the format of the data being sent, required
+    "Authorization": "Bearer <token here>",  # For authentication, replace <token here> with actual token, required
+    "Accept": "application/json"  # Specifies the format of the response data, required
+}
+data = {
+    "content": "Your text to segment goes here",  # The text to segment, required
+    "return_tokens": True,  # Whether to return tokens in response, optional
+    "return_chunks": True,  # Whether to return chunks in response, optional
+    "max_chunk_length": 1000,  # Maximum length of each chunk, optional
+    "head": 5,  # Return the first N tokens, optional and mutually exclusive with 'tail'
+    "tail": 5,  # Return the last N tokens, optional and mutually exclusive with 'head'
+    "split_sentences": True  # Whether to split the content into sentences, optional
+}
+
+response = requests.post(endpoint, json=data, headers=headers)  # Sends a POST request to the API.
+```
+## response formats
+The response JSON object structure would look something like this for a successful request:
+```json
+{
+  "code": 200,
+  "status": "success",
+  "data": {
+    "num_tokens": 78,
+    "tokenizer": "cl100k_base",
+    "usage": {
+      "tokens": 0
+    },
+    "num_chunks": 4,
+    "chunk_positions": [
+      [3, 55],
+      [55, 93],
+      [93, 110],
+      [110, 135]
+    ],
+    "tokens": [
+      [["J", [41]], ["ina", [2259]], [" AI", [15592]], ...],
+      [["I", [40]], ["hr", [4171]], ["er", [261]], ...],
+      ...
+    ],
+    "chunks": [
+      "Jina AI: Your Search Foundation, Supercharged! 🚀\n  ",
+      "Ihrer Suchgrundlage, aufgeladen! 🚀\n  ",
+      ...
+    ]
+  }
+}
+```
+For text, this response indicates the chunks into which the input text was segmented, along with information about the tokens within each chunk, their positions, and identifiers if they were requested.
