@@ -33,14 +33,14 @@ async function processHtmlSnippets() {
 ${fileContent}
 #### end file content
 
-Generate the most sophisticated example request possible in python format without imports. Also generate the example response of the request.
-For all attributes make a comment with the following requirements:
+Generate the an example request that contains as many parameters, attributes, header fileds as possible in python format without imports. Also generate the example response of the request.
+Make sure to include -H "Accept: application/json" in the request to get a json response.
+Instead of the actual jina token put the place holder <token here>.
+For all parameters, attributes, or header fileds make a comment with the following requirements:
 - The comment must be concise
 - The comment must indicate if the attribute is optional or required
-- instead of the actual jina token put the place holder <token here>
 Note:
-- if multiple response formats are possible by defining -H "Accept: ..."  you must list all of them and explain how they relate to the request parameters and header attributes
-- for instance for the json format you must write down an example of a complete json response like this:
+- write down an example of a complete json response like this:
 {
   "code": 200,
   "status": 20000,
@@ -67,15 +67,27 @@ response = requests. ... # < comment here >
 You must use the Jina APIs for the implementation.
 Never decline an implementation because of its complexity.
 Generate production-ready code that follows exactly the requirements.
+Never use placeholder data.
+Always make JSON requests by including the header -H "Accept: application/json".
 
 Overview of all Jina AI APIs:
 Classification API: Given texts or images, classify them into categories
-Embeddings API: Given texts or images, generate embeddings
-r.reader API: input a single URL and get an LLM-friendly version of that single website
-s.reader API: Given a search term, get an LLM-friendly version of all websites in the search results
-g.reader API: Given a statement, find out if it is true or false
-Re-Ranker API: Given a query and a list of search results, re-rank them
-Segmenter API: Given a text, split it into segments
+Embeddings API: Given texts or images, generate embeddings.
+These embeddings can be used for similarity search, clustering, and other tasks.
+r.reader API: Input a single website URL and get an LLM-friendly version of that single website.
+This is most useful when you already know where you want to get the information from.
+s.reader API: Given a search term, get an LLM-friendly version of all websites in the search results.
+This is useful when you don't know where to get the information from, but you just know what you are looking for.
+g.reader API: Given a statement, find out if it is true or false.
+This is useful for fact-checking, fake news detection, and general knowledge verification.
+Re-Ranker API: Given a query and a list of search results, re-rank them.
+This is useful for improving the relevance of search results.
+Segmenter API: Given a text, split it into segments.
+This is useful for breaking down long texts into smaller, more manageable parts.
+
+Note:
+For every request to any of the Jina APIs, you must include the header -H "Accept: application/json" to specify that the response should be in JSON format.
+It is not JSON by default. So you must explicitly specify it in the request headers.
 ` + metaPrompt
     fs.appendFileSync(outputFile, metaPrompt);
 
