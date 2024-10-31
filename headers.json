@@ -1,6 +1,8 @@
 {
   "x-content-type-options": "nosniff",
-  "cache-control": "public, max-age=3600",
+  "cache-control": "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0",
+  "pragma": "no-cache",
+  "expires": "0",
   "x-robots-tag": "noindex, follow",
   "link": "<https://jina.ai>; rel=\"canonical\"",
   
