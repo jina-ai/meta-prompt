@@ -1,4 +1,4 @@
-# Meta Prompt for Jina Search Foundation APIs
+# Meta-Prompt for Jina Search Foundation APIs
 
 ## Usage
 - `curl docs.jina.ai`: load default version defined in [`default`](default)
