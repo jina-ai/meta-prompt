@@ -5,6 +5,7 @@ Never use placeholder data.
 
 
 Overview of all Jina AI APIs:
+Most APIs require auth with bearer secret in the request header, i.e. "Authorization": "Bearer $JINA_API_KEY", this key can be found in https://jina.ai/?sui=apikey for free.
 Classification API: Given texts or images, classify them into categories
 Embeddings API: Given texts or images, generate embeddings.
 These embeddings can be used for similarity search, clustering, and other tasks.
@@ -30,7 +31,7 @@ It is not JSON by default. So you must explicitly specify it in the request head
 endpoint = "https://api.jina.ai/v1/classify"  # Endpoint URL for the classification API.
 headers = {
     "Content-Type": "application/json",  # Required: indicates the media type of the resource.
-    "Authorization": "Bearer <token here>",  # Required: authentication token to validate the request.
+    "Authorization": "Bearer $JINA_API_KEY",  # Required: authentication token to validate the request.
     "Accept": "application/json"  # Required: specifies the media type that the client can understand.
 }
 data = {
@@ -106,7 +107,7 @@ Errors are typically returned with status code `4XX` or `5XX`, detailing the iss
 endpoint = "https://api.jina.ai/v1/classify" # API endpoint for classification service
 headers = {
     "Content-Type": "application/json", # Required: Content type of the request, in this case, JSON
-    "Authorization": "Bearer <token here>", # Required: Authorization token to access the API
+    "Authorization": "Bearer $JINA_API_KEY", # Required: Authorization token to access the API
     "Accept": "application/json" # Required: Indicates the client expects JSON response
 }
 data = {
@@ -164,7 +165,7 @@ response = requests.post(endpoint, json=data, headers=headers) # Sends a POST re
 endpoint = "https://api.jina.ai/v1/classifiers" # Endpoint to list classifiers
 headers = {
     "Content-Type": "application/json", # Required: To indicate the type of data being sent
-    "Authorization": "Bearer <token here>", # Required: To authenticate the API request
+    "Authorization": "Bearer $JINA_API_KEY", # Required: To authenticate the API request
     "Accept": "application/json" # Required: To specify that the response should be JSON
 }
 params = {
@@ -202,7 +203,7 @@ response = requests.get(endpoint, headers=headers, params=params) # Executes a G
 endpoint = "https://api.jina.ai/v1/train" # Jina AI training endpoint
 headers = {
     "Content-Type": "application/json", # specifies the format of the request body
-    "Authorization": "Bearer <token here>", # authentication token, required for secure endpoints
+    "Authorization": "Bearer $JINA_API_KEY", # authentication token, required for secure endpoints
     "Accept": "application/json" # indicates that the client expects a JSON response
 }
 data = {
@@ -260,7 +261,7 @@ endpoint = "https://api.jina.ai/v1/train" # Endpoint URL for training a model
 # Header specifying the content type of the request body
 headers = {
     "Content-Type": "application/json", # Required: Indicates the media type of the resource
-    "Authorization": "Bearer <token here>", # Required: Authentication token to validate the request
+    "Authorization": "Bearer $JINA_API_KEY", # Required: Authentication token to validate the request
     "Accept": "application/json" # Optional: Indicates that the client expects a JSON response
 }
 
@@ -318,7 +319,7 @@ endpoint = "https://api.jina.ai/v1/embeddings"  # The API endpoint for retrievin
 
 headers = {
     "Content-Type": "application/json",  # Required: Specifies the format of the payload in the request is JSON.
-    "Authorization": "Bearer <token here>",  # Required: Authentication token for using the API.
+    "Authorization": "Bearer $JINA_API_KEY",  # Required: Authentication token for using the API.
     "Accept": "application/json"  # Optional: Specifies that the response should be in JSON format.
 }
 
@@ -371,7 +372,7 @@ endpoint = "https://g.jina.ai"  # The base URL to the grounding API (required)
 query = "Jina AI was founded in 2020 in Berlin."  # Query string to be fact-checked (required)
 headers = {
   "Accept": "application/json",  # Indicates that the response should be in JSON format (required)
-  "Authorization": "Bearer <token here>"  # Authentication token to access the API (required)
+  "Authorization": "Bearer $JINA_API_KEY"  # Authentication token to access the API (required)
 }
 params = {
   "search_parameters": "",  # Additional search parameters or headers (optional)
@@ -413,7 +414,7 @@ response = requests.get(endpoint, params=params, headers=headers)  # Sends a GET
 ```python
 endpoint = "https://r.jina.ai/https://example.com"  # Endpoint to send the request
 headers = {
-    "Authorization": "Bearer <token here>",  # Required: Your Jina AI access token
+    "Authorization": "Bearer $JINA_API_KEY",  # Required: Your Jina AI access token
     "Accept": "application/json",  # Required: Specifies the format of the response
     "Content-Type": "application/json"  # Optional: Indicates the media type of the resource
 }
@@ -458,7 +459,7 @@ The response will be in JSON format containing the following structure:
 endpoint = "https://api.jina.ai/v1/rerank" # The endpoint to send rerank requests
 headers = {
     "Content-Type": "application/json", # Required: Specifies the media type of the resource
-    "Authorization": "Bearer <token here>", # Required: Authorization token for API access
+    "Authorization": "Bearer $JINA_API_KEY", # Required: Authorization token for API access
     "Accept": "application/json" # Optional: Specifies that the response must be in JSON format
 }
 data = {
@@ -505,7 +506,7 @@ response = requests.post(endpoint, headers=headers, json=data) # Sends a POST re
 endpoint = f"https://s.jina.ai/When%20was%20Jina%20AI%20founded?" # Base endpoint, required
 headers = {
     "Accept": "application/json", # Response format, required
-    "Authorization": "Bearer <token here>", # Authentication token, required
+    "Authorization": "Bearer $JINA_API_KEY", # Authentication token, required
     "Content-Type": "application/json", # Request body format, optional
     "X-Custom-Header": "value" # Example of a custom header, optional
 }
@@ -547,7 +548,7 @@ The response is structured as plain text, potentially containing key-value pairs
 endpoint = "https://segment.jina.ai"  # The base URL of the API endpoint, required
 headers = {
     "Content-Type": "application/json",  # Specifies the format of the data being sent, required
-    "Authorization": "Bearer <token here>",  # For authentication, replace <token here> with actual token, required
+    "Authorization": "Bearer $JINA_API_KEY",  # For authentication, replace <token here> with actual token, required
     "Accept": "application/json"  # Specifies the format of the response data, required
 }
 data = {
@@ -595,3 +596,22 @@ The response JSON object structure would look something like this for a successf
 }
 ```
 For text, this response indicates the chunks into which the input text was segmented, along with information about the tokens within each chunk, their positions, and identifiers if they were requested.
+
+
+Finally, Jina AI API endpoints rate limits:
+Embedding & Reranker APIs (api.jina.ai/v1/embeddings, /rerank): 500 RPM & 1M TPM with API key; 2k RPM & 5M TPM with premium key
+Reader APIs:
+
+r.jina.ai: 20 RPM without key, 200 RPM with key, 1k RPM premium
+s.jina.ai: 5 RPM without key, 40 RPM with key, 100 RPM premium
+g.jina.ai: No access without key, 10 RPM with key, 30 RPM premium
+
+
+Classifier APIs (api.jina.ai/v1/classify):
+
+Zero-shot: 200 RPM & 500k TPM with key; 1k RPM & 3M TPM premium
+Few-shot: 20 RPM & 200k TPM with key; 60 RPM & 1M TPM premium
+
+
+Classifier Training API (api.jina.ai/v1/train): 20 RPM & 200k TPM with key; 60 RPM & 1M TPM premium
+Segmenter API (segment.jina.ai): 20 RPM without key, 200 RPM with key, 1k RPM premium
