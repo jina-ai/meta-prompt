@@ -1,43 +1,37 @@
-import requests
 import os
+import requests
 
-token = os.environ["JINA_API_KEY"]
-
-endpoint = "https://api.jina.ai/v1/classify"
-headers = {
+# Get your Jina AI API key for free: https://jina.ai/?sui=apikey
+JINA_API_KEY = os.environ["JINA_API_KEY"]
+HEADERS = {
+    "Authorization": f"Bearer {JINA_API_KEY}",
     "Content-Type": "application/json",
-    "Authorization": f"Bearer {token}",
-    "Accept": "application/json"
-}
-data = {
-    "model": "jina-clip-v1",
-    "input": [
-        {
-            "text": "A sleek smartphone with a high-resolution display and multiple camera lenses"
-        },
-        {
-            "text": "Fresh sushi rolls served on a wooden board with wasabi and ginger"
-        },
-        {
-            "image": "https://picsum.photos/id/11/367/267"
-        },
-        {
-            "image": "https://picsum.photos/id/22/367/267"
-        },
-        {
-            "text": "Vibrant autumn leaves in a dense forest with sunlight filtering through"
-        },
-        {
-            "image": "https://picsum.photos/id/8/367/267"
-        }
-    ],
-    "labels": [
-        "Technology and Gadgets",
-        "Food and Dining",
-        "Nature and Outdoors",
-        "Urban and Architecture"
-    ]
+    "Accept": "application/json",
 }
 
-response = requests.post(endpoint, json=data, headers=headers)
-print(response.json())
+def classify_images(image_paths, labels):
+    classify_url = "https://api.jina.ai/v1/classify"
+    images_base64 = []
+    for path in image_paths:
+        with open(path, "rb") as image_file:
+            encoded_string = base64.b64encode(image_file.read()).decode("utf-8")
+            images_base64.append({"image": encoded_string})
+    data = {
+        "model": "jina-clip-v1",
+        "input": images_base64,
+        "labels": labels,
+    }
+    response = requests.post(classify_url, headers=HEADERS, json=data)
+    if response.status_code == 200:
+        return response.json()["data"]
+    else:
+        return response.json()
+
+def main():
+    image_paths = ["path/to/your/image1.jpg", "path/to/your/image2.jpg"]
+    labels = ["domain1", "domain2", "domain3"]
+    classifications = classify_images(image_paths, labels)
+    print(classifications)
+
+if __name__ == "__main__":
+    main()

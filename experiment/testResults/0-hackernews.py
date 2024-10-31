@@ -1,57 +1,69 @@
-import requests
 import os
-import matplotlib.pyplot as plt
+import requests
 import umap
-import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.feature_extraction.text import CountVectorizer
 
-# Load the API token from environment variable
-token = os.environ["JINA_API_KEY"]
+# Get your Jina AI API key for free: https://jina.ai/?sui=apikey
+JINA_API_KEY = os.getenv('JINA_API_KEY')
 
-# Define the endpoint and headers for the `r.reader API` to grab the frontpage of HackerNews
-endpoint = "https://r.jina.ai/https://news.ycombinator.com"
-headers = {
-    "Authorization": f"Bearer {token}",
-    "Accept": "application/json"
-}
+def fetch_frontpage_sentences():
+    headers = {
+        "Authorization": f"Bearer {JINA_API_KEY}",
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+    }
+    response = requests.post('https://s.jina.ai/',
+                             headers=headers,
+                             json={"q": "site:ycombinator.com Hacker News", "options": "Text"})
+    if response.status_code == 200:
+        articles = response.json().get('data', [])
+        sentences = []
+        for article in articles:
+            content = article.get('content', '')
+            sentences.extend(content.split('. '))
+        return sentences
+    else:
+        return []
 
-# Sending request to get the text/content from the HackerNews frontpage
-response = requests.get(endpoint, headers=headers)
-data = response.json()
+def generate_embeddings(sentences):
+    headers = {
+        "Authorization": f"Bearer {JINA_API_KEY}",
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+    }
+    data = {
+        "model": "jina-embeddings-v3",
+        "input": sentences,
+    }
+    response = requests.post('https://api.jina.ai/v1/embeddings', headers=headers, json=data)
+    if response.status_code == 200:
+        embeddings = [item['embedding'] for item in response.json()['data']]
+        return embeddings
+    else:
+        return []
 
-# Extract sentences from the content, assuming data['data']['content'] contains the text
-content = data['data']['content']
-sentences = content.split(".")
-print('sentences', sentences)
+def visualize_embeddings(sentences, embeddings):
+    reducer = umap.UMAP(n_neighbors=15, min_dist=0.1, metric='cosine')
+    embedding_data = reducer.fit_transform(embeddings)
 
-# Define the endpoint and headers for the `Embeddings API`
-embedding_endpoint = "https://api.jina.ai/v1/embeddings"
-embedding_headers = {
-    "Content-Type": "application/json",
-    "Authorization": f"Bearer {token}",
-    "Accept": "application/json"
-}
+    plt.figure(figsize=(15,10))
+    plt.scatter(embedding_data[:, 0], embedding_data[:, 1])
+    for i, sentence in enumerate(sentences):
+        plt.text(embedding_data[i, 0], embedding_data[i, 1], sentence, fontsize=9)
+    plt.title("2D UMAP Visualization of Hacker News Frontpage Sentences")
+    plt.show()
 
-# Prepare the data for the embeddings API
-embedding_data = {
-    "model": "jina-clip-v1",
-    "input": [{"text": sentence.strip()} for sentence in sentences if sentence.strip() != ""]
-}
+def main():
+    sentences = fetch_frontpage_sentences()
+    if not sentences:
+        print("Failed to fetch sentences.")
+        return
+    embeddings = generate_embeddings(sentences)
+    if not embeddings:
+        print("Failed to generate embeddings.")
+        return
+    visualize_embeddings(sentences, embeddings)
 
-# Sending request to get embeddings for each sentence
-embedding_response = requests.post(embedding_endpoint, json=embedding_data, headers=embedding_headers)
-embedding_data = embedding_response.json()
-
-# Extract embeddings and prepare for UMAP reduction
-embeddings = np.array([entry['embedding'] for entry in embedding_data['data']])
-
-# Reduce dimensionality with UMAP
-reducer = umap.UMAP(n_neighbors=5, min_dist=0.3, metric='correlation')
-embedding_2d = reducer.fit_transform(embeddings)
-
-# Plotting
-plt.figure(figsize=(12, 12))
-plt.scatter(embedding_2d[:, 0], embedding_2d[:, 1], alpha=0.5)
-plt.title('2D UMAP Visualization of Sentences from HackerNews Frontpage')
-plt.xlabel('UMAP Dimension 1')
-plt.ylabel('UMAP Dimension 2')
-plt.show()
+if __name__ == "__main__":
+    main()

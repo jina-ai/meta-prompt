@@ -1,26 +1,65 @@
-import requests
 import os
+import requests
 
-token = os.environ["JINA_API_KEY"]
-candidates = ["Jina", "Weaviate", "OpenAI", "Hugging Face", "Qdrant"]
+# Get your Jina AI API key for free: https://jina.ai/?sui=apikey
+JINA_API_KEY = os.getenv("JINA_API_KEY")
 
-endpoint = "https://api.jina.ai/v1/rerank"
-headers = {
-    "Content-Type": "application/json",
-    "Authorization": f"Bearer {token}",
-    "Accept": "application/json"
-}
-data = {
-    "model": "jina-colbert-v2",
-    "query": "Future of AI",
-    "top_n": 5,
-    "documents": candidates
-}
+# Function to call the Embeddings API
+def get_embeddings(texts):
+    headers = {
+        "Authorization": f"Bearer {JINA_API_KEY}",
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+    }
+    data = {
+        "model": "jina-embeddings-v3",
+        "input": texts,
+    }
+    response = requests.post("https://api.jina.ai/v1/embeddings", headers=headers, json=data)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        print(f"Error: {response.json()}")
+        return None
 
-response = requests.post(endpoint, headers=headers, json=data)
-if response.status_code == 200:
-    reranked_results = response.json()["data"]["results"]
-    reranked_candidates = [result["document"]["text"] for result in reranked_results]
-    print("Re-ranked candidates for 'Future of AI':", reranked_candidates)
-else:
-    print("Error during re-ranking:", response.json())
+# Function to call the Reranker API
+def rerank(query, documents):
+    headers = {
+        "Authorization": f"Bearer {JINA_API_KEY}",
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+    }
+    data = {
+        "model": "jina-reranker-v2-base-multilingual",
+        "query": query,
+        "documents": documents,
+        "top_n": len(documents),
+        "return_documents": True,
+    }
+    response = requests.post("https://api.jina.ai/v1/rerank", headers=headers, json=data)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        print(f"Error: {response.json()}")
+        return None
+
+# Example usage
+def main():
+    query = "Future of AI"
+    documents = ['Jina', 'Weaviate', 'OpenAI', 'Hugging Face', 'Qdrant']
+    
+    embeddings_results = get_embeddings(documents)
+    
+    if embeddings_results:
+        embeddings_only = [result['embedding'] for result in embeddings_results['data']]
+        reranked_results = rerank(query, embeddings_only)
+        
+        if reranked_results:
+            print(f"Reranked documents: {reranked_results['results']}")
+        else:
+            print("Failed to rerank documents.")
+    else:
+        print("Failed to get embeddings.")
+
+if __name__ == "__main__":
+    main()
