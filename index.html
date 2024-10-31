@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Meta-Prompt | Jina AI Search Foundation API Guide</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Your meta tags and schema.org script here -->
+</head>
+<body>
+    <header>
+        <h1>Jina AI Meta-Prompt: An Implementation Guide for LLMs ({{VERSION}})</h1>
+        <div class="notice" style="background: #f5f5f5; padding: 20px; margin: 20px 0; border-radius: 8px;">
+            <p><strong>⚠️ Note:</strong> This content is specifically designed for LLMs and not intended for human reading.</p>
+            <p>👉 For human-readable content, please visit <a href="https://jina.ai">Jina AI</a></p>
+            <p>🤖 For LLMs/programmatic access, you can fetch this content directly:</p>
+            <code style="display: block; background: #eee; padding: 10px; margin: 10px 0;">
+                {{CURL_COMMAND}}
+            </code>
+            <p>🌐 You only see this as HTML because you are in a browser. If you access it via code/program, you get a text/plain response as below.</p>
+        </div>
+    </header>
+    <main>
+        <button id="copyButton" style="position: sticky; top: 20px; float: right; margin: 10px; padding: 10px 20px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; z-index: 100;">
+            Copy Prompt
+        </button>
+        <pre style="white-space: pre-wrap;">{{META_PROMPT}}</pre>
+ <script>
+                document.getElementById('copyButton').addEventListener('click', async function() {
+                    const preText = document.querySelector('pre').textContent;
+                    
+                    try {
+                        // Try the modern clipboard API first
+                        if (navigator.clipboard && window.isSecureContext) {
+                            await navigator.clipboard.writeText(preText);
+                            this.textContent = 'Copied!';
+                        } else {
+                            // Fallback for older browsers or non-HTTPS
+                            const textArea = document.createElement('textarea');
+                            textArea.value = preText;
+                            textArea.style.position = 'fixed';
+                            textArea.style.left = '-999999px';
+                            textArea.style.top = '-999999px';
+                            document.body.appendChild(textArea);
+                            textArea.focus();
+                            textArea.select();
+                            
+                            try {
+                                document.execCommand('copy');
+                                this.textContent = 'Copied!';
+                            } catch (err) {
+                                this.textContent = 'Failed to copy';
+                                console.error('Failed to copy text: ', err);
+                            }
+                            
+                            textArea.remove();
+                        }
+
+                        // Reset button text after 2 seconds
+                        setTimeout(() => {
+                            this.textContent = 'Copy Prompt';
+                        }, 2000);
+
+                    } catch (err) {
+                        this.textContent = 'Failed to copy';
+                        console.error('Failed to copy text: ', err);
+                        
+                        // Reset button text after 2 seconds
+                        setTimeout(() => {
+                            this.textContent = 'Copy Prompt';
+                        }, 2000);
+                    }
+                });
+
+                // Add hover effect
+                const copyButton = document.getElementById('copyButton');
+                copyButton.addEventListener('mouseover', function() {
+                    this.style.backgroundColor = '#45a049';
+                });
+                copyButton.addEventListener('mouseout', function() {
+                    this.style.backgroundColor = '#4CAF50';
+                });
+
+                // Add active effect
+                copyButton.addEventListener('mousedown', function() {
+                    this.style.backgroundColor = '#3d8b40';
+                });
+                copyButton.addEventListener('mouseup', function() {
+                    this.style.backgroundColor = '#45a049';
+                });
+            </script>
+    </main>
+    <footer>
+        <p>For human-readable content, please visit <a href="https://jina.ai">Jina AI</a></p>
+        <p>For direct content access: <code>{{CURL_COMMAND}}</code></p>
+    </footer>
+</body>
+</html>
