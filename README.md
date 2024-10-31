@@ -1,7 +1,7 @@
 # Meta Prompt for Jina Search Foundation APIs
 
 ## Usage
-- `curl docs.jina.ai` 
+- `curl docs.jina.ai`: load default version defined in [`default`](default)
 - Specific version: `curl docs.jina.ai/v1`
 - Pipe into [`llm`](https://github.com/simonw/llm):
 ```bash
@@ -16,5 +16,4 @@ curl docs.jina.ai/v1 | llm -s 'grab all sentences from Hacker News, embed them, 
 - Upload your prompt to `v{x}.txt` in the repository root.
 - Use `curl docs.jina.ai/v{x}` to fetch your prompt:
   - No need to include `.txt`; simply use `curl docs.jina.ai/v1`, `curl docs.jina.ai/v2`, `curl docs.jina.ai/v3`, etc.
-  - By default, `curl docs.jina.ai` fetches the version defined in `default`
-  
+  - `index.html` is the `text/html` response template, with placeholder variables; this file is only for browser/bot view.
