@@ -17,4 +17,4 @@ curl docs.jina.ai/v1 | llm -s 'grab all sentences from Hacker News, embed them, 
 - Use `curl docs.jina.ai/v{x}` to fetch your prompt:
   - No need to include `.txt`; simply use `curl docs.jina.ai/v1`, `curl docs.jina.ai/v2`, `curl docs.jina.ai/v3`, etc.
   - [`index.html`](index.html) is the `text/html` response template with placeholder variables inside; this file is only for browser/bot view and for human readability. Eye-candy stuff.
-  - [`headers.json`](header.json) defines some response header that *may be respected* by AI-browsers/apps in the future; one can use `curl -svo. docs.jina.ai` to check them.
+  - [`headers.json`](headers.json) defines some response header that *may be respected* by AI-browsers/apps in the future; one can use `curl -svo. docs.jina.ai` to check them.
