@@ -1,37 +1,33 @@
-import requests
 import os
-import json
+import requests
 
-# Load the token from environment variables
-token = os.environ["JINA_API_KEY"]
-
-# API endpoint for generating embeddings
-endpoint = "https://api.jina.ai/v1/embeddings"
+# Get your Jina AI API key for free: https://jina.ai/?sui=apikey
+JINA_API_KEY = os.getenv('JINA_API_KEY')
 headers = {
-    "Content-Type": "application/json",
-    "Authorization": f"Bearer {token}",
-    "Accept": "application/json"
+    'Authorization': f'Bearer {JINA_API_KEY}',
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
 }
 
-# Preparing the data - converting numbers 1 to 100 into text
-numbers_in_text = [{"text": str(number)} for number in range(1, 101)]
+def generate_embeddings(input_texts):
+    url = 'https://api.jina.ai/v1/embeddings'
+    data = {
+        'model': 'jina-embeddings-v3',
+        'input': input_texts,
+    }
+    response = requests.post(url, json=data, headers=headers)
+    if response.status_code == 200:
+        return response.json()['data']
+    else:
+        print(f"Error in generate_embeddings: {response.json()}")
+        return None
 
-data = {
-    "model": "jina-clip-v1",
-    "normalized": True,
-    "embedding_type": "float",
-    "input": numbers_in_text
-}
+def main():
+    input_texts = [str(i) for i in range(1, 101)]
+    embeddings = generate_embeddings(input_texts)
+    if embeddings:
+        for i, embedding in enumerate(embeddings, 1):
+            print(f"Embedding for {i}: {embedding['embedding'][:10]}...")  # Showing first 10 characters of each embedding for brevity
 
-response = requests.post(endpoint, json=data, headers=headers)
-embeddings_response = response.json()
-
-# Check if the request was successful
-if embeddings_response["code"] == 200:
-    # Output the embeddings
-    for item in embeddings_response["data"]:
-        index = item["index"]
-        embedding = item["embedding"]
-        print(f"Number: {numbers_in_text[index]['text']}, Embedding: {embedding[:5]}...") # Displaying only the first 5 dimensions for brevity
-else:
-    print("Error generating embeddings:", embeddings_response.get("message", "Unknown error"))
+if __name__ == "__main__":
+    main()
