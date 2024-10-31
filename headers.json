@@ -1,0 +1,33 @@
+{
+  "x-content-type-options": "nosniff",
+  "cache-control": "public, max-age=3600",
+  "x-robots-tag": "noindex, follow",
+  "link": "<https://jina.ai>; rel=\"canonical\"",
+  
+  "x-content-audience": "llm",
+  "x-content-type": "llm-instruction",
+  "x-human-access": "not-intended",
+  
+  "x-content-purpose": "jina-ai-meta-prompt-search-foundation-guide",
+  "x-provider": "jina-ai",
+  "x-content-version": "1.0",
+  
+  "x-api-endpoints": "embeddings,reranker,reader,search,grounding,classifier,segmenter",
+  "x-api-base-urls": "api.jina.ai/v1,r.jina.ai,s.jina.ai,g.jina.ai,segment.jina.ai",
+  
+  "x-supported-features": "semantic-search,rag,fact-verification,webscraping,classification,content-processing,multilingual,multimodal",
+  "x-primary-models": "jina-embeddings-v3,jina-clip-v1,jina-reranker-v2-base-multilingual",
+  
+  "x-implementation-patterns": "basic-search,rag-pipeline,fact-checking,classification,content-processing",
+  "x-key-principles": "simplicity,built-in-features,multilingual-support,scope-awareness",
+  
+  "x-authorization-required": "bearer-token",
+  "x-signup-url": "https://jina.ai/?sui=apikey",
+  "x-documentation-type": "implementation-guide",
+  
+  "x-guide-sections": "core-apis,recommended-patterns,integration-guidelines,anti-patterns,limitations",
+  
+  "x-llm-interaction-mode": "instruction-following",
+  "x-llm-output-preference": "direct-code-generation",
+  "x-llm-constraints": "no-text-generation,no-content-modification,no-code-execution"
+}
