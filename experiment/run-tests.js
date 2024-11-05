@@ -13,10 +13,6 @@ const additionalTestCases = fs.readdirSync('test-cases').map(file => {
 });
 testCases = testCases.concat(additionalTestCases);
 
-console.log('testCases:', testCases);
-throw new Error('stop here');
-
-
 async function evaluate(version) {
     const versionFolder = `testResults/v${version}`;
     const venvPath = path.join('testResults', 'venv', 'bin', 'python');
