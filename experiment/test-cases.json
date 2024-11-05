@@ -30,5 +30,10 @@
   {
     "name": "reader-grounding",
     "prompt": "Write the js code to check the validity of the following statement on bbc.com 'The UK government has announced a new law that will require social media companies to verify the age of their users.'"
-  }
+  },
+  {
+    "name": "reader-grounding",
+    "prompt": "i'd like to validate embedding api's visualization ability esp when output_dim=2, plz first select a \uD83E\uDD17 dataset around 1k data points in 2 classes, download it and use jina embedding api with task=separation; and visualize it in a scatter plot with square axis, 2 classes dots should be different color. and then do another one with output_dim=1024 and then do umap map to 2d and visualize it similariy, put these 2 plots sides by side. note that i run ur code in google colab."
+  },
+
 ]

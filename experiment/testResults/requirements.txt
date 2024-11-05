@@ -8,3 +8,6 @@ numpy
 umap-learn
 matplotlib
 nltk==3.8.1
+dotenv
+pandas
+seaborn
