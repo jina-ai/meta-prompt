@@ -1,9 +1,20 @@
 const { promptLLMOpenAI } = require("./gpt");
 const fs = require('fs');
 const path = require('path');
-const testCases = require('./test-cases.json');
+let testCases = require('./test-cases.json');
 
 const { execSync } = require('child_process'); // Import execSync correctly
+
+const additionalTestCases = fs.readdirSync('test-cases').map(file => {
+    const filePath = path.join('test-cases', file);
+    const name = file.split('.')[0];
+    const prompt = fs.readFileSync(filePath, 'utf-8');
+    return { name, prompt };
+});
+testCases = testCases.concat(additionalTestCases);
+
+console.log('testCases:', testCases);
+throw new Error('stop here');
 
 
 async function evaluate(version) {
