@@ -1,0 +1,15 @@
+# Paper QA
+
+Create a Python script to:
+
+- Using Jina's Search API: Search arxiv.org for the 3 latest papers with the search term "embeddings". When you have found a paper, log its name.
+- Using Jina's Reader API: Scrape each paper's PDF and store the text and title
+- Using Jina's Segmenter API: Break the texts into segments
+- Using Jina's Embeddings API: Generate embeddings for each segment, using task_type retrieval.passage
+- Allow user to enter a search query to search through the papers, using task_type retrieval.query
+- Return each matching passage, along with the title of the paper.
+
+## Notes
+
+- Provide some beautiful logging with rich so I can see what's happening. If an error arises, alert me.
+- Use the Jina API as described. Use no other libraries.
