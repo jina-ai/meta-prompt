@@ -1,0 +1,40 @@
+# Recipe Recommender
+
+Your job is to recommend recipes based on what I have available at home. You have access to an LLM with the shell command: `llm '<your query>' -m claude-3.5-sonnet`
+
+## Instructions
+
+I have the following ingredients at home:
+
+- Onion
+- Chickpeas
+- Tinned chopped tomatoes
+- Chicken thighs (skin on, bone in)
+- EVOO
+- S+P
+- Herbs and spices: Cumin, garlic, ginger, italian seasoning, chilli flakes
+- Sweet potato
+- Peanut butter
+- Chicken stock
+- Milk
+- Sugar
+
+I have the following equipment:
+
+- Stove top
+- Pots and pans
+- Slow cooker
+- Various utensils
+
+1. Use LLM to brainstorm recipe names from ingredients above
+2. Search the internet for those recipes and retrieve each recipe page
+3. Send that page to LLM to summarize the recipe into one paragraph
+4. Rerank the summarized recipes by healthiness
+5. Show the recipe name, summary and link to the website
+
+## Notes
+
+- For dishes from specific countries, it's okay to search in those languages.
+- Try to avoid vegan or vegetarian dishes. 
+- It's okay to have recipes that use just some of the ingredients, or recipes that need more ingredients than I currently have.
+- Provide some beautiful logging with a nice library so I can see what's happening. If an error arises, alert me.

@@ -1,0 +1,50 @@
+Search the Google Books API for each author in this list and return their latest 10 books, with no duplicates:
+
+- Terry Pratchett
+- William Shakespeare
+
+You can use this URL as an example:
+
+https://www.googleapis.com/books/v1/volumes?q=inauthor:%22Terry%20Pratchett%22&langRestrict=en&maxResults=30&printType=books&orderBy=newest
+
+That URL returns a response similar to:
+
+```json
+{
+  "items": [
+    {
+      "volumeInfo": {
+        "title": "The Illustrated Eric",
+        "publishedDate": "2013-01-31",
+        "description": "Terry Pratchett's hilarious take on the Faust legend stars many of the Discworld's most popular characters. Eric is the Discworld's only demonology hacker. The trouble is, he's not very good at it. All he wants is the usual three wishes: to be immortal, rule the world and have the most beautiful woman fall madly in love with him. The usual stuff. But what he gets is Rincewind, the Disc's most incompetent wizard, and Rincewind's Luggage (the world's most dangerous travel accessory) into the bargain. The outcome is an outrageous adventure that will leave Eric wishing once more - this time, quite fervently - that he'd never been born.",
+      }
+      }
+      ]
+}
+```
+
+Write this information to a JSON list, with each entry having the keys:
+
+- author
+- title
+- published_date
+- description
+
+Classify each book as one of the following, and store under the key "genre":
+- Science-fiction
+- Fantasy
+- Non-fiction
+- Other
+
+Generate embedding for each book's description using jina-embeddings-v3 with passage task type and late chunking, and store under key `embedding`.
+
+Write all the data to books-embeddings.json. Write all the data (excluding embeddings) to books.json
+
+Provide logging via `rich` so I can see what's happening. Be verbose about logging any errors, for example, embeddings not being generated.
+
+Then present a search box for the user to type a query. encode that with the query task type then search through the books. Return the top ten matches, then use reranker to sort the results. Return the following:
+
+- Title
+- Description
+- Genre
+- Closeness to search term
