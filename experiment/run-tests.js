@@ -1,8 +1,8 @@
 const { promptLLMOpenAI } = require("./gpt");
 const fs = require('fs');
 const path = require('path');
-let testCases = require('./test-cases.json');
-
+// let testCases = require('./test-cases.json');
+let testCases = [];
 const { execSync } = require('child_process'); // Import execSync correctly
 
 const additionalTestCases = fs.readdirSync('test-cases').map(file => {
@@ -76,9 +76,11 @@ ${metaPrompt}`;
             });
             await Promise.all(batch);
         }
-        scores[version] = await evaluate(version);
+        if (isSelfEvaluation) {
+            scores[version] = await evaluate(version);
+        }
         console.log('scores so far', scores);
     }
 }
 
-main([0, 1, 2, 3, 4], true);
+main([0, 1, 2, 3, 4], false);

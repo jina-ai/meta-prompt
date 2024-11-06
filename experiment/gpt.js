@@ -15,6 +15,8 @@ async function promptLLMOpenAI(prompt, modelName) {
   console.log('\x1b[34m%s\x1b[0m', prompt);
   for (let i = 0; i < 5; i++) {
     try {
+      console.log('endpoint', endpoint)
+      console.log('apiKey', apiKey)
       const client = new AzureOpenAI({ endpoint, apiKey, apiVersion, deployment });
       const result = await client.chat.completions.create({
         messages: [
