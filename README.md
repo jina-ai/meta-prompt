@@ -5,7 +5,7 @@
 - Specific version: `curl docs.jina.ai/v1`
 - Pipe into [`llm`](https://github.com/simonw/llm):
 ```bash
-curl docs.jina.ai/v1 | llm -s 'grab all sentences from Hacker News, embed them, and visualize the results in a 2D UMAP with matplotlib' -m claude-3-sonnet
+curl docs.jina.ai/v1 | llm -s 'grab all sentences from Hacker News, embed them, and visualize the results in a 2D UMAP with matplotlib' -m claude-3.5-sonnet
 ```
 
 ## Note
