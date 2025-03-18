@@ -21,6 +21,7 @@ These embeddings can be used for similarity search, clustering, and other tasks.
 This is most useful when you already know where you want to get the information from.
 - s.reader API: Given a search term, get an LLM-friendly version of all websites in the search results.
 This is useful when you don't know where to get the information from, but you just know what you are looking for.
+The API follows the SERP-style format.
 - g.reader API: Given a statement, find out if it is true or false.
 This is useful for fact-checking, fake news detection, and general knowledge verification.
 - Re-Ranker API: Given a query and a list of search results, re-rank them.
@@ -37,7 +38,7 @@ Purpose: Convert text/images to fixed-length vectors
 Best for: semantic search, similarity matching, clustering, etc.
 Method: POST
 Authorization: HTTPBearer
-Request body schema: {"application/json":{"model":{"type":"string","required":true,"description":"Identifier of the model to use.","options":[{"name":"jina-clip-v2","size":"885M","dimensions":1024},{"name":"jina-embeddings-v3","size":"570M","dimensions":1024}]},"input":{"type":"array","required":true,"description":"Array of input strings or objects to be embedded."},"embedding_type":{"type":"string or array of strings","required":false,"default":"float","description":"The format of the returned embeddings.","options":["float","base64","binary","ubinary"]},"task":{"type":"string","required":false,"description":"Specifies the intended downstream application to optimize embedding output.","options":["retrieval.query","retrieval.passage","text-matching","classification","separation"]},"dimensions":{"type":"integer","required":false,"description":"Truncates output embeddings to the specified size if set."},"normalized":{"type":"boolean","required":false,"default":false,"description":"If true, embeddings are normalized to unit L2 norm."},"late_chunking":{"type":"boolean","required":false,"default":false,"description":"If true, concatenates all sentences in input and treats as a single input for late chunking."}}}
+Request body schema: {"application/json":{"model":{"type":"string","required":true,"description":"Identifier of the model to use.","options":[{"name":"jina-clip-v2","size":"885M","dimensions":1024},{"name":"jina-embeddings-v3","size":"570M","dimensions":1024}]},"input":{"type":"array","required":true,"description":"Array of input strings or objects to be embedded."},"embedding_type":{"type":"string or array of strings","required":false,"default":"float","description":"The format of the returned embeddings.","options":["float","base64","binary","ubinary"]},"task":{"type":"string","required":false,"description":"Specifies the intended downstream application to optimize embedding output.","options":["retrieval.query","retrieval.passage","text-matching","classification","separation"]},"dimensions":{"type":"integer","required":false,"description":"Truncates output embeddings to the specified size if set."},"normalized":{"type":"boolean","required":false,"default":false,"description":"If true, embeddings are normalized to unit L2 norm."},"late_chunking":{"type":"boolean","required":false,"default":false,"description":"If true, concatenates all sentences in input and treats as a single input for late chunking."},"truncate":{"type":"boolean","required":false,"default":false,"description":"If true, the model will automatically drop the tail that extends beyond the maximum context length allowed by the model instead of throwing an error."}}}
 Example request: {"model":"jina-embeddings-v3","input":["Hello, world!"]}
 Example response: {"200":{"data":[{"embedding":"..."}],"usage":{"total_tokens":15}},"422":{"error":{"message":"Invalid input or parameters"}}}
 
@@ -53,29 +54,46 @@ Example response: {"results":[{"index":0,"document":{"text":"Document to rank 1"
 
 3. Reader API
 Endpoint: https://r.jina.ai/
-Purpose: retrieve/parse content from URL in a format optimized for downstream tasks like LLMs and other applications
+Purpose: retrieve/parse content from URL in a format optimized for downstream tasks like LLMs and other applications. Use https://eu.r.jina.ai/ to reside all infrastructure and data processing operations entirely within EU jurisdiction.
 Best for: extracting structured content from web pages, suitable for generative models and search applications
 Method: POST
 Authorization: HTTPBearer
 Headers:
 - **Authorization**: Bearer $JINA_API_KEY
 - **Content-Type**: application/json
-- **Accept**: application/json
-- **X-Engine** (optional): Specifies the engine to retrieve/parse content. Use `readerlm-v2` for higher quality or `direct` for speed
+- **Accept**: Use `application/json` to get JSON response, `text/event-stream` to enable stream mode
+- **X-Engine** (optional): Specifies the engine to retrieve/parse content. Use `browser` for fetching best quality content or `direct` for speed
 - **X-Timeout** (optional): Specifies the maximum time (in seconds) to wait for the webpage to load
 - **X-Target-Selector** (optional): CSS selectors to focus on specific elements within the page
 - **X-Wait-For-Selector** (optional): CSS selectors to wait for specific elements before returning
 - **X-Remove-Selector** (optional): CSS selectors to exclude certain parts of the page (e.g., headers, footers)
-- **X-With-Links-Summary** (optional): `true` to gather all links at the end of the response
-- **X-With-Images-Summary** (optional): `true` to gather all images at the end of the response
+- **X-With-Links-Summary** (optional): `all` to gather all links or `true` to gather unique links at the end of the response
+- **X-With-Images-Summary** (optional): `all` to gather all images or `true` to gather unique images at the end of the response
 - **X-With-Generated-Alt** (optional): `true` to add alt text to images lacking captions
 - **X-No-Cache** (optional): `true` to bypass cache for fresh retrieval
 - **X-With-Iframe** (optional): `true` to include iframe content in the response
 - **X-Return-Format** (optional): `markdown`, `html`, `text`, `screenshot`, or `pageshot` (for URL of full-page screenshot)
 - **X-Token-Budget** (optional): Specifies maximum number of tokens to use for the request
 - **X-Retain-Images** (optional): Use `none` to remove all images from the response
+- **X-Respond-With** (optional): Use `readerlm-v2` for HTML to Markdown conversion, to deliver high-quality results for websites with complex structures and contents
+- **X-Set-Cookie** (optional): Forwards your custom cookie settings when accessing the URL, which is useful for pages requiring extra authentication. Note that requests with cookies will not be cached
+- **X-Proxy-Url** (optoinal): Utilizes your proxy to access URLs, which is helpful for pages accessible only through specific proxies
+- **X-Proxy** (optional): Sets country code for location-based proxy server. Use 'auto' for optimal selection or 'none' to disable
+- **DNT** (optional): Use `1` to not cache and track the requested URL on our server
+- **X-No-Gfm** (optional): Opt in/out features from GFM (Github Flavored Markdown). By default, GFM (Github Flavored Markdown) features is enabled. Use `true` to disable GFM (Github Flavored Markdown) features. Use `table` to Opt out GFM Table but keep the table HTML elements in response
+- **X-Locale** (optional): Controls the browser locale to render the page. Lots of websites serve different content based on the locale.
+- **X-Robots-Txt** (optional): Defines bot User-Agent to check against robots.txt before fetching content. Websites may allow different behaviors based on the User-Agent.
+- **X-With-Shadow-Dom** (optional): Use `true` to extract content from all Shadow DOM roots in the document.
+- **X-Base** (optoinal): Use `final` to follow the full redirect chain.
+- **X-Md-Heading-Style** (optinal): When to use '#' or '===' to create markdown headings. Set `atx` to use any number of "==" or "--" characters on the line below the text to create headings.
+- **X-Md-Hr** (optional): Defines markdown horizontal rule format (passed to Turndown). Default is "***".
+- **X-Md-Bullet-List-Marker** (optional): Sets markdown bullet list marker character (passed to Turndown). Options: *, -, +
+- **X-Md-Em-Delimiter** (optional): Defines markdown emphasis delimiter (passed to Turndown). Options: -, *
+- **X-Md-Strong-Delimiter** (optional): Sets markdown strong emphasis delimiter (passed to Turndown). Options: **, __
+- **X-Md-Link-Style** (optinal): When not set, links are embedded directly within the text. Uses `referenced` to list links at the end, referenced by numbers in the text. Uses `discarded` to replace links with their anchor text.
+- **X-Md-Link-Reference-Style** (optional): Sets markdown reference link format (passed to Turndown). Set to `collapse`, `shortcut` or do not set this header.
 
-Request body schema: {"application/json":{"url":{"type":"string","required":true},"options":{"type":"string","default":"Default","options":["Default","Markdown","HTML","Text","Screenshot","Pageshot"]}}}
+Request body schema: {"application/json":{"url":{"type":"string","required":true},"viewport":{"type":"object","required":false,"description":"Sets browser viewport dimensions for responsive rendering.","width":{"type":"number", "required":true},"height":{"type":"number","required":true}},"injectPageScript":{"type":"string","required":false,"description":"Executes preprocessing JS code (inline string or remote URL), for instance manipulating doms."}}}
 Example cURL request: ```curl -X POST 'https://r.jina.ai/' -H "Accept: application/json" -H "Authorization: Bearer ..." -H "Content-Type: application/json" -H "X-No-Cache: true" -H "X-Remove-Selector: header,.class,#id" -H "X-Target-Selector: body,.class,#id" -H "X-Timeout: 10" -H "X-Wait-For-Selector: body,.class,#id" -H "X-With-Generated-Alt: true" -H "X-With-Iframe: true" -H "X-With-Images-Summary: true" -H "X-With-Links-Summary: true" -d '{"url":"https://jina.ai"}'```
 Example response: {"code":200,"status":20000,"data":{"title":"Jina AI - Your Search Foundation, Supercharged.","description":"Best-in-class embeddings, rerankers, LLM-reader, web scraper, classifiers. The best search AI for multilingual and multimodal data.","url":"https://jina.ai/","content":"Jina AI - Your Search Foundation, Supercharged.\n===============\n","images":{"Image 1":"https://jina.ai/Jina%20-%20Dark.svg"},"links":{"Newsroom":"https://jina.ai/#newsroom","Contact sales":"https://jina.ai/contact-sales","Commercial License":"https://jina.ai/COMMERCIAL-LICENSE-TERMS.pdf","Security":"https://jina.ai/legal/#security","Terms & Conditions":"https://jina.ai/legal/#terms-and-conditions","Privacy":"https://jina.ai/legal/#privacy-policy"},"usage":{"tokens
 Pay attention to the response format of the reader API, the actual content of the page will be available in `response["data"]["content"]`, and links / images (if using "X-With-Links-Summary: true" or "X-With-Images-Summary: true") will be available in `response["data"]["links"]` and `response["data"]["images"]`.
