@@ -21,7 +21,7 @@ These embeddings can be used for similarity search, clustering, and other tasks.
 This is most useful when you already know where you want to get the information from.
 - s.reader API: Given a search term, get an LLM-friendly version of all websites in the search results.
 This is useful when you don't know where to get the information from, but you just know what you are looking for.
-The API follows the SERP-style format.
+The API adheres to the search engine results page (SERP) format.
 - g.reader API: Given a statement, find out if it is true or false.
 This is useful for fact-checking, fake news detection, and general knowledge verification.
 - Re-Ranker API: Given a query and a list of search results, re-rank them.
@@ -77,23 +77,23 @@ Headers:
 - **X-Retain-Images** (optional): Use `none` to remove all images from the response
 - **X-Respond-With** (optional): Use `readerlm-v2` for HTML to Markdown conversion, to deliver high-quality results for websites with complex structures and contents
 - **X-Set-Cookie** (optional): Forwards your custom cookie settings when accessing the URL, which is useful for pages requiring extra authentication. Note that requests with cookies will not be cached
-- **X-Proxy-Url** (optoinal): Utilizes your proxy to access URLs, which is helpful for pages accessible only through specific proxies
+- **X-Proxy-Url** (optional): Utilizes your proxy to access URLs, which is helpful for pages accessible only through specific proxies
 - **X-Proxy** (optional): Sets country code for location-based proxy server. Use 'auto' for optimal selection or 'none' to disable
 - **DNT** (optional): Use `1` to not cache and track the requested URL on our server
-- **X-No-Gfm** (optional): Opt in/out features from GFM (Github Flavored Markdown). By default, GFM (Github Flavored Markdown) features is enabled. Use `true` to disable GFM (Github Flavored Markdown) features. Use `table` to Opt out GFM Table but keep the table HTML elements in response
+- **X-No-Gfm** (optional): Opt in/out features from GFM (Github Flavored Markdown). By default, GFM (Github Flavored Markdown) features are enabled. Use `true` to disable GFM (Github Flavored Markdown) features. Use `table` to Opt out GFM Table but keep the table HTML elements in response
 - **X-Locale** (optional): Controls the browser locale to render the page. Lots of websites serve different content based on the locale.
 - **X-Robots-Txt** (optional): Defines bot User-Agent to check against robots.txt before fetching content. Websites may allow different behaviors based on the User-Agent.
 - **X-With-Shadow-Dom** (optional): Use `true` to extract content from all Shadow DOM roots in the document.
-- **X-Base** (optoinal): Use `final` to follow the full redirect chain.
-- **X-Md-Heading-Style** (optinal): When to use '#' or '===' to create markdown headings. Set `atx` to use any number of "==" or "--" characters on the line below the text to create headings.
-- **X-Md-Hr** (optional): Defines markdown horizontal rule format (passed to Turndown). Default is "***".
-- **X-Md-Bullet-List-Marker** (optional): Sets markdown bullet list marker character (passed to Turndown). Options: *, -, +
-- **X-Md-Em-Delimiter** (optional): Defines markdown emphasis delimiter (passed to Turndown). Options: -, *
-- **X-Md-Strong-Delimiter** (optional): Sets markdown strong emphasis delimiter (passed to Turndown). Options: **, __
-- **X-Md-Link-Style** (optinal): When not set, links are embedded directly within the text. Uses `referenced` to list links at the end, referenced by numbers in the text. Uses `discarded` to replace links with their anchor text.
-- **X-Md-Link-Reference-Style** (optional): Sets markdown reference link format (passed to Turndown). Set to `collapse`, `shortcut` or do not set this header.
+- **X-Base** (optional): Use `final` to follow the full redirect chain.
+- **X-Md-Heading-Style** (optional): When to use '#' or '===' to create Markdown headings. Set `atx` to use any number of "==" or "--" characters on the line below the text to create headings.
+- **X-Md-Hr** (optional): Defines Markdown horizontal rule format (passed to Turndown). Default is "***".
+- **X-Md-Bullet-List-Marker** (optional): Sets Markdown bullet list marker character (passed to Turndown). Options: *, -, +
+- **X-Md-Em-Delimiter** (optional): Defines Markdown emphasis delimiter (passed to Turndown). Options: -, *
+- **X-Md-Strong-Delimiter** (optional): Sets Markdown strong emphasis delimiter (passed to Turndown). Options: **, __
+- **X-Md-Link-Style** (optional): When not set, links are embedded directly within the text. Sets `referenced` to list links at the end, referenced by numbers in the text. Sets `discarded` to replace links with their anchor text.
+- **X-Md-Link-Reference-Style** (optional): Sets Markdown reference link format (passed to Turndown). Set to `collapse`, `shortcut` or do not set this header.
 
-Request body schema: {"application/json":{"url":{"type":"string","required":true},"viewport":{"type":"object","required":false,"description":"Sets browser viewport dimensions for responsive rendering.","width":{"type":"number", "required":true},"height":{"type":"number","required":true}},"injectPageScript":{"type":"string","required":false,"description":"Executes preprocessing JS code (inline string or remote URL), for instance manipulating doms."}}}
+Request body schema: {"application/json":{"url":{"type":"string","required":true},"viewport":{"type":"object","required":false,"description":"Sets browser viewport dimensions for responsive rendering.","width":{"type":"number", "required":true},"height":{"type":"number","required":true}},"injectPageScript":{"type":"string","required":false,"description":"Executes preprocessing JS code (inline string or remote URL), for instance manipulating DOMs."}}}
 Example cURL request: ```curl -X POST 'https://r.jina.ai/' -H "Accept: application/json" -H "Authorization: Bearer ..." -H "Content-Type: application/json" -H "X-No-Cache: true" -H "X-Remove-Selector: header,.class,#id" -H "X-Target-Selector: body,.class,#id" -H "X-Timeout: 10" -H "X-Wait-For-Selector: body,.class,#id" -H "X-With-Generated-Alt: true" -H "X-With-Iframe: true" -H "X-With-Images-Summary: true" -H "X-With-Links-Summary: true" -d '{"url":"https://jina.ai"}'```
 Example response: {"code":200,"status":20000,"data":{"title":"Jina AI - Your Search Foundation, Supercharged.","description":"Best-in-class embeddings, rerankers, LLM-reader, web scraper, classifiers. The best search AI for multilingual and multimodal data.","url":"https://jina.ai/","content":"Jina AI - Your Search Foundation, Supercharged.\n===============\n","images":{"Image 1":"https://jina.ai/Jina%20-%20Dark.svg"},"links":{"Newsroom":"https://jina.ai/#newsroom","Contact sales":"https://jina.ai/contact-sales","Commercial License":"https://jina.ai/COMMERCIAL-LICENSE-TERMS.pdf","Security":"https://jina.ai/legal/#security","Terms & Conditions":"https://jina.ai/legal/#terms-and-conditions","Privacy":"https://jina.ai/legal/#privacy-policy"},"usage":{"tokens
 Pay attention to the response format of the reader API, the actual content of the page will be available in `response["data"]["content"]`, and links / images (if using "X-With-Links-Summary: true" or "X-With-Images-Summary: true") will be available in `response["data"]["links"]` and `response["data"]["images"]`.
@@ -121,7 +121,7 @@ Headers:
 - **X-With-Favicons** (optional): `true` to fetch the favicon of each URL in the SERP and include them in the response as image URI, useful for UI rendering.
 - **X-Timeout** (optional): Specifies the maximum time (in seconds) to wait for the webpage to load
 - **X-Set-Cookie** (optional): Forwards your custom cookie settings when accessing the URL, which is useful for pages requiring extra authentication. Note that requests with cookies will not be cached
-- **X-Proxy-Url** (optoinal): Utilizes your proxy to access URLs, which is helpful for pages accessible only through specific proxies
+- **X-Proxy-Url** (optional): Utilizes your proxy to access URLs, which is helpful for pages accessible only through specific proxies
 - **X-Locale** (optional): Controls the browser locale to render the page. Lots of websites serve different content based on the locale.
 
 Request body schema: {"application/json":{"q":{"type":"string","required":true},"gl":{"type":"string","required":false,"description":"The country to use for the search. It's a two-letter country code."},"location":{"type":"string","required":false,"description":"From where you want the search query to originate. It is recommended to specify location at the city level in order to simulate a real user’s search."},"hl":{"type":"string","required":false,"description":"The language to use for the search. It's a two-letter language code."},"num":{"type":"number","required":false,"description":"Sets maximum results returned. Using num may cause latency and exclude specialized result types. Omit unless you specifically need more results per page."},"page":{"type":"number","required":false,"description":"The result offset. It skips the given number of results. It's used for pagination."} }}
