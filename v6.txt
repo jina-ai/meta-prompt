@@ -129,24 +129,7 @@ Example request cURL request: ```curl -X POST 'https://s.jina.ai/' -H "Authoriza
 Example response: {"code":200,"status":20000,"data":[{"title":"Jina AI - Your Search Foundation, Supercharged.","description":"Our frontier models form the search foundation for high-quality enterprise search...","url":"https://jina.ai/","content":"Jina AI - Your Search Foundation, Supercharged...","usage":{"tokens":10475}},{"title":"Jina AI CEO, Founder, Key Executive Team, Board of Directors & Employees","description":"An open-source vector search engine that supports structured filtering...","url":"https://www.cbinsights.com/company/jina-ai/people","content":"Jina AI Management Team...","usage":{"tokens":8472}}]}
 Similarly to the reader API, you must pay attention to the response format of the search API, and you must ensure to extract the required content correctly.
 
-5. Grounding API
-Endpoint: https://g.jina.ai/
-Purpose: verify the factual accuracy of a given statement by cross-referencing it with sources from the internet
-Best for: ideal for validating claims or facts by using verifiable sources, such as company websites or social media profiles
-Method: POST
-Authorization: HTTPBearer
-Headers:
-- **Authorization**: Bearer $JINA_API_KEY
-- **Content-Type**: application/json
-- **Accept**: application/json
-- **X-Site** (optional): comma-separated list of URLs to serve as grounding references for verifying the statement (if not specified, all sources found on the internet will be used)
-- **X-No-Cache** (optional): "true" to bypass cache and retrieve real-time data
-
-Request body schema: {"application/json":{"statement":{"type":"string","required":true,"description":"The statement to verify for factual accuracy"}}}
-Example cURL request: ```curl -X POST 'https://g.jina.ai/' -H "Accept: application/json" -H "Authorization: Bearer ..." -H "Content-Type: application/json" -H "X-Site: https://jina.ai, https://linkedin.com" -d '{"statement":"Jina AI was founded in 2020 in Berlin."}'```
-Example response: {"code":200,"status":20000,"data":{"factuality":1,"result":true,"reason":"The statement that Jina AI was founded in 2020 in Berlin is supported by the references. The first reference confirms the founding year as 2020 and the location as Berlin. The second and third references specify that Jina AI was founded in February 2020, which aligns with the year mentioned in the statement. Therefore, the statement is factually correct based on the provided references.","references":[{"url":"https://es.linkedin.com/company/jinaai?trk=ppro_cprof","keyQuote":"Founded in February 2020, Jina AI has swiftly emerged as a global pioneer in multimodal AI technology.","isSupportive":true},{"url":"https://jina.ai/about-us/","keyQuote":"Founded in 2020 in Berlin, Jina AI is a leading search AI company.","isSupportive":true},{"url":"https://www.linkedin.com/company/jinaai","keyQuote":"Founded in February 2020, Jina AI has swiftly emerged as a global pioneer in multimodal AI technology.","isSupportive":true}],"usage":{"tokens":7620}}}
-
-6. Segmenter API
+5. Segmenter API
 Endpoint: https://segment.jina.ai/
 Purpose: tokenizes text, divide text into chunks
 Best for: counting number of tokens in text, segmenting text into manageable chunks (ideal for downstream applications like RAG)
@@ -162,7 +145,7 @@ Example cURL request: ```curl -X POST 'https://segment.jina.ai/' -H "Content-Typ
 Example response: {"num_tokens":78,"tokenizer":"cl100k_base","usage":{"tokens":0},"num_chunks":4,"chunk_positions":[[3,55],[55,93],[93,110],[110,135]],"tokens":[[["J",[41]],["ina",[2259]],[" AI",[15592]],[":",[25]],[" Your",[4718]],[" Search",[7694]],[" Foundation",[5114]],[",",[11]],[" Super",[7445]],["charged",[38061]],["!",[0]],[" ",[11410]],["🚀",[248,222]],["\n",[198]],["  ",[256]]],[["I",[40]],["hr",[4171]],["er",[261]],[" Such",[15483]],["grund",[60885]],["lage",[56854]],[",",[11]],[" auf",[7367]],["gel",[29952]],["aden",[21825]],["!",[0]],[" ",[11410]],["🚀",[248,222]],["\n",[198]],["  ",[256]]],[["您",[88126]],["的",[9554]],["搜索",[80073]],["底",[11795,243]],["座",[11795,100]],["，",[3922]],["从",[46281]],["此",[33091]],["不",[16937]],["同",[42016]],["！",[6447]],["🚀",[9468,248,222]],["\n",[198]],["  ",[256]]],[["検",[162,97,250]],["索",[52084]],["ベ",[2845,247]],["ース",[61398]],[",",[11]],["も",[32977]],["う",[30297]],["二",[41920]],["度",[27479]],["と",[19732]],["同",[42016]],["じ",[100204]],["こ",[22957]],["と",[19732]],["は",[15682]],["あり",[57903]],["ま",[17129]],["せ",[72342]],["ん",[25827]],["！",[6447]],["🚀",[9468,248,222]],["\n",[198]]]],"chunks":["Jina AI: Your Search Foundation, Supercharged! 🚀\n  ","Ihrer Suchgrundlage, aufgeladen! 🚀\n  ","您的搜索底座，从此不同！🚀\n  ","検索ベース,もう二度と同じことはありません！🚀\n"]}
 Note: for the API to return chunks, you must specify `"return_chunks": true` as part of the request body.
 
-7. Classifier API
+6. Classifier API
 Endpoint: https://api.jina.ai/v1/classify
 Purpose: zero-shot classification for text or images
 Best for: text or image classification without training
@@ -238,11 +221,10 @@ Remember to use variables for required API keys, and point out to the user that 
 5. Finally, Jina AI API endpoints rate limits:
 Embedding & Reranker APIs (api.jina.ai/v1/embeddings, /rerank): 500 RPM & 1M TPM with API key; 2k RPM & 5M TPM with premium key
 Reader APIs:
- - r.jina.ai: 200 RPM, 1k RPM premium
- - s.jina.ai: 40 RPM, 100 RPM premium
- - g.jina.ai: 10 RPM, 30 RPM premium
+ - r.jina.ai: 200 RPM, 2k RPM premium
+ - s.jina.ai: 40 RPM, 400 RPM premium
 Classifier APIs (api.jina.ai/v1/classify):
- - 200 RPM & 500k TPM; 1k RPM & 3M TPM premium
+ - 20 RPM & 200k TPM; 60 RPM & 1M TPM premium
 Segmenter API (segment.jina.ai): 200 RPM, 1k RPM premium
 
 Approach your task step by step.
