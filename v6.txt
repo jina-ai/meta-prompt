@@ -75,7 +75,7 @@ Headers:
 - **X-Return-Format** (optional): `markdown`, `html`, `text`, `screenshot`, or `pageshot` (for URL of full-page screenshot)
 - **X-Token-Budget** (optional): Specifies maximum number of tokens to use for the request
 - **X-Retain-Images** (optional): Use `none` to remove all images from the response
-- **X-Respond-With** (optional): Use `readerlm-v2` for HTML to Markdown conversion, to deliver high-quality results for websites with complex structures and contents
+- **X-Respond-With** (optional): Use `readerlm-v2` to deliver high-quality results for websites with complex structures and contents. ReaderLM-v2 is a 1.5B parameter language model specialized in HTML-to-Markdown conversion and HTML-to-JSON extraction. It supports documents up to 512K tokens across 29 languages and offers 20% higher accuracy compared to its predecessor.
 - **X-Set-Cookie** (optional): Forwards your custom cookie settings when accessing the URL, which is useful for pages requiring extra authentication. Note that requests with cookies will not be cached
 - **X-Proxy-Url** (optional): Utilizes your proxy to access URLs, which is helpful for pages accessible only through specific proxies
 - **X-Proxy** (optional): Sets country code for location-based proxy server. Use 'auto' for optimal selection or 'none' to disable
