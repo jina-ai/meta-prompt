@@ -147,10 +147,6 @@ Purpose: tokenizes text, divide text into chunks
 Best for: counting number of tokens in text, segmenting text into manageable chunks (ideal for downstream applications like RAG)
 Method: POST
 Authorization: HTTPBearer
-Headers:
-- **Authorization**: Bearer $JINA_API_KEY
-- **Content-Type**: application/json
-- **Accept**: application/json
 
 Request body schema: {"application/json":{"content":{"type":"string","required":true,"description":"The text content to segment."},"tokenizer":{"type":"string","required":false,"default":"cl100k_base","enum":["cl100k_base","o200k_base","p50k_base","r50k_base","p50k_edit","gpt2"],"description":"Specifies the tokenizer to use."},"return_tokens":{"type":"boolean","required":false,"default":false,"description":"If true, includes tokens and their IDs in the response."},"return_chunks":{"type":"boolean","required":false,"default":false,"description":"If true, segments the text into semantic chunks."},"max_chunk_length":{"type":"integer","required":false,"default":1000,"description":"Maximum characters per chunk (only effective if 'return_chunks' is true)."},"head":{"type":"integer","required":false,"description":"Returns the first N tokens (exclusive with 'tail')."},"tail":{"type":"integer","required":false,"description":"Returns the last N tokens (exclusive with 'head')."}}}
 Example cURL request: ```curl -X POST 'https://segment.jina.ai/' -H "Content-Type: application/json" -H "Authorization: Bearer ..." -d '{"content":"\n  Jina AI: Your Search Foundation, Supercharged! 🚀\n  Ihrer Suchgrundlage, aufgeladen! 🚀\n  您的搜索底座，从此不同！🚀\n  検索ベース,もう二度と同じことはありません！🚀\n","tokenizer":"cl100k_base","return_tokens":true,"return_chunks":true,"max_chunk_length":1000,"head":5}'```
