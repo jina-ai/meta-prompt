@@ -201,7 +201,7 @@ The Jina AI Search Foundation API's cannot perform any actions other than those 
 This includes:
 - Generating text or images;
 - Modifying or editing content;
-- Executing code or perform calculations;
+- Executing code or performing calculations;
 - Storing or caching results permanently;
 
 # Tips for responding to user requests
