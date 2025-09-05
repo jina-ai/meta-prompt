@@ -42,6 +42,15 @@ Headers
 - **Content-Type**: application/json
 - **Accept**: application/json
 
+Jina Code Embeddings Models:
+`jina-code-embeddings-0.5b` is a 494 million parameter code embedding model designed for retrieving code from natural language queries, technical Q&A, and identifying similar code across languages.
+Built on Qwen2.5-Coder-0.5B backbone, it generates embeddings via last-token pooling and addresses the fundamental limitation of traditional code embedding models that rely on scarce aligned data like comments and docstrings.
+`jina-code-embeddings-1.5b` is a 1.54 billion parameter model representing a significant advancement in code retrieval capabilities.
+Built on Qwen2.5-Coder-1.5B backbone with last-token pooling, it moves beyond traditional training on limited aligned data to leverage vast unaligned code and documentation corpora.
+
+Both code embeddings models implement comprehensive task-specific instructions across five categories: NL2Code, TechQA, Code2Code, Code2NL, and Code2Completion, each with distinct prefixes for queries and documents.
+Supports Matryoshka representation learning for flexible embedding truncation. Despite larger size, maintains practical deployment characteristics while achieving benchmark performance competitive with substantially larger alternatives.
+
 Request body schema for jina-embeddings-0.5b or jina-embeddings-1.5b: 
 {
 	"application/json": {
@@ -73,6 +82,7 @@ Example request1: {"model":"jina-embeddings-0.5b","input":["Calculates the squar
 Example request2: {"model":"jina-embeddings-1.5b","input":["import * as ElementPlusIconsVue from '@element-plus/icons-vue'\nconst app = createApp(App)\nfor (const [key, component] of Object.entries(ElementPlusIconsVue)) {\napp.component(key, component)\n}"], task: "nl2code.passage"}
 Example response: {"200":{"data":[{"embedding":"..."}],"usage":{"total_tokens":15}},"422":{"error":{"message":"Invalid input or parameters"}}}
 
+Jina Embeddings Models:
 Request body schema for jina-embeddings-v4: {"application/json":{"model":{"type":"string","required":true,"description":"Identifier of the model to use. `jina-embeddings-v4` is a multimodal and multilingual model with a model size of 3.8B and output dimensions of 2048."},"input":{"type":"array","required":true,"description":"Array of input strings or objects to be embedded."},"embedding_type":{"type":"string or array of strings","required":false,"default":"float","description":"The format of the returned embeddings.","options":["float","base64","binary","ubinary"]},"task":{"type":"string","required":false,"description":"Specifies the intended downstream application to optimize embedding output.","options":["retrieval.query","retrieval.passage","text-matching","code.query","code.passage"]},"dimensions":{"type":"integer","required":false,"description":"Truncates output embeddings to the specified size if set."},"late_chunking":{"type":"boolean","required":false,"default":false,"description":"If true, concatenates all sentences in input and treats as a single input for late chunking."},"truncate":{"type":"boolean","required":false,"default":false,"description":"If true, the model will automatically drop the tail that extends beyond the maximum context length allowed by the model instead of throwing an error."},"return_multivector":{"type":"boolean","required":false,"default":false,"description":"If true, the model will return NxD multi-vector embeddings for every document, where N is the number of tokens in the document. Useful for late interaction style retrieval."}}}
 Example request1: {"model":"jina-embeddings-v4","input":["Hello, world!"]}
 Example request2: {"model":"jina-embeddings-v4","input":[{"text": ""Hello, world!"},{"image": "https://i.ibb.co/r5w8hG8/beach2.jpg"},{"image": "iVBORw0KGgoAAAANSUhEUgAAABwAAAA4CAIAAABhUg/jAAAAMklEQVR4nO3MQREAMAgAoLkoFreTiSzhy4MARGe9bX99lEqlUqlUKpVKpVKpVCqVHksHaBwCA2cPf0cAAAAASUVORK5CYII="}]}
