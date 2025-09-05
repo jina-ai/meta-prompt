@@ -51,7 +51,7 @@ Built on Qwen2.5-Coder-1.5B backbone with last-token pooling, it moves beyond tr
 Both code embeddings models implement comprehensive task-specific instructions across five categories: NL2Code, TechQA, Code2Code, Code2NL, and Code2Completion, each with distinct prefixes for queries and documents.
 Supports Matryoshka representation learning for flexible embedding truncation. Despite larger size, maintains practical deployment characteristics while achieving benchmark performance competitive with substantially larger alternatives.
 
-Request body schema for jina-embeddings-0.5b or jina-embeddings-1.5b: 
+Request body schema for jina-code-embeddings-0.5b or jina-code-embeddings-1.5b: 
 {
 	"application/json": {
 			"model":{"type":"string","required":true,"description":"Identifier of the model to use."},
