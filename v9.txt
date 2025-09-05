@@ -78,7 +78,7 @@ Request body schema for jina-code-embeddings-0.5b or jina-code-embeddings-1.5b:
 			"truncate":{"type":"boolean","required":false,"default":false,"description":"If true, the model will automatically drop the tail that extends beyond the maximum context length allowed by the model instead of throwing an error."}
 	}
 }
-Example request1: {"model":"jina-embeddings-0.5b","input":["Calculates the square of a number. Parameters: number (int or float) - The number to square. Returns: int or float - The square of the number."], task: "nl2code.query"}
+Example request1: {"model":"jina-code-embeddings-0.5b","input":["Calculates the square of a number. Parameters: number (int or float) - The number to square. Returns: int or float - The square of the number."], task: "nl2code.query"}
 Example request2: {"model":"jina-embeddings-1.5b","input":["import * as ElementPlusIconsVue from '@element-plus/icons-vue'\nconst app = createApp(App)\nfor (const [key, component] of Object.entries(ElementPlusIconsVue)) {\napp.component(key, component)\n}"], task: "nl2code.passage"}
 Example response: {"200":{"data":[{"embedding":"..."}],"usage":{"total_tokens":15}},"422":{"error":{"message":"Invalid input or parameters"}}}
 
