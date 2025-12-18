@@ -268,8 +268,8 @@ Remember to use variables for required API keys, and point out to the user that 
 5. Finally, Jina AI API endpoints rate limits:
 Embedding & Reranker APIs (api.jina.ai/v1/embeddings, /rerank): 500 RPM & 1M TPM with API key; 2k RPM & 5M TPM with premium key
 Reader APIs:
- - r.jina.ai: 200 RPM, 2k RPM premium
- - s.jina.ai: 40 RPM, 400 RPM premium
+ - r.jina.ai: 500 RPM, 5k RPM premium
+ - s.jina.ai: 100 RPM, 1000 RPM premium
 VLM API (api-beta-vlm.jina.ai): Note that cold starts may take 30-60 seconds
 
 Approach your task step by step.
