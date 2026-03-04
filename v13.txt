@@ -56,7 +56,37 @@ Jina Code Embeddings Models:
 
 Request body schema for jina-code-embeddings-0.5b or jina-code-embeddings-1.5b: {"application/json":{"model":{"type":"string","required":true,"description":"Identifier of the model to use.","options":[{"name":"jina-code-embeddings-0.5b","size":"494M"},{"name":"jina-code-embeddings-1.5b","size":"1.54B"}]},"input":{"type":"array","required":true,"description":"Array of input strings to be embedded."},"embedding_type":{"type":"string or array of strings","required":false,"default":"float","description":"The format of the returned embeddings.","options":["float","base64","binary","ubinary"]},"task":{"type":"string","required":false,"description":"Specifies the intended downstream application to optimize embedding output.","options":["nl2code.query","nl2code.passage","code2code.query","code2code.passage","code2nl.query","code2nl.passage","code2completion.query","code2completion.passage","qa.query","qa.passage"]},"dimensions":{"type":"integer","required":false,"description":"Truncates output embeddings to the specified size if set."},"truncate":{"type":"boolean","required":false,"default":false,"description":"If true, the model will automatically drop the tail that extends beyond the maximum context length allowed by the model instead of throwing an error."}}}
 
-2. Reranker API
+2. Batch Embeddings API
+Endpoint: https://api.jina.ai/v1/batch/embeddings
+Purpose: Asynchronously embed large volumes of text. Submit a batch job and poll for completion instead of waiting synchronously. Ideal for processing thousands to millions of documents.
+Best for: large-scale embedding tasks, offline indexing, bulk document processing
+Method: POST (submit), GET (status/download), DELETE (cancel)
+Authorization: HTTPBearer
+Headers
+- **Authorization**: Bearer $JINA_API_KEY
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+Workflow:
+1. **Submit**: POST to `/v1/batch/embeddings` with your input. Returns a `batch_id` immediately (HTTP 202).
+2. **Poll**: GET `/v1/batch/{batch_id}` to check status (`submitted`, `processing`, `completed`, `failed`, `cancelled`).
+3. **Download**: When completed, GET `/v1/batch/{batch_id}/output` to stream the output JSONL.
+4. **Cancel**: DELETE `/v1/batch/{batch_id}` to cancel a running batch.
+5. **Errors**: GET `/v1/batch/{batch_id}/errors` to download error details if any.
+
+Input options:
+- **Inline input**: Include `input` array directly in the request body (up to 10,000 items).
+- **GCS input**: Set `input_file` to a GCS URI (`gs://bucket/file.jsonl`) containing JSONL with one `{"input": "text"}` per line (up to 50,000 lines).
+
+Request body schema: {"application/json":{"model":{"type":"string","required":true,"description":"Identifier of the model to use.","options":["jina-embeddings-v5-text-small","jina-embeddings-v5-text-nano"]},"input":{"type":"array","required":false,"description":"Array of input strings. Use this for inline input (up to 10,000 items). Either input or input_file is required."},"input_file":{"type":"string","required":false,"description":"GCS URI to a JSONL file (up to 50,000 lines). Either input or input_file is required."},"task":{"type":"string","required":false,"description":"Task type for the embeddings.","options":["retrieval.query","retrieval.passage","text-matching","classification","clustering"]},"dimensions":{"type":"integer","required":false,"description":"Truncates output embeddings to the specified size."},"normalized":{"type":"boolean","required":false,"default":false,"description":"If true, embeddings are normalized to unit L2 norm."}}}
+
+Submit response: {"batch_id":"batch_xxxx","status":"submitted","created_at":1234567890}
+Status response: {"batch_id":"batch_xxxx","status":"completed","stats":{"total":1000,"completed":1000,"failed":0,"total_tokens":31890},"output_url":"/v1/batch/batch_xxxx/output","created_at":1234567890,"completed_at":1234567899}
+Output format: JSONL where each line is {"custom_id":"request-N","response":{"status_code":200,"body":{"data":[{"embedding":[...],"index":0}],"model":"jina-embeddings-v5-text-small","usage":{"prompt_tokens":32}}}}
+
+Note: Batch processing is asynchronous. Poll the status endpoint periodically (e.g., every 10-30 seconds) until status is "completed". Token usage is billed upon first status query after completion.
+
+3. Reranker API
 Endpoint: https://api.jina.ai/v1/rerank
 Purpose: find the most relevant search results
 Best for: refining search results, refining RAG (retrieval augmented generation) contextual chunks, etc. 
@@ -77,7 +107,7 @@ Request body schema for jina-reranker-v3 or jina-reranker-v2-base-multilingual o
 
 Request body schema for jina-reranker-m0: {"application/json":{"model":{"type":"string","required":true,"description":"Identifier of the model to use.","value":"jina-reranker-m0"},"query":{"type":"string, TextDoc, or image (URL or base64-encoded string)","required":true,"description":"The search query."},"documents":{"type":"array of objects with keys 'text' and/or 'image'","required":true,"description":"A list of text and/or image documents to rerank. Each document can have 'text' (string) and/or 'image' (URL or base64-encoded string)."},"top_n":{"type":"integer","required":false,"description":"The number of most relevant documents or indices to return, defaults to the length of documents."},"return_documents":{"type":"boolean","required":false,"default":true,"description":"If false, returns only the index and relevance score without the document text. If true, returns the index, text, and relevance score."}}}
 
-3. Reader API
+4. Reader API
 Endpoint: https://r.jina.ai/
 Purpose: retrieve/parse content from URL in a format optimized for downstream tasks like LLMs and other applications. Use https://eu.r.jina.ai/ to reside all infrastructure and data processing operations entirely within EU jurisdiction.
 Best for: extracting structured content from web pages, suitable for generative models and search applications
@@ -122,7 +152,7 @@ Request body schema: {"application/json":{"url":{"type":"string","required":true
 
 Note: The actual content of the page will be available in `response["data"]["content"]`, and links/images (if using "X-With-Links-Summary: true" or "X-With-Images-Summary: true") will be available in `response["data"]["links"]` and `response["data"]["images"]`.
 
-4. Search API
+5. Search API
 Endpoint: https://s.jina.ai/
 Purpose: search the web for information and return results in a format optimized for downstream tasks like LLMs and other applications. Use https://eu.s.jina.ai/ to reside all infrastructure and data processing operations entirely within EU jurisdiction.
 Best for: customizable web search with results optimized for enterprise search systems and LLMs, with options for Markdown, HTML, JSON, text, and image outputs
@@ -160,6 +190,8 @@ Make sure that any code you generate uses the JINA_API_KEY environment variable,
 1. Basic search: Use the search API for simple queries. For better relevancy, first use search API to retrieve results, then reranker API to refine them.
 
 2. Web content processing: Use reader API to scrape a webpage. To embed webpage contents, first use reader API then embeddings API.
+
+3. Large-scale embedding: For bulk document processing (thousands+ documents), use the batch embeddings API instead of the synchronous embeddings API. Submit all documents in one request, then poll for completion.
 
 # Integration guidelines
 

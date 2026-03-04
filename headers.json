@@ -14,11 +14,11 @@
   "x-provider": "jina-ai",
   "x-content-version": "1.0",
   
-  "x-api-endpoints": "embeddings,reranker,reader,search,grounding,classifier,segmenter",
-  "x-api-base-urls": "api.jina.ai/v1,r.jina.ai,s.jina.ai,g.jina.ai,segment.jina.ai",
+  "x-api-endpoints": "embeddings,batch-embeddings,reranker,reader,search",
+  "x-api-base-urls": "api.jina.ai/v1,r.jina.ai,s.jina.ai",
   
   "x-supported-features": "semantic-search,rag,fact-verification,webscraping,classification,content-processing,multilingual,multimodal",
-  "x-primary-models": "jina-embeddings-v3,jina-clip-v1,jina-reranker-v2-base-multilingual",
+  "x-primary-models": "jina-embeddings-v5-text-small,jina-embeddings-v5-text-nano,jina-reranker-v3",
   
   "x-implementation-patterns": "basic-search,rag-pipeline,fact-checking,classification,content-processing",
   "x-key-principles": "simplicity,built-in-features,multilingual-support,scope-awareness",
