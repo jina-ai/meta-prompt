@@ -18,7 +18,7 @@
   "x-api-base-urls": "api.jina.ai/v1,r.jina.ai,s.jina.ai",
   
   "x-supported-features": "semantic-search,rag,fact-verification,webscraping,classification,content-processing,multilingual,multimodal",
-  "x-primary-models": "jina-embeddings-v5-text-small,jina-embeddings-v5-text-nano,jina-reranker-v3",
+  "x-primary-models": "jina-embeddings-v5-text-small,jina-embeddings-v5-text-nano,jina-reranker-v3.5",
   
   "x-implementation-patterns": "basic-search,rag-pipeline,fact-checking,classification,content-processing",
   "x-key-principles": "simplicity,built-in-features,multilingual-support,scope-awareness",
