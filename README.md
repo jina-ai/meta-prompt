@@ -18,6 +18,11 @@ curl docs.jina.ai/v1 | llm -s 'grab all sentences from Hacker News, embed them, 
 - `docs.jina.ai/api/openapi.json`: the three hosts' OpenAPI specs merged into one.
 - Built by [`api-docs/build.mjs`](api-docs/build.mjs) (Node >= 18, no dependencies) from each host's live `/openapi.json`. Reader and Search paths keep their own server, so "Try it" calls the right host; their schemas are prefixed `Reader_` / `Search_` to avoid name clashes.
 - [`.github/workflows/api-docs.yml`](.github/workflows/api-docs.yml) rebuilds every 6 hours and commits only when a spec changed. Run it by hand with `node api-docs/build.mjs`.
+- **Customising without losing it on rebuild**: the build never writes these two files, it layers them on top of the live specs every time.
+  - [`api-docs/intro.md`](api-docs/intro.md): the intro and the "I want to" navigation table at the top of the page and of `api.md`. Links like `#tag/reader/GET/{url}` jump to an operation.
+  - [`api-docs/overrides.mjs`](api-docs/overrides.mjs): section order, hidden operations, and summaries / descriptions for operations, parameters and body fields.
+  - Undocumented query params of Reader/Search reuse the text of their `X-*` header twin automatically; the generated `- Cast to ...` / `- Member of ...` lines are dropped.
+  - [`api-docs/coverage.md`](api-docs/coverage.md) (generated) lists every visible parameter that still has no description; the build warns when an override no longer matches anything.
 
 ## Worker
 - docs.jina.ai is the Cloudflare worker in [`worker/`](worker/) (`metaprompt`). It reads everything from this repo's `main` branch on raw.githubusercontent.com, so pushing to `main` publishes.
