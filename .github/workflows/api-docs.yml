@@ -1,0 +1,39 @@
+name: api-docs
+
+# Rebuilds api-docs/ (served at docs.jina.ai/api) from the live OpenAPI specs of
+# api.jina.ai, r.jina.ai and s.jina.ai, and commits only when something changed.
+on:
+  schedule:
+    - cron: '17 */6 * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['api-docs/build.mjs']
+
+permissions:
+  contents: write
+
+concurrency:
+  group: api-docs
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node api-docs/build.mjs
+      - name: Commit if changed
+        run: |
+          if git diff --quiet -- api-docs; then
+            echo "api-docs unchanged"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add api-docs
+          git commit -m "api-docs: regenerate from live OpenAPI specs"
+          git push
