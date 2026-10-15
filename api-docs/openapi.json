@@ -1288,6 +1288,7 @@
           }
         },
         "summary": "getIndex",
+        "description": "Index of the service",
         "operationId": "reader_get_root",
         "security": [
           {
@@ -2965,14 +2966,14 @@
           }
         },
         "summary": "Read a URL (JSON body)",
+        "description": "Send `{\"url\": \"...\"}` as JSON, with the same `X-*` headers as the GET form.\n\n`Accept: application/json` returns JSON: the content is in `data.content`, and with `X-With-Links-Summary` / `X-With-Images-Summary` the links and images are in `data.links` and `data.images`. `Accept: text/event-stream` streams the result.",
         "operationId": "reader_post_root",
         "security": [
           {
             "HTTPBearer": []
           },
           {}
-        ],
-        "description": "Send `{\"url\": \"...\"}` as JSON, with the same `X-*` headers as the GET form.\n\n`Accept: application/json` returns JSON: the content is in `data.content`, and with `X-With-Links-Summary` / `X-With-Images-Summary` the links and images are in `data.links` and `data.images`. `Accept: text/event-stream` streams the result."
+        ]
       },
       "servers": [
         {
@@ -4239,14 +4240,14 @@
           }
         },
         "summary": "Read a URL",
+        "description": "Put the target URL right after `https://r.jina.ai/`, e.g. `https://r.jina.ai/https://example.com`.\n\nReturns the page as LLM-friendly Markdown. Every option is an `X-*` header, or the query parameter of the same name.",
         "operationId": "reader_get_url",
         "security": [
           {
             "HTTPBearer": []
           },
           {}
-        ],
-        "description": "Put the target URL right after `https://r.jina.ai/`, e.g. `https://r.jina.ai/https://example.com`.\n\nReturns the page as LLM-friendly Markdown. Every option is an `X-*` header, or the query parameter of the same name."
+        ]
       },
       "post": {
         "tags": [
@@ -5916,7 +5917,8 @@
             "headers": {}
           }
         },
-        "summary": "crawl",
+        "summary": "read",
+        "description": "Read a URL and get its content back in an LLM-friendly format.",
         "operationId": "reader_post_url",
         "security": [
           {
@@ -6061,6 +6063,7 @@
           }
         },
         "summary": "getEphemeral",
+        "description": "Get embedded ephemeral resources, including ephemeral resources such as short-lived signed links to files produced by a request. Links expire within 24 hours.",
         "operationId": "reader_get_ephemeral_encodedFid",
         "x-scalar-ignore": true
       },
@@ -6283,6 +6286,7 @@
           }
         },
         "summary": "getEphemeral",
+        "description": "Get embedded ephemeral resources, including ephemeral resources such as short-lived signed links to files produced by a request. Links expire within 24 hours.",
         "operationId": "reader_post_ephemeral_encodedFid",
         "x-scalar-ignore": true
       },
@@ -7579,14 +7583,14 @@
           }
         },
         "summary": "Search the web",
+        "description": "Put the query right after `https://s.jina.ai/`, e.g. `https://s.jina.ai/jina%20ai`.\n\nReturns the top results with each page's content as LLM-friendly text. `X-Respond-With: no-content` returns the results without page content; `X-Site` keeps results to one domain.",
         "operationId": "search_get_q",
         "security": [
           {
             "HTTPBearer": []
           },
           {}
-        ],
-        "description": "Put the query right after `https://s.jina.ai/`, e.g. `https://s.jina.ai/jina%20ai`.\n\nReturns the top results with each page's content as LLM-friendly text. `X-Respond-With: no-content` returns the results without page content; `X-Site` keeps results to one domain."
+        ]
       },
       "post": {
         "tags": [
@@ -9483,6 +9487,7 @@
           }
         },
         "summary": "search",
+        "description": "Search the web and get the result pages back in an LLM-friendly format.",
         "operationId": "search_post_q",
         "security": [
           {
@@ -10784,6 +10789,7 @@
           }
         },
         "summary": "searchIndex",
+        "description": "Index of the service",
         "operationId": "search_get_search",
         "security": [
           {
@@ -12687,14 +12693,14 @@
           }
         },
         "summary": "Search the web (JSON body)",
+        "description": "Send `{\"q\": \"...\"}` as JSON, optionally with `gl`, `hl`, `location`, `num` and `page`. Same `X-*` headers as the GET form.",
         "operationId": "search_post_search",
         "security": [
           {
             "HTTPBearer": []
           },
           {}
-        ],
-        "description": "Send `{\"q\": \"...\"}` as JSON, optionally with `gl`, `hl`, `location`, `num` and `page`. Same `X-*` headers as the GET form."
+        ]
       },
       "servers": [
         {
