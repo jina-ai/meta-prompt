@@ -4,20 +4,28 @@
 //
 //   node api-docs/build.mjs
 //
-// Writes, next to this file:
-//   openapi.json  the three specs merged into one (served at docs.jina.ai/api/openapi.json)
-//   index.html    Scalar page that renders openapi.json (docs.jina.ai/api in a browser)
-//   api.md        the same reference as Markdown (curl docs.jina.ai/api, docs.jina.ai/api.md)
+// Hand-written inputs (never touched by this script, so edits survive every rebuild):
+//   intro.md       intro block with the navigation table, shown first on the page and in api.md
+//   overrides.mjs  order, hidden operations, and summaries/descriptions for operations and parameters
 //
-// Outputs carry no timestamps, so a rebuild only changes files when a source spec changed.
-import { writeFile } from 'node:fs/promises';
+// Generated outputs, next to this file:
+//   openapi.json   the three specs merged into one (docs.jina.ai/api/openapi.json)
+//   index.html     Scalar page that renders openapi.json (docs.jina.ai/api in a browser)
+//   api.md         the same reference as Markdown (curl docs.jina.ai/api, docs.jina.ai/api.md)
+//   coverage.md    visible parameters that still have no description
+//
+// Outputs carry no timestamps, so a rebuild only changes files when an input changed.
+import { readFile, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const OUT = dirname(fileURLToPath(import.meta.url));
 const SCALAR_VERSION = '1.74.0';
 const METHODS = ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace'];
-const KEY_URL = 'https://jina.ai/?sui=apikey';
+const PAGE_URL = 'https://docs.jina.ai/api';
+
+const overrides = (await import('./overrides.mjs')).default;
+const introMd = (await readFile(join(OUT, 'intro.md'), 'utf8')).trim();
 
 const SOURCES = [
   {
@@ -33,12 +41,7 @@ const SOURCES = [
     group: 'Reader API (r.jina.ai)',
     tag: 'Reader',
     prefix: 'Reader_',
-    description: 'Read a URL and get its content back in an LLM-friendly format. Put the target URL after `https://r.jina.ai/`, or pass it as `url`. Most options are `X-*` request headers.',
-    summaries: {
-      '/': 'Read a URL',
-      '/{url}': 'Read a URL (URL in path)',
-      '/ephemeral/{encodedFid}': 'Get an ephemeral file',
-    },
+    description: 'Read a URL and get its content back in an LLM-friendly format.',
   },
   {
     key: 'search',
@@ -47,11 +50,7 @@ const SOURCES = [
     group: 'Search API (s.jina.ai)',
     tag: 'Search',
     prefix: 'Search_',
-    description: 'Search the web and get the results back in an LLM-friendly format. Put the query after `https://s.jina.ai/`, or pass it as `q`. Most options are `X-*` request headers.',
-    summaries: {
-      '/search': 'Search the web',
-      '/{q}': 'Search the web (query in path)',
-    },
+    description: 'Search the web and get the result pages back in an LLM-friendly format.',
   },
 ];
 
@@ -77,39 +76,130 @@ function prefixSchemas(spec, prefix) {
 }
 
 const slug = (p) => p.replace(/[{}]/g, '').replace(/[^a-zA-Z0-9]+/g, '_').replace(/^_|_$/g, '') || 'root';
+// "X-With-Links-Summary", "withLinksSummary" and "withlinkssummary" all become "withlinkssummary".
+const norm = (name) => String(name).toLowerCase().replace(/^x-/, '').replace(/[^a-z0-9]/g, '');
+const hasText = (s) => typeof s === 'string' && s.trim().length > 0;
+// Reader/Search specs pad descriptions with generated lines ("- Cast to: < string >",
+// "- Member of <CrawlerOptions>", ...). They explain nothing, so they are dropped; a param left
+// with no text counts as undocumented and gets its header twin's text or an override.
+const NOISE = /^\s*-\s*(Cast to|Member of|Endpoint parameter of|Defaults to|Sub-?type of|Type)\b/i;
+const clean = (s) => (typeof s === 'string'
+  ? s.split('\n').filter((line) => !NOISE.test(line)).join('\n').replace(/\n{3,}/g, '\n\n').trim()
+  : s);
+const paramDesc = (p) => (hasText(p.description) ? p.description : (p.schema && hasText(p.schema.description) ? p.schema.description : ''));
 
 function merge(loaded) {
-  const [base, ...rest] = loaded;
-  const out = structuredClone(base.spec);
-  const intro = [
-    'One reference for three hosts, merged from each host\'s own OpenAPI spec:',
-    '',
-    ...SOURCES.map((s) => `- \`${new URL(s.server).host}\`: ${s.group.replace(/ \(.*\)$/, '')}, from ${s.url}`),
-    '',
-    `Every endpoint takes \`Authorization: Bearer <your Jina API key>\`. Get a key at ${KEY_URL}.`,
-  ].join('\n');
-  out.info = { ...out.info, title: 'Jina AI API', description: `${intro}\n\n${out.info.description || ''}`.trim() };
-  out.servers = [{ url: base.src.server }];
-  out.tags = [...(out.tags || [])];
-  out.components = out.components || {};
-  out.components.schemas = out.components.schemas || {};
-  const groups = [{ name: base.src.group, tags: out.tags.map((t) => t.name) }];
+  const used = new Set();
+  const opOverride = (key) => {
+    const o = overrides.operations && overrides.operations[key];
+    if (o) used.add(`operations['${key}']`);
+    return o;
+  };
+  const paramOverride = (srcKey, name) => {
+    const d = overrides.parameters && overrides.parameters[srcKey] && overrides.parameters[srcKey][name];
+    if (d) used.add(`parameters.${srcKey}.${name}`);
+    return d;
+  };
 
-  for (const { src, spec } of rest) {
-    const s = prefixSchemas(spec, src.prefix);
-    for (const [name, schema] of Object.entries(s.components.schemas)) {
-      if (out.components.schemas[name]) throw new Error(`schema ${name} from ${src.url} already exists`);
-      out.components.schemas[name] = schema;
+  // Many Reader/Search query params are undocumented while their X-* header twin is documented;
+  // the twin's text is reused. Overrides win over both.
+  const headerDescs = (spec) => {
+    const map = {};
+    for (const item of Object.values(spec.paths || {})) {
+      for (const m of METHODS) {
+        for (const p of (item[m] && item[m].parameters) || []) {
+          const d = clean(p.description);
+          if (p.in === 'header' && hasText(d) && !map[norm(p.name)]) map[norm(p.name)] = d;
+        }
+      }
     }
+    return map;
+  };
+  const lookup = (map, name) => map[norm(name)] || map[norm(name).replace(/s$/, '')] || '';
+
+  const annotateOps = (srcKey, paths, twins) => {
+    for (const [p, item] of Object.entries(paths)) {
+      for (const m of METHODS) {
+        const op = item[m];
+        if (!op) continue;
+        const o = opOverride(`${srcKey} ${m.toUpperCase()} ${p}`);
+        if (o) {
+          if (o.summary) op.summary = o.summary;
+          if (o.description) op.description = o.description;
+          if (o.hidden) op['x-scalar-ignore'] = true;
+        }
+        for (const param of op.parameters || []) {
+          if (param.$ref) continue;
+          if (twins) {
+            param.description = clean(param.description);
+            if (param.schema) param.schema.description = clean(param.schema.description);
+            if (!hasText(param.description)) delete param.description;
+            if (param.schema && !hasText(param.schema.description)) delete param.schema.description;
+          }
+          const ov = paramOverride(srcKey, param.name);
+          if (ov) param.description = ov;
+          else if (!paramDesc(param) && twins) {
+            const twin = lookup(twins, param.name);
+            if (twin) param.description = twin;
+          }
+        }
+      }
+    }
+  };
+  const annotateSchemas = (srcKey, schemas, twins) => {
+    for (const schema of Object.values(schemas)) {
+      for (const [name, prop] of Object.entries(schema.properties || {})) {
+        if (twins) {
+          prop.description = clean(prop.description);
+          if (!hasText(prop.description)) delete prop.description;
+        }
+        const ov = paramOverride(srcKey, name);
+        if (ov) prop.description = ov;
+        else if (!hasText(prop.description) && twins) {
+          const twin = lookup(twins, name);
+          if (twin) prop.description = twin;
+        }
+      }
+    }
+  };
+
+  const parts = {};
+  for (const { src, spec } of loaded) {
+    if (src.key === 'api') {
+      const s = structuredClone(spec);
+      annotateOps('api', s.paths, null);
+      annotateSchemas('api', (s.components && s.components.schemas) || {}, null);
+      parts.api = {
+        paths: s.paths,
+        schemas: (s.components && s.components.schemas) || {},
+        tags: s.tags || [],
+        group: { name: src.group, tags: (s.tags || []).map((t) => t.name) },
+      };
+      continue;
+    }
+    const twins = headerDescs(spec);
+    const s = prefixSchemas(spec, src.prefix);
+    // Request bodies are often inline schemas inside the operation, so walk the whole spec:
+    // scrub every description, then fill every object that has properties.
+    const holders = [];
+    const walk = (node) => {
+      if (!node || typeof node !== 'object') return;
+      if (typeof node.description === 'string') {
+        node.description = clean(node.description);
+        if (!hasText(node.description)) delete node.description;
+      }
+      if (node.properties && typeof node.properties === 'object') holders.push(node);
+      for (const v of Object.values(node)) walk(v);
+    };
+    walk(s);
+    annotateSchemas(src.key, holders, twins);
+    const paths = {};
     for (const [p, item] of Object.entries(s.paths || {})) {
-      if (out.paths[p]) throw new Error(`path ${p} from ${src.url} already exists`);
       const next = { ...item, servers: [{ url: src.server }] };
       for (const m of METHODS) {
         const op = next[m];
         if (!op) continue;
         op.tags = [src.tag];
-        const fixed = src.summaries && src.summaries[p];
-        if (fixed) op.summary = fixed;
         op.operationId = op.operationId || `${src.key}_${m}_${slug(p)}`;
         // The Authorization header param becomes the shared HTTPBearer scheme, so "Try it" reuses one key.
         const params = op.parameters || [];
@@ -119,13 +209,113 @@ function merge(loaded) {
           op.security = auth.required ? [{ HTTPBearer: [] }] : [{ HTTPBearer: [] }, {}];
         }
       }
-      out.paths[p] = next;
+      paths[p] = next;
     }
-    out.tags.push({ name: src.tag, description: src.description });
-    groups.push({ name: src.group, tags: [src.tag] });
+    annotateOps(src.key, paths, twins);
+    parts[src.key] = {
+      paths,
+      schemas: s.components.schemas,
+      tags: [{ name: src.tag, description: src.description }],
+      group: { name: src.group, tags: [src.tag] },
+    };
   }
-  out['x-tagGroups'] = groups;
-  return out;
+
+  const order = [...(overrides.order || []), ...SOURCES.map((s) => s.key)]
+    .filter((k, i, all) => parts[k] && all.indexOf(k) === i);
+  const base = loaded.find((l) => l.src.key === 'api').spec;
+  const out = structuredClone(base);
+  out.info = {
+    ...out.info,
+    title: 'Jina AI API',
+    description: [
+      introMd,
+      `_Merged from ${SOURCES.map((s) => s.url).join(', ')}. Plain text: ${PAGE_URL}.md. Spec: ${PAGE_URL}/openapi.json._`,
+      out.info.description || '',
+    ].join('\n\n').trim(),
+  };
+  out.servers = [{ url: SOURCES.find((s) => s.key === 'api').server }];
+  out.paths = {};
+  out.components = { ...(out.components || {}), schemas: {} };
+  out.tags = [];
+  for (const k of order) {
+    for (const [p, item] of Object.entries(parts[k].paths)) {
+      if (out.paths[p]) throw new Error(`path ${p} from ${k} already exists`);
+      out.paths[p] = item;
+    }
+    for (const [name, schema] of Object.entries(parts[k].schemas)) {
+      if (out.components.schemas[name]) throw new Error(`schema ${name} from ${k} already exists`);
+      out.components.schemas[name] = schema;
+    }
+    out.tags.push(...parts[k].tags);
+  }
+  for (const tag of out.tags) {
+    const o = overrides.tags && overrides.tags[tag.name];
+    if (o) {
+      used.add(`tags['${tag.name}']`);
+      if (o.description) tag.description = o.description;
+    }
+  }
+  out['x-tagGroups'] = order.map((k) => parts[k].group);
+
+  const declared = [
+    ...Object.keys(overrides.operations || {}).map((k) => `operations['${k}']`),
+    ...Object.entries(overrides.parameters || {}).flatMap(([s, ps]) => Object.keys(ps).map((n) => `parameters.${s}.${n}`)),
+    ...Object.keys(overrides.tags || {}).map((k) => `tags['${k}']`),
+  ];
+  const stale = declared.filter((k) => !used.has(k));
+  return { spec: out, stale };
+}
+
+// Visible operations whose params or top-level body fields have no description.
+function coverage(spec) {
+  const resolve = makeResolver(spec);
+  const lines = ['# Undocumented parameters', '', 'Visible operations only. Add the missing texts to `api-docs/overrides.mjs`; they survive every rebuild.', ''];
+  let missing = 0;
+  let total = 0;
+  for (const [p, item] of Object.entries(spec.paths)) {
+    const host = ((item.servers && item.servers[0].url) || spec.servers[0].url).replace(/^https:\/\//, '').replace(/\/$/, '');
+    for (const m of METHODS) {
+      const op = item[m];
+      if (!op || op['x-scalar-ignore']) continue;
+      const gaps = [];
+      for (const param of [...(item.parameters || []), ...(op.parameters || [])].map(resolve)) {
+        total++;
+        if (!paramDesc(param)) gaps.push(`${param.in} \`${param.name}\``);
+      }
+      const body = op.requestBody && resolve(op.requestBody);
+      const json = body && body.content && (body.content['application/json'] || Object.values(body.content)[0]);
+      if (json) {
+        const top = resolve(json.schema);
+        const shapes = top.properties ? [top] : (top.anyOf || top.oneOf || []).map(resolve);
+        const seen = new Set();
+        for (const shape of shapes) {
+          for (const [name, prop] of Object.entries(shape.properties || {})) {
+            if (seen.has(name)) continue;
+            seen.add(name);
+            total++;
+            if (!hasText(prop.description) && !hasText(resolve(prop).description)) gaps.push(`body \`${name}\``);
+          }
+        }
+      }
+      if (gaps.length) {
+        missing += gaps.length;
+        lines.push(`## ${m.toUpperCase()} ${host}${p}`, '', ...gaps.map((g) => `- ${g}`), '');
+      }
+    }
+  }
+  lines.splice(4, 0, `${missing} of ${total} parameters and body fields have no description.`, '');
+  return { text: `${lines.join('\n').trim()}\n`, missing, total };
+}
+
+function makeResolver(spec) {
+  return (obj) => {
+    let cur = obj;
+    for (let hops = 0; cur && cur.$ref && hops < 10; hops++) {
+      cur = cur.$ref.replace(/^#\//, '').split('/').map(decodeURIComponent)
+        .reduce((node, key) => (node ? node[key] : undefined), spec);
+    }
+    return cur || {};
+  };
 }
 
 function renderHtml() {
@@ -138,11 +328,12 @@ function renderHtml() {
     authentication: { preferredSecurityScheme: 'HTTPBearer' },
     metaData: {
       title: 'Jina AI API reference',
-      description: 'Embeddings, reranking, Reader (r.jina.ai) and Search (s.jina.ai) in one reference.',
+      description: 'Reader (r.jina.ai), Search (s.jina.ai), embeddings and reranking in one reference.',
     },
     customCss: [
       ':root { --scalar-color-accent: #009191; --scalar-background-accent: #00919115; }',
       '.dark-mode { --scalar-color-accent: #81E3EE; --scalar-background-accent: #00919130; }',
+      '.markdown table { font-size: 0.95em; }',
     ].join('\n'),
   };
   return `<!doctype html>
@@ -170,14 +361,7 @@ Scalar.createApiReference('#app', ${JSON.stringify(config, null, 2)});
 
 function renderMarkdown(spec) {
   const lines = [];
-  const resolve = (obj) => {
-    let cur = obj;
-    for (let hops = 0; cur && cur.$ref && hops < 10; hops++) {
-      cur = cur.$ref.replace(/^#\//, '').split('/').map(decodeURIComponent)
-        .reduce((node, key) => (node ? node[key] : undefined), spec);
-    }
-    return cur || {};
-  };
+  const resolve = makeResolver(spec);
   const one = (t) => String(t || '').replace(/\s+/g, ' ').trim();
   // Reader/Search schema names look like "Reader_PseudoBoolean@0x10"; show "PseudoBoolean".
   const refName = (ref) => decodeURIComponent(ref.split('/').pop())
@@ -196,7 +380,7 @@ function renderMarkdown(spec) {
     }
     const alt = raw.anyOf || raw.oneOf;
     if (alt) {
-      const kinds = alt.filter((a) => a.type !== 'null').map((a) => typeOf(a, depth + 1));
+      const kinds = [...new Set(alt.filter((a) => a.type !== 'null').map((a) => typeOf(a, depth + 1)))];
       return kinds.join(' | ') + (alt.some((a) => a.type === 'null') ? ' | null' : '');
     }
     if (raw.allOf) return raw.allOf.map((a) => typeOf(a, depth + 1)).join(' & ');
@@ -228,16 +412,16 @@ function renderMarkdown(spec) {
     }
     return count;
   };
-  const renderOp = (methods, url, op, pathParams) => {
-    lines.push(`#### ${methods} ${url}`, '');
-    if (op.summary) lines.push(`${one(op.summary)}.`.replace(/\.\.$/, '.'), '');
+  const renderOp = (method, url, op, pathParams) => {
+    lines.push(`#### ${method} ${url}`, '');
+    if (op.summary) lines.push(`**${one(op.summary).replace(/\.$/, '')}**`, '');
     if (op.description) lines.push(op.description.trim(), '');
     if (op.security && op.security.some((s) => Object.keys(s).length === 0)) lines.push('Authentication: optional.', '');
     const params = [...(pathParams || []), ...(op.parameters || [])].map(resolve);
     if (params.length) {
       lines.push('Parameters:');
       for (const x of params) {
-        const desc = one(x.description);
+        const desc = one(paramDesc(x));
         lines.push(`- \`${x.name}\` (${x.in}, ${facts(x.schema, x.required)})${desc ? `: ${desc}` : ''}`);
       }
       lines.push('');
@@ -274,31 +458,21 @@ function renderMarkdown(spec) {
     }
   };
 
-  lines.push(
-    '# Jina AI API reference',
-    '',
-    `Generated from ${SOURCES.map((s) => s.url).join(', ')}.`,
-    'Interactive version: https://docs.jina.ai/api. Merged OpenAPI spec: https://docs.jina.ai/api/openapi.json.',
-    `Authentication: \`Authorization: Bearer <your Jina API key>\`. Get a key at ${KEY_URL}.`,
-    '',
-  );
+  // Page-relative links (#tag/...) from intro.md point at the interactive page in plain text.
+  const absolute = (md) => md.replace(/\]\(#/g, `](${PAGE_URL}#`);
+  lines.push('# Jina AI API reference', '', absolute(spec.info.description).replace(/^(#{1,5}) /gm, '#$1 '), '');
   for (const group of spec['x-tagGroups']) {
     lines.push(`## ${group.name}`, '');
     for (const tagName of group.tags) {
       const tag = (spec.tags || []).find((t) => t.name === tagName);
       lines.push(`### ${tagName}`, '');
-      if (tag && tag.description) lines.push(tag.description.trim().replace(/^#+ /gm, '**') , '');
+      if (tag && tag.description) lines.push(absolute(tag.description.trim()).replace(/^#+ /gm, '**'), '');
       for (const [p, item] of Object.entries(spec.paths)) {
         const server = ((item.servers && item.servers[0].url) || spec.servers[0].url).replace(/\/$/, '');
-        const ops = METHODS.filter((m) => item[m] && (item[m].tags || []).includes(tagName));
-        const seen = new Set();
-        for (const m of ops) {
-          if (seen.has(m)) continue;
-          // Methods whose docs are identical apart from operationId share one entry, e.g. "GET, POST".
-          const sig = (o) => JSON.stringify({ ...item[o], operationId: undefined });
-          const same = ops.filter((o) => !seen.has(o) && sig(o) === sig(m));
-          same.forEach((o) => seen.add(o));
-          renderOp(same.map((o) => o.toUpperCase()).join(', '), server + p, item[m], item.parameters);
+        for (const m of METHODS) {
+          const op = item[m];
+          if (!op || op['x-scalar-ignore'] || !(op.tags || []).includes(tagName)) continue;
+          renderOp(m.toUpperCase(), server + p, op, item.parameters);
         }
       }
     }
@@ -307,9 +481,13 @@ function renderMarkdown(spec) {
 }
 
 const loaded = await Promise.all(SOURCES.map(async (src) => ({ src, spec: await fetchSpec(src) })));
-const merged = merge(loaded);
+const { spec: merged, stale } = merge(loaded);
+const cov = coverage(merged);
 await writeFile(join(OUT, 'openapi.json'), `${JSON.stringify(merged, null, 2)}\n`);
 await writeFile(join(OUT, 'index.html'), renderHtml());
 await writeFile(join(OUT, 'api.md'), renderMarkdown(merged));
-const ops = Object.values(merged.paths).reduce((n, item) => n + METHODS.filter((m) => item[m]).length, 0);
-console.log(`api-docs: ${Object.keys(merged.paths).length} paths, ${ops} operations, ${Object.keys(merged.components.schemas).length} schemas`);
+await writeFile(join(OUT, 'coverage.md'), cov.text);
+const ops = Object.values(merged.paths).flatMap((item) => METHODS.filter((m) => item[m]).map((m) => item[m]));
+const visible = ops.filter((op) => !op['x-scalar-ignore']).length;
+console.log(`api-docs: ${ops.length} operations (${visible} shown), ${Object.keys(merged.components.schemas).length} schemas, ${cov.missing}/${cov.total} parameters undocumented (see coverage.md)`);
+for (const key of stale) console.warn(`warning: overrides.mjs ${key} matches nothing in the current specs`);

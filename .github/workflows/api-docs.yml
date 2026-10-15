@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths: ['api-docs/build.mjs']
+    paths: ['api-docs/build.mjs', 'api-docs/overrides.mjs', 'api-docs/intro.md']
 
 permissions:
   contents: write
