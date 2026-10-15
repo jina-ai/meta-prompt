@@ -13,9 +13,10 @@ curl docs.jina.ai/v1 | llm -s 'grab all sentences from Hacker News, embed them, 
 - For browser JS `fetch` where you can't change the `user-agent` or in scenarios where you pretend to be a browser by `user-agent` spoofing, you can add 'accept': 'text/plain' to the header to force the `text/plain` response.
 
 ## API reference
-- `docs.jina.ai/api`: one reference for `api.jina.ai`, `r.jina.ai` and `s.jina.ai`. Browsers get an interactive [Scalar](https://github.com/scalar/scalar) page; `curl docs.jina.ai/api` gets the same reference as Markdown.
-- `docs.jina.ai/api.md`: the Markdown, always.
-- `docs.jina.ai/api/openapi.json`: the three hosts' OpenAPI specs merged into one.
+- `docs.jina.ai` in a browser: one interactive [Scalar](https://github.com/scalar/scalar) reference for `api.jina.ai`, `r.jina.ai` and `s.jina.ai`. `curl docs.jina.ai` (and any other non-browser client) still gets the meta-prompt text, unchanged. `/v{x}` in a browser still shows that meta-prompt version as HTML.
+- `docs.jina.ai/api.md`: the reference as Markdown.
+- `docs.jina.ai/openapi.json`: the three hosts' OpenAPI specs merged into one.
+- The old `docs.jina.ai/api` and `docs.jina.ai/api/openapi.json` redirect (301) to the addresses above.
 - Built by [`api-docs/build.mjs`](api-docs/build.mjs) (Node >= 18, no dependencies) from each host's live `/openapi.json`. Reader and Search paths keep their own server, so "Try it" calls the right host; their schemas are prefixed `Reader_` / `Search_` to avoid name clashes.
 - [`.github/workflows/api-docs.yml`](.github/workflows/api-docs.yml) rebuilds every 6 hours and commits only when a spec changed. Run it by hand with `node api-docs/build.mjs`.
 - **Customising without losing it on rebuild**: the build never writes these two files, it layers them on top of the live specs every time.

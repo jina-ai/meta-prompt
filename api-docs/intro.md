@@ -14,4 +14,6 @@ Jina AI APIs on three hosts: Reader (`r.jina.ai`), Search (`s.jina.ai`) and the 
 
 **EU.** `eu.r.jina.ai` and `eu.s.jina.ai` keep all processing inside the EU.
 
+**For LLMs.** `curl docs.jina.ai` returns the meta-prompt, a plain-text guide to these APIs written for coding agents. This reference as Markdown: `curl docs.jina.ai/api.md`.
+
 **Rate limits.** r.jina.ai 500 RPM (5k premium), s.jina.ai 100 RPM (1k premium).
