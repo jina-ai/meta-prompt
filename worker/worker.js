@@ -144,12 +144,16 @@ export default {
           if (!pageResponse.ok) {
             throw new Error('Failed to fetch api-docs/index.html');
           }
-          return new Response(pageResponse.body, {
-            headers: {
-              'content-type': 'text/html; charset=utf-8',
-              ...commonHeaders,
-            }
-          });
+          // This page is for people and should be indexed: drop the meta-prompt's noindex and
+          // "not for humans" headers, and make it its own canonical (headers.json points at jina.ai).
+          const pageHeaders = {
+            'content-type': 'text/html; charset=utf-8',
+            ...commonHeaders,
+            'link': '<https://docs.jina.ai/>; rel="canonical"',
+          };
+          delete pageHeaders['x-robots-tag'];
+          delete pageHeaders['x-human-access'];
+          return new Response(pageResponse.body, { headers: pageHeaders });
         }
 
         // Fetch HTML template
