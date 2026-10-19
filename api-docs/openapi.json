@@ -111,9 +111,13 @@
             "name": "page",
             "in": "query",
             "schema": {
-              "type": "number",
-              "summary": "Steer which page to return for document files (1-indexed).",
-              "description": "Steer which page to return for document files (1-indexed).\n\n- Some validators will be applied on value(s): (v) =&gt; Number.isInteger(v) &amp;&amp; v &gt;= 1"
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Reader_PageSelection@0x0f"
+                }
+              ],
+              "summary": "Steer which page(s) to return for document files. See PageSelection.",
+              "description": "Steer which page(s) to return for document files. See PageSelection."
             }
           },
           {
@@ -124,7 +128,7 @@
                 {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Reader_enum@0x0f"
+                      "$ref": "#/components/schemas/Reader_enum@0x10"
                     }
                   ]
                 },
@@ -142,7 +146,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Reader_PseudoBoolean@0x10"
+                  "$ref": "#/components/schemas/Reader_PseudoBoolean@0x11"
                 }
               ]
             },
@@ -154,7 +158,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Reader_enum@0x11"
+                  "$ref": "#/components/schemas/Reader_enum@0x12"
                 }
               ],
               "default": "all"
@@ -167,7 +171,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Reader_enum@0x12"
+                  "$ref": "#/components/schemas/Reader_enum@0x13"
                 }
               ],
               "default": "link"
@@ -180,7 +184,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Reader_enum@0x13"
+                  "$ref": "#/components/schemas/Reader_enum@0x14"
                 }
               ]
             },
@@ -192,7 +196,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Reader_enum@0x14"
+                  "$ref": "#/components/schemas/Reader_enum@0x15"
                 }
               ],
               "default": "all"
@@ -207,7 +211,7 @@
                 {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Reader_PseudoBoolean@0x10"
+                      "$ref": "#/components/schemas/Reader_PseudoBoolean@0x11"
                     }
                   ]
                 },
@@ -274,7 +278,7 @@
                 {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Reader_PseudoBoolean@0x10"
+                      "$ref": "#/components/schemas/Reader_PseudoBoolean@0x11"
                     }
                   ]
                 },
@@ -337,7 +341,7 @@
                 {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Reader_PseudoBoolean@0x10"
+                      "$ref": "#/components/schemas/Reader_PseudoBoolean@0x11"
                     }
                   ]
                 },
@@ -444,7 +448,7 @@
                 {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Reader_enum@0x1a"
+                      "$ref": "#/components/schemas/Reader_enum@0x1b"
                     }
                   ]
                 },
@@ -551,7 +555,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Reader_enum@0x24"
+                  "$ref": "#/components/schemas/Reader_enum@0x25"
                 }
               ]
             },
@@ -565,7 +569,7 @@
                 {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Reader_enum@0x25"
+                      "$ref": "#/components/schemas/Reader_enum@0x26"
                     }
                   ]
                 },
@@ -946,7 +950,7 @@
           },
           {
             "name": "X-Page",
-            "description": "Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.).\n\n1-indexed; ignored when no file/PDF is uploaded.",
+            "description": "Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.).\n\n1-indexed, 0 is the same as 1. Accepts a page number, a list and/or ranges like `1,3,5-7`.\n\nAt most 35 pages can be selected. With multiple pages, DocLayout / OCR runs over each selected page.\n\nIgnored when the target is not a document.",
             "in": "header",
             "schema": {
               "type": "string"
@@ -1057,14 +1061,14 @@
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Reader_ParamValidationError@0x27"
+                          "$ref": "#/components/schemas/Reader_ParamValidationError@0x28"
                         }
                       ]
                     },
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Reader_DataStreamBrokenError@0x28"
+                          "$ref": "#/components/schemas/Reader_DataStreamBrokenError@0x29"
                         }
                       ]
                     }
@@ -1083,14 +1087,14 @@
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Reader_AuthenticationFailedError@0x29"
+                          "$ref": "#/components/schemas/Reader_AuthenticationFailedError@0x2a"
                         }
                       ]
                     },
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Reader_AuthenticationRequiredError@0x2a"
+                          "$ref": "#/components/schemas/Reader_AuthenticationRequiredError@0x2b"
                         }
                       ]
                     }
@@ -1109,14 +1113,14 @@
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Reader_TierFeatureConstraintError@0x2b"
+                          "$ref": "#/components/schemas/Reader_TierFeatureConstraintError@0x2c"
                         }
                       ]
                     },
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Reader_InsufficientBalanceError@0x2c"
+                          "$ref": "#/components/schemas/Reader_InsufficientBalanceError@0x2d"
                         }
                       ]
                     }
@@ -1135,14 +1139,14 @@
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Reader_OperationNotAllowedError@0x2d"
+                          "$ref": "#/components/schemas/Reader_OperationNotAllowedError@0x2e"
                         }
                       ]
                     },
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Reader_AbuseAlleviationError@0x2e"
+                          "$ref": "#/components/schemas/Reader_AbuseAlleviationError@0x2f"
                         }
                       ]
                     }
@@ -1161,14 +1165,14 @@
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Reader_ResourcePolicyDenyError@0x2f"
+                          "$ref": "#/components/schemas/Reader_ResourcePolicyDenyError@0x30"
                         }
                       ]
                     },
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Reader_BudgetExceededError@0x30"
+                          "$ref": "#/components/schemas/Reader_BudgetExceededError@0x31"
                         }
                       ]
                     }
@@ -1185,7 +1189,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Reader_TargetFileTooLargeError@0x31"
+                      "$ref": "#/components/schemas/Reader_TargetFileTooLargeError@0x32"
                     }
                   ]
                 }
@@ -1202,21 +1206,21 @@
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Reader_SubmittedDataMalformedError@0x32"
+                          "$ref": "#/components/schemas/Reader_SubmittedDataMalformedError@0x33"
                         }
                       ]
                     },
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Reader_DownstreamServiceFailureError@0x33"
+                          "$ref": "#/components/schemas/Reader_DownstreamServiceFailureError@0x34"
                         }
                       ]
                     },
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Reader_AssertionFailureError@0x34"
+                          "$ref": "#/components/schemas/Reader_AssertionFailureError@0x35"
                         }
                       ]
                     }
@@ -1233,7 +1237,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Reader_RateLimitTriggeredError@0x35"
+                      "$ref": "#/components/schemas/Reader_RateLimitTriggeredError@0x36"
                     }
                   ]
                 }
@@ -1248,7 +1252,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Reader_HarmfulContentError@0x36"
+                      "$ref": "#/components/schemas/Reader_HarmfulContentError@0x37"
                     }
                   ]
                 }
@@ -1263,7 +1267,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Reader_DownstreamServiceError@0x37"
+                      "$ref": "#/components/schemas/Reader_DownstreamServiceError@0x38"
                     }
                   ]
                 }
@@ -1278,7 +1282,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Reader_ServiceNodeResourceDrainError@0x38"
+                      "$ref": "#/components/schemas/Reader_ServiceNodeResourceDrainError@0x39"
                     }
                   ]
                 }
@@ -1397,9 +1401,13 @@
             "name": "page",
             "in": "query",
             "schema": {
-              "type": "number",
-              "summary": "Steer which page to return for document files (1-indexed).",
-              "description": "Steer which page to return for document files (1-indexed).\n\n- Some validators will be applied on value(s): (v) =&gt; Number.isInteger(v) &amp;&amp; v &gt;= 1"
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Reader_PageSelection@0x0f"
+                }
+              ],
+              "summary": "Steer which page(s) to return for document files. See PageSelection.",
+              "description": "Steer which page(s) to return for document files. See PageSelection."
             }
           },
           {
@@ -1410,7 +1418,7 @@
                 {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Reader_enum@0x0f"
+                      "$ref": "#/components/schemas/Reader_enum@0x10"
                     }
                   ]
                 },
@@ -1428,7 +1436,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Reader_PseudoBoolean@0x10"
+                  "$ref": "#/components/schemas/Reader_PseudoBoolean@0x11"
                 }
               ]
             },
@@ -1440,7 +1448,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Reader_enum@0x11"
+                  "$ref": "#/components/schemas/Reader_enum@0x12"
                 }
               ],
               "default": "all"
@@ -1453,7 +1461,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Reader_enum@0x12"
+                  "$ref": "#/components/schemas/Reader_enum@0x13"
                 }
               ],
               "default": "link"
@@ -1466,7 +1474,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Reader_enum@0x13"
+                  "$ref": "#/components/schemas/Reader_enum@0x14"
                 }
               ]
             },
@@ -1478,7 +1486,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Reader_enum@0x14"
+                  "$ref": "#/components/schemas/Reader_enum@0x15"
                 }
               ],
               "default": "all"
@@ -1493,7 +1501,7 @@
                 {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Reader_PseudoBoolean@0x10"
+                      "$ref": "#/components/schemas/Reader_PseudoBoolean@0x11"
                     }
                   ]
                 },
@@ -1560,7 +1568,7 @@
                 {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Reader_PseudoBoolean@0x10"
+                      "$ref": "#/components/schemas/Reader_PseudoBoolean@0x11"
                     }
                   ]
                 },
@@ -1623,7 +1631,7 @@
                 {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Reader_PseudoBoolean@0x10"
+                      "$ref": "#/components/schemas/Reader_PseudoBoolean@0x11"
                     }
                   ]
                 },
@@ -1730,7 +1738,7 @@
                 {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Reader_enum@0x1a"
+                      "$ref": "#/components/schemas/Reader_enum@0x1b"
                     }
                   ]
                 },
@@ -1837,7 +1845,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Reader_enum@0x24"
+                  "$ref": "#/components/schemas/Reader_enum@0x25"
                 }
               ]
             },
@@ -1851,7 +1859,7 @@
                 {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Reader_enum@0x25"
+                      "$ref": "#/components/schemas/Reader_enum@0x26"
                     }
                   ]
                 },
@@ -2232,7 +2240,7 @@
           },
           {
             "name": "X-Page",
-            "description": "Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.).\n\n1-indexed; ignored when no file/PDF is uploaded.",
+            "description": "Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.).\n\n1-indexed, 0 is the same as 1. Accepts a page number, a list and/or ranges like `1,3,5-7`.\n\nAt most 35 pages can be selected. With multiple pages, DocLayout / OCR runs over each selected page.\n\nIgnored when the target is not a document.",
             "in": "header",
             "schema": {
               "type": "string"
@@ -2264,10 +2272,10 @@
                     "$ref": "#/components/schemas/Reader_JinaEmbeddingsAuthDTO@0x0b"
                   },
                   {
-                    "$ref": "#/components/schemas/Reader_CrawlerOptionsHeaderOnly@0x39"
+                    "$ref": "#/components/schemas/Reader_CrawlerOptionsHeaderOnly@0x3a"
                   },
                   {
-                    "$ref": "#/components/schemas/Reader_CrawlerOptions@0x26"
+                    "$ref": "#/components/schemas/Reader_CrawlerOptions@0x27"
                   }
                 ]
               }
@@ -2279,10 +2287,10 @@
                     "$ref": "#/components/schemas/Reader_JinaEmbeddingsAuthDTO@0x0b"
                   },
                   {
-                    "$ref": "#/components/schemas/Reader_CrawlerOptionsHeaderOnly@0x39"
+                    "$ref": "#/components/schemas/Reader_CrawlerOptionsHeaderOnly@0x3a"
                   },
                   {
-                    "$ref": "#/components/schemas/Reader_CrawlerOptions@0x26"
+                    "$ref": "#/components/schemas/Reader_CrawlerOptions@0x27"
                   }
                 ]
               }
@@ -2353,16 +2361,20 @@
                     "description": "Base64-encoded file (PDF, DOC, XLS, PPT, ...) to convert instead of a URL."
                   },
                   "page": {
-                    "type": "number",
-                    "summary": "Steer which page to return for document files (1-indexed).",
-                    "description": "Steer which page to return for document files (1-indexed).\n\n- Some validators will be applied on value(s): (v) =&gt; Number.isInteger(v) &amp;&amp; v &gt;= 1"
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/Reader_PageSelection@0x0f"
+                      }
+                    ],
+                    "summary": "Steer which page(s) to return for document files. See PageSelection.",
+                    "description": "Steer which page(s) to return for document files. See PageSelection."
                   },
                   "respondWith": {
                     "oneOf": [
                       {
                         "allOf": [
                           {
-                            "$ref": "#/components/schemas/Reader_enum@0x0f"
+                            "$ref": "#/components/schemas/Reader_enum@0x10"
                           }
                         ]
                       },
@@ -2376,7 +2388,7 @@
                   "withGeneratedAlt": {
                     "allOf": [
                       {
-                        "$ref": "#/components/schemas/Reader_PseudoBoolean@0x10"
+                        "$ref": "#/components/schemas/Reader_PseudoBoolean@0x11"
                       }
                     ],
                     "description": "Enable automatic alt-text generating for images without an meaningful alt-text.\n\nNote: Does not work when `X-Respond-With` is specified"
@@ -2384,7 +2396,7 @@
                   "retainImages": {
                     "allOf": [
                       {
-                        "$ref": "#/components/schemas/Reader_enum@0x11"
+                        "$ref": "#/components/schemas/Reader_enum@0x12"
                       }
                     ],
                     "default": "all",
@@ -2393,7 +2405,7 @@
                   "retainMedia": {
                     "allOf": [
                       {
-                        "$ref": "#/components/schemas/Reader_enum@0x12"
+                        "$ref": "#/components/schemas/Reader_enum@0x13"
                       }
                     ],
                     "default": "link",
@@ -2402,7 +2414,7 @@
                   "preset": {
                     "allOf": [
                       {
-                        "$ref": "#/components/schemas/Reader_enum@0x13"
+                        "$ref": "#/components/schemas/Reader_enum@0x14"
                       }
                     ],
                     "description": "Apply a preset configuration for common scenarios.\n\nSupported presets:\n- reader: optimized for display to human users\n- index: optimized for semantic indexing\n- research: optimized for academic/research AI agents\n- agent: optimized for day-to-day AI agents\n- spider: optimized for recursive site crawling\n\nPreset values are applied only to options not explicitly set by the caller."
@@ -2410,7 +2422,7 @@
                   "retainLinks": {
                     "allOf": [
                       {
-                        "$ref": "#/components/schemas/Reader_enum@0x14"
+                        "$ref": "#/components/schemas/Reader_enum@0x15"
                       }
                     ],
                     "default": "all",
@@ -2421,7 +2433,7 @@
                       {
                         "allOf": [
                           {
-                            "$ref": "#/components/schemas/Reader_PseudoBoolean@0x10"
+                            "$ref": "#/components/schemas/Reader_PseudoBoolean@0x11"
                           }
                         ]
                       },
@@ -2468,7 +2480,7 @@
                       {
                         "allOf": [
                           {
-                            "$ref": "#/components/schemas/Reader_PseudoBoolean@0x10"
+                            "$ref": "#/components/schemas/Reader_PseudoBoolean@0x11"
                           }
                         ]
                       },
@@ -2507,7 +2519,7 @@
                       {
                         "allOf": [
                           {
-                            "$ref": "#/components/schemas/Reader_PseudoBoolean@0x10"
+                            "$ref": "#/components/schemas/Reader_PseudoBoolean@0x11"
                           }
                         ]
                       },
@@ -2578,7 +2590,7 @@
                       {
                         "allOf": [
                           {
-                            "$ref": "#/components/schemas/Reader_enum@0x1a"
+                            "$ref": "#/components/schemas/Reader_enum@0x1b"
                           }
                         ]
                       },
@@ -2637,7 +2649,7 @@
                   "respondTiming": {
                     "allOf": [
                       {
-                        "$ref": "#/components/schemas/Reader_enum@0x24"
+                        "$ref": "#/components/schemas/Reader_enum@0x25"
                       }
                     ],
                     "description": "Explicitly specify the respond timing. One of the following:\n\n- html: directly return unrendered HTML\n- visible-content: return immediately when any content becomes available\n- mutation-idle: wait for DOM mutations to settle and remain unchanged for at least 0.2s\n- resource-idle: wait for no additional resources that would affect page logic and content has SUCCEEDED loading in 0.5s\n- media-idle: wait for no additional resources, including media resources, has SUCCEEDED loading in 0.5s\n- network-idle: wait for full load of webpage, also known as networkidle0."
@@ -2647,7 +2659,7 @@
                       {
                         "allOf": [
                           {
-                            "$ref": "#/components/schemas/Reader_enum@0x25"
+                            "$ref": "#/components/schemas/Reader_enum@0x26"
                           }
                         ]
                       },
@@ -2695,7 +2707,7 @@
                     "data": {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Reader_FormattedPageDto@0x41"
+                          "$ref": "#/components/schemas/Reader_FormattedPageDto@0x42"
                         }
                       ],
                       "summary": "The result payload you expect",
@@ -2718,7 +2730,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Reader_OutputServerEventStream@0x42"
+                      "$ref": "#/components/schemas/Reader_OutputServerEventStream@0x43"
                     }
                   ]
                 }
@@ -2735,14 +2747,14 @@
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Reader_ParamValidationError@0x27"
+                          "$ref": "#/components/schemas/Reader_ParamValidationError@0x28"
                         }
                       ]
                     },
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Reader_DataStreamBrokenError@0x28"
+                          "$ref": "#/components/schemas/Reader_DataStreamBrokenError@0x29"
                         }
                       ]
                     }
@@ -2761,14 +2773,14 @@
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Reader_AuthenticationFailedError@0x29"
+                          "$ref": "#/components/schemas/Reader_AuthenticationFailedError@0x2a"
                         }
                       ]
                     },
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Reader_AuthenticationRequiredError@0x2a"
+                          "$ref": "#/components/schemas/Reader_AuthenticationRequiredError@0x2b"
                         }
                       ]
                     }
@@ -2787,14 +2799,14 @@
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Reader_TierFeatureConstraintError@0x2b"
+                          "$ref": "#/components/schemas/Reader_TierFeatureConstraintError@0x2c"
                         }
                       ]
                     },
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Reader_InsufficientBalanceError@0x2c"
+                          "$ref": "#/components/schemas/Reader_InsufficientBalanceError@0x2d"
                         }
                       ]
                     }
@@ -2813,14 +2825,14 @@
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Reader_OperationNotAllowedError@0x2d"
+                          "$ref": "#/components/schemas/Reader_OperationNotAllowedError@0x2e"
                         }
                       ]
                     },
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Reader_AbuseAlleviationError@0x2e"
+                          "$ref": "#/components/schemas/Reader_AbuseAlleviationError@0x2f"
                         }
                       ]
                     }
@@ -2839,14 +2851,14 @@
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Reader_ResourcePolicyDenyError@0x2f"
+                          "$ref": "#/components/schemas/Reader_ResourcePolicyDenyError@0x30"
                         }
                       ]
                     },
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Reader_BudgetExceededError@0x30"
+                          "$ref": "#/components/schemas/Reader_BudgetExceededError@0x31"
                         }
                       ]
                     }
@@ -2863,7 +2875,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Reader_TargetFileTooLargeError@0x31"
+                      "$ref": "#/components/schemas/Reader_TargetFileTooLargeError@0x32"
                     }
                   ]
                 }
@@ -2880,21 +2892,21 @@
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Reader_SubmittedDataMalformedError@0x32"
+                          "$ref": "#/components/schemas/Reader_SubmittedDataMalformedError@0x33"
                         }
                       ]
                     },
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Reader_DownstreamServiceFailureError@0x33"
+                          "$ref": "#/components/schemas/Reader_DownstreamServiceFailureError@0x34"
                         }
                       ]
                     },
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Reader_AssertionFailureError@0x34"
+                          "$ref": "#/components/schemas/Reader_AssertionFailureError@0x35"
                         }
                       ]
                     }
@@ -2911,7 +2923,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Reader_RateLimitTriggeredError@0x35"
+                      "$ref": "#/components/schemas/Reader_RateLimitTriggeredError@0x36"
                     }
                   ]
                 }
@@ -2926,7 +2938,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Reader_HarmfulContentError@0x36"
+                      "$ref": "#/components/schemas/Reader_HarmfulContentError@0x37"
                     }
                   ]
                 }
@@ -2941,7 +2953,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Reader_DownstreamServiceError@0x37"
+                      "$ref": "#/components/schemas/Reader_DownstreamServiceError@0x38"
                     }
                   ]
                 }
@@ -2956,7 +2968,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Reader_ServiceNodeResourceDrainError@0x38"
+                      "$ref": "#/components/schemas/Reader_ServiceNodeResourceDrainError@0x39"
                     }
                   ]
                 }
@@ -3082,9 +3094,13 @@
             "name": "page",
             "in": "query",
             "schema": {
-              "type": "number",
-              "summary": "Steer which page to return for document files (1-indexed).",
-              "description": "Steer which page to return for document files (1-indexed).\n\n- Some validators will be applied on value(s): (v) =&gt; Number.isInteger(v) &amp;&amp; v &gt;= 1"
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Reader_PageSelection@0x0f"
+                }
+              ],
+              "summary": "Steer which page(s) to return for document files. See PageSelection.",
+              "description": "Steer which page(s) to return for document files. See PageSelection."
             }
           },
           {
@@ -3095,7 +3111,7 @@
                 {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Reader_enum@0x0f"
+                      "$ref": "#/components/schemas/Reader_enum@0x10"
                     }
                   ]
                 },
@@ -3113,7 +3129,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Reader_PseudoBoolean@0x10"
+                  "$ref": "#/components/schemas/Reader_PseudoBoolean@0x11"
                 }
               ]
             },
@@ -3125,7 +3141,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Reader_enum@0x11"
+                  "$ref": "#/components/schemas/Reader_enum@0x12"
                 }
               ],
               "default": "all"
@@ -3138,7 +3154,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Reader_enum@0x12"
+                  "$ref": "#/components/schemas/Reader_enum@0x13"
                 }
               ],
               "default": "link"
@@ -3151,7 +3167,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Reader_enum@0x13"
+                  "$ref": "#/components/schemas/Reader_enum@0x14"
                 }
               ]
             },
@@ -3163,7 +3179,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Reader_enum@0x14"
+                  "$ref": "#/components/schemas/Reader_enum@0x15"
                 }
               ],
               "default": "all"
@@ -3178,7 +3194,7 @@
                 {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Reader_PseudoBoolean@0x10"
+                      "$ref": "#/components/schemas/Reader_PseudoBoolean@0x11"
                     }
                   ]
                 },
@@ -3245,7 +3261,7 @@
                 {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Reader_PseudoBoolean@0x10"
+                      "$ref": "#/components/schemas/Reader_PseudoBoolean@0x11"
                     }
                   ]
                 },
@@ -3308,7 +3324,7 @@
                 {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Reader_PseudoBoolean@0x10"
+                      "$ref": "#/components/schemas/Reader_PseudoBoolean@0x11"
                     }
                   ]
                 },
@@ -3415,7 +3431,7 @@
                 {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Reader_enum@0x1a"
+                      "$ref": "#/components/schemas/Reader_enum@0x1b"
                     }
                   ]
                 },
@@ -3522,7 +3538,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Reader_enum@0x24"
+                  "$ref": "#/components/schemas/Reader_enum@0x25"
                 }
               ]
             },
@@ -3536,7 +3552,7 @@
                 {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Reader_enum@0x25"
+                      "$ref": "#/components/schemas/Reader_enum@0x26"
                     }
                   ]
                 },
@@ -3917,7 +3933,7 @@
           },
           {
             "name": "X-Page",
-            "description": "Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.).\n\n1-indexed; ignored when no file/PDF is uploaded.",
+            "description": "Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.).\n\n1-indexed, 0 is the same as 1. Accepts a page number, a list and/or ranges like `1,3,5-7`.\n\nAt most 35 pages can be selected. With multiple pages, DocLayout / OCR runs over each selected page.\n\nIgnored when the target is not a document.",
             "in": "header",
             "schema": {
               "type": "string"
@@ -3969,7 +3985,7 @@
                     "data": {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Reader_FormattedPageDto@0x41"
+                          "$ref": "#/components/schemas/Reader_FormattedPageDto@0x42"
                         }
                       ],
                       "summary": "The result payload you expect",
@@ -3992,7 +4008,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Reader_OutputServerEventStream@0x42"
+                      "$ref": "#/components/schemas/Reader_OutputServerEventStream@0x43"
                     }
                   ]
                 }
@@ -4009,14 +4025,14 @@
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Reader_ParamValidationError@0x27"
+                          "$ref": "#/components/schemas/Reader_ParamValidationError@0x28"
                         }
                       ]
                     },
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Reader_DataStreamBrokenError@0x28"
+                          "$ref": "#/components/schemas/Reader_DataStreamBrokenError@0x29"
                         }
                       ]
                     }
@@ -4035,14 +4051,14 @@
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Reader_AuthenticationFailedError@0x29"
+                          "$ref": "#/components/schemas/Reader_AuthenticationFailedError@0x2a"
                         }
                       ]
                     },
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Reader_AuthenticationRequiredError@0x2a"
+                          "$ref": "#/components/schemas/Reader_AuthenticationRequiredError@0x2b"
                         }
                       ]
                     }
@@ -4061,14 +4077,14 @@
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Reader_TierFeatureConstraintError@0x2b"
+                          "$ref": "#/components/schemas/Reader_TierFeatureConstraintError@0x2c"
                         }
                       ]
                     },
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Reader_InsufficientBalanceError@0x2c"
+                          "$ref": "#/components/schemas/Reader_InsufficientBalanceError@0x2d"
                         }
                       ]
                     }
@@ -4087,14 +4103,14 @@
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Reader_OperationNotAllowedError@0x2d"
+                          "$ref": "#/components/schemas/Reader_OperationNotAllowedError@0x2e"
                         }
                       ]
                     },
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Reader_AbuseAlleviationError@0x2e"
+                          "$ref": "#/components/schemas/Reader_AbuseAlleviationError@0x2f"
                         }
                       ]
                     }
@@ -4113,14 +4129,14 @@
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Reader_ResourcePolicyDenyError@0x2f"
+                          "$ref": "#/components/schemas/Reader_ResourcePolicyDenyError@0x30"
                         }
                       ]
                     },
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Reader_BudgetExceededError@0x30"
+                          "$ref": "#/components/schemas/Reader_BudgetExceededError@0x31"
                         }
                       ]
                     }
@@ -4137,7 +4153,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Reader_TargetFileTooLargeError@0x31"
+                      "$ref": "#/components/schemas/Reader_TargetFileTooLargeError@0x32"
                     }
                   ]
                 }
@@ -4154,21 +4170,21 @@
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Reader_SubmittedDataMalformedError@0x32"
+                          "$ref": "#/components/schemas/Reader_SubmittedDataMalformedError@0x33"
                         }
                       ]
                     },
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Reader_DownstreamServiceFailureError@0x33"
+                          "$ref": "#/components/schemas/Reader_DownstreamServiceFailureError@0x34"
                         }
                       ]
                     },
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Reader_AssertionFailureError@0x34"
+                          "$ref": "#/components/schemas/Reader_AssertionFailureError@0x35"
                         }
                       ]
                     }
@@ -4185,7 +4201,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Reader_RateLimitTriggeredError@0x35"
+                      "$ref": "#/components/schemas/Reader_RateLimitTriggeredError@0x36"
                     }
                   ]
                 }
@@ -4200,7 +4216,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Reader_HarmfulContentError@0x36"
+                      "$ref": "#/components/schemas/Reader_HarmfulContentError@0x37"
                     }
                   ]
                 }
@@ -4215,7 +4231,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Reader_DownstreamServiceError@0x37"
+                      "$ref": "#/components/schemas/Reader_DownstreamServiceError@0x38"
                     }
                   ]
                 }
@@ -4230,7 +4246,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Reader_ServiceNodeResourceDrainError@0x38"
+                      "$ref": "#/components/schemas/Reader_ServiceNodeResourceDrainError@0x39"
                     }
                   ]
                 }
@@ -4349,9 +4365,13 @@
             "name": "page",
             "in": "query",
             "schema": {
-              "type": "number",
-              "summary": "Steer which page to return for document files (1-indexed).",
-              "description": "Steer which page to return for document files (1-indexed).\n\n- Some validators will be applied on value(s): (v) =&gt; Number.isInteger(v) &amp;&amp; v &gt;= 1"
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Reader_PageSelection@0x0f"
+                }
+              ],
+              "summary": "Steer which page(s) to return for document files. See PageSelection.",
+              "description": "Steer which page(s) to return for document files. See PageSelection."
             }
           },
           {
@@ -4362,7 +4382,7 @@
                 {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Reader_enum@0x0f"
+                      "$ref": "#/components/schemas/Reader_enum@0x10"
                     }
                   ]
                 },
@@ -4380,7 +4400,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Reader_PseudoBoolean@0x10"
+                  "$ref": "#/components/schemas/Reader_PseudoBoolean@0x11"
                 }
               ]
             },
@@ -4392,7 +4412,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Reader_enum@0x11"
+                  "$ref": "#/components/schemas/Reader_enum@0x12"
                 }
               ],
               "default": "all"
@@ -4405,7 +4425,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Reader_enum@0x12"
+                  "$ref": "#/components/schemas/Reader_enum@0x13"
                 }
               ],
               "default": "link"
@@ -4418,7 +4438,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Reader_enum@0x13"
+                  "$ref": "#/components/schemas/Reader_enum@0x14"
                 }
               ]
             },
@@ -4430,7 +4450,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Reader_enum@0x14"
+                  "$ref": "#/components/schemas/Reader_enum@0x15"
                 }
               ],
               "default": "all"
@@ -4445,7 +4465,7 @@
                 {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Reader_PseudoBoolean@0x10"
+                      "$ref": "#/components/schemas/Reader_PseudoBoolean@0x11"
                     }
                   ]
                 },
@@ -4512,7 +4532,7 @@
                 {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Reader_PseudoBoolean@0x10"
+                      "$ref": "#/components/schemas/Reader_PseudoBoolean@0x11"
                     }
                   ]
                 },
@@ -4575,7 +4595,7 @@
                 {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Reader_PseudoBoolean@0x10"
+                      "$ref": "#/components/schemas/Reader_PseudoBoolean@0x11"
                     }
                   ]
                 },
@@ -4682,7 +4702,7 @@
                 {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Reader_enum@0x1a"
+                      "$ref": "#/components/schemas/Reader_enum@0x1b"
                     }
                   ]
                 },
@@ -4789,7 +4809,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Reader_enum@0x24"
+                  "$ref": "#/components/schemas/Reader_enum@0x25"
                 }
               ]
             },
@@ -4803,7 +4823,7 @@
                 {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Reader_enum@0x25"
+                      "$ref": "#/components/schemas/Reader_enum@0x26"
                     }
                   ]
                 },
@@ -5184,7 +5204,7 @@
           },
           {
             "name": "X-Page",
-            "description": "Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.).\n\n1-indexed; ignored when no file/PDF is uploaded.",
+            "description": "Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.).\n\n1-indexed, 0 is the same as 1. Accepts a page number, a list and/or ranges like `1,3,5-7`.\n\nAt most 35 pages can be selected. With multiple pages, DocLayout / OCR runs over each selected page.\n\nIgnored when the target is not a document.",
             "in": "header",
             "schema": {
               "type": "string"
@@ -5216,10 +5236,10 @@
                     "$ref": "#/components/schemas/Reader_JinaEmbeddingsAuthDTO@0x0b"
                   },
                   {
-                    "$ref": "#/components/schemas/Reader_CrawlerOptionsHeaderOnly@0x39"
+                    "$ref": "#/components/schemas/Reader_CrawlerOptionsHeaderOnly@0x3a"
                   },
                   {
-                    "$ref": "#/components/schemas/Reader_CrawlerOptions@0x26"
+                    "$ref": "#/components/schemas/Reader_CrawlerOptions@0x27"
                   }
                 ]
               }
@@ -5231,10 +5251,10 @@
                     "$ref": "#/components/schemas/Reader_JinaEmbeddingsAuthDTO@0x0b"
                   },
                   {
-                    "$ref": "#/components/schemas/Reader_CrawlerOptionsHeaderOnly@0x39"
+                    "$ref": "#/components/schemas/Reader_CrawlerOptionsHeaderOnly@0x3a"
                   },
                   {
-                    "$ref": "#/components/schemas/Reader_CrawlerOptions@0x26"
+                    "$ref": "#/components/schemas/Reader_CrawlerOptions@0x27"
                   }
                 ]
               }
@@ -5305,16 +5325,20 @@
                     "description": "Base64-encoded file (PDF, DOC, XLS, PPT, ...) to convert instead of a URL."
                   },
                   "page": {
-                    "type": "number",
-                    "summary": "Steer which page to return for document files (1-indexed).",
-                    "description": "Steer which page to return for document files (1-indexed).\n\n- Some validators will be applied on value(s): (v) =&gt; Number.isInteger(v) &amp;&amp; v &gt;= 1"
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/Reader_PageSelection@0x0f"
+                      }
+                    ],
+                    "summary": "Steer which page(s) to return for document files. See PageSelection.",
+                    "description": "Steer which page(s) to return for document files. See PageSelection."
                   },
                   "respondWith": {
                     "oneOf": [
                       {
                         "allOf": [
                           {
-                            "$ref": "#/components/schemas/Reader_enum@0x0f"
+                            "$ref": "#/components/schemas/Reader_enum@0x10"
                           }
                         ]
                       },
@@ -5328,7 +5352,7 @@
                   "withGeneratedAlt": {
                     "allOf": [
                       {
-                        "$ref": "#/components/schemas/Reader_PseudoBoolean@0x10"
+                        "$ref": "#/components/schemas/Reader_PseudoBoolean@0x11"
                       }
                     ],
                     "description": "Enable automatic alt-text generating for images without an meaningful alt-text.\n\nNote: Does not work when `X-Respond-With` is specified"
@@ -5336,7 +5360,7 @@
                   "retainImages": {
                     "allOf": [
                       {
-                        "$ref": "#/components/schemas/Reader_enum@0x11"
+                        "$ref": "#/components/schemas/Reader_enum@0x12"
                       }
                     ],
                     "default": "all",
@@ -5345,7 +5369,7 @@
                   "retainMedia": {
                     "allOf": [
                       {
-                        "$ref": "#/components/schemas/Reader_enum@0x12"
+                        "$ref": "#/components/schemas/Reader_enum@0x13"
                       }
                     ],
                     "default": "link",
@@ -5354,7 +5378,7 @@
                   "preset": {
                     "allOf": [
                       {
-                        "$ref": "#/components/schemas/Reader_enum@0x13"
+                        "$ref": "#/components/schemas/Reader_enum@0x14"
                       }
                     ],
                     "description": "Apply a preset configuration for common scenarios.\n\nSupported presets:\n- reader: optimized for display to human users\n- index: optimized for semantic indexing\n- research: optimized for academic/research AI agents\n- agent: optimized for day-to-day AI agents\n- spider: optimized for recursive site crawling\n\nPreset values are applied only to options not explicitly set by the caller."
@@ -5362,7 +5386,7 @@
                   "retainLinks": {
                     "allOf": [
                       {
-                        "$ref": "#/components/schemas/Reader_enum@0x14"
+                        "$ref": "#/components/schemas/Reader_enum@0x15"
                       }
                     ],
                     "default": "all",
@@ -5373,7 +5397,7 @@
                       {
                         "allOf": [
                           {
-                            "$ref": "#/components/schemas/Reader_PseudoBoolean@0x10"
+                            "$ref": "#/components/schemas/Reader_PseudoBoolean@0x11"
                           }
                         ]
                       },
@@ -5420,7 +5444,7 @@
                       {
                         "allOf": [
                           {
-                            "$ref": "#/components/schemas/Reader_PseudoBoolean@0x10"
+                            "$ref": "#/components/schemas/Reader_PseudoBoolean@0x11"
                           }
                         ]
                       },
@@ -5459,7 +5483,7 @@
                       {
                         "allOf": [
                           {
-                            "$ref": "#/components/schemas/Reader_PseudoBoolean@0x10"
+                            "$ref": "#/components/schemas/Reader_PseudoBoolean@0x11"
                           }
                         ]
                       },
@@ -5530,7 +5554,7 @@
                       {
                         "allOf": [
                           {
-                            "$ref": "#/components/schemas/Reader_enum@0x1a"
+                            "$ref": "#/components/schemas/Reader_enum@0x1b"
                           }
                         ]
                       },
@@ -5589,7 +5613,7 @@
                   "respondTiming": {
                     "allOf": [
                       {
-                        "$ref": "#/components/schemas/Reader_enum@0x24"
+                        "$ref": "#/components/schemas/Reader_enum@0x25"
                       }
                     ],
                     "description": "Explicitly specify the respond timing. One of the following:\n\n- html: directly return unrendered HTML\n- visible-content: return immediately when any content becomes available\n- mutation-idle: wait for DOM mutations to settle and remain unchanged for at least 0.2s\n- resource-idle: wait for no additional resources that would affect page logic and content has SUCCEEDED loading in 0.5s\n- media-idle: wait for no additional resources, including media resources, has SUCCEEDED loading in 0.5s\n- network-idle: wait for full load of webpage, also known as networkidle0."
@@ -5599,7 +5623,7 @@
                       {
                         "allOf": [
                           {
-                            "$ref": "#/components/schemas/Reader_enum@0x25"
+                            "$ref": "#/components/schemas/Reader_enum@0x26"
                           }
                         ]
                       },
@@ -5647,7 +5671,7 @@
                     "data": {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Reader_FormattedPageDto@0x41"
+                          "$ref": "#/components/schemas/Reader_FormattedPageDto@0x42"
                         }
                       ],
                       "summary": "The result payload you expect",
@@ -5670,7 +5694,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Reader_OutputServerEventStream@0x42"
+                      "$ref": "#/components/schemas/Reader_OutputServerEventStream@0x43"
                     }
                   ]
                 }
@@ -5687,14 +5711,14 @@
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Reader_ParamValidationError@0x27"
+                          "$ref": "#/components/schemas/Reader_ParamValidationError@0x28"
                         }
                       ]
                     },
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Reader_DataStreamBrokenError@0x28"
+                          "$ref": "#/components/schemas/Reader_DataStreamBrokenError@0x29"
                         }
                       ]
                     }
@@ -5713,14 +5737,14 @@
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Reader_AuthenticationFailedError@0x29"
+                          "$ref": "#/components/schemas/Reader_AuthenticationFailedError@0x2a"
                         }
                       ]
                     },
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Reader_AuthenticationRequiredError@0x2a"
+                          "$ref": "#/components/schemas/Reader_AuthenticationRequiredError@0x2b"
                         }
                       ]
                     }
@@ -5739,14 +5763,14 @@
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Reader_TierFeatureConstraintError@0x2b"
+                          "$ref": "#/components/schemas/Reader_TierFeatureConstraintError@0x2c"
                         }
                       ]
                     },
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Reader_InsufficientBalanceError@0x2c"
+                          "$ref": "#/components/schemas/Reader_InsufficientBalanceError@0x2d"
                         }
                       ]
                     }
@@ -5765,14 +5789,14 @@
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Reader_OperationNotAllowedError@0x2d"
+                          "$ref": "#/components/schemas/Reader_OperationNotAllowedError@0x2e"
                         }
                       ]
                     },
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Reader_AbuseAlleviationError@0x2e"
+                          "$ref": "#/components/schemas/Reader_AbuseAlleviationError@0x2f"
                         }
                       ]
                     }
@@ -5791,14 +5815,14 @@
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Reader_ResourcePolicyDenyError@0x2f"
+                          "$ref": "#/components/schemas/Reader_ResourcePolicyDenyError@0x30"
                         }
                       ]
                     },
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Reader_BudgetExceededError@0x30"
+                          "$ref": "#/components/schemas/Reader_BudgetExceededError@0x31"
                         }
                       ]
                     }
@@ -5815,7 +5839,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Reader_TargetFileTooLargeError@0x31"
+                      "$ref": "#/components/schemas/Reader_TargetFileTooLargeError@0x32"
                     }
                   ]
                 }
@@ -5832,21 +5856,21 @@
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Reader_SubmittedDataMalformedError@0x32"
+                          "$ref": "#/components/schemas/Reader_SubmittedDataMalformedError@0x33"
                         }
                       ]
                     },
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Reader_DownstreamServiceFailureError@0x33"
+                          "$ref": "#/components/schemas/Reader_DownstreamServiceFailureError@0x34"
                         }
                       ]
                     },
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Reader_AssertionFailureError@0x34"
+                          "$ref": "#/components/schemas/Reader_AssertionFailureError@0x35"
                         }
                       ]
                     }
@@ -5863,7 +5887,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Reader_RateLimitTriggeredError@0x35"
+                      "$ref": "#/components/schemas/Reader_RateLimitTriggeredError@0x36"
                     }
                   ]
                 }
@@ -5878,7 +5902,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Reader_HarmfulContentError@0x36"
+                      "$ref": "#/components/schemas/Reader_HarmfulContentError@0x37"
                     }
                   ]
                 }
@@ -5893,7 +5917,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Reader_DownstreamServiceError@0x37"
+                      "$ref": "#/components/schemas/Reader_DownstreamServiceError@0x38"
                     }
                   ]
                 }
@@ -5908,7 +5932,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Reader_ServiceNodeResourceDrainError@0x38"
+                      "$ref": "#/components/schemas/Reader_ServiceNodeResourceDrainError@0x39"
                     }
                   ]
                 }
@@ -6023,7 +6047,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Reader_AuthenticationRequiredError@0x2a"
+                      "$ref": "#/components/schemas/Reader_AuthenticationRequiredError@0x2b"
                     }
                   ]
                 }
@@ -6038,7 +6062,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Reader_OperationNotAllowedError@0x2d"
+                      "$ref": "#/components/schemas/Reader_OperationNotAllowedError@0x2e"
                     }
                   ]
                 }
@@ -6053,7 +6077,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Reader_ResourceNotFoundError@0x43"
+                      "$ref": "#/components/schemas/Reader_ResourceNotFoundError@0x44"
                     }
                   ]
                 }
@@ -6246,7 +6270,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Reader_AuthenticationRequiredError@0x2a"
+                      "$ref": "#/components/schemas/Reader_AuthenticationRequiredError@0x2b"
                     }
                   ]
                 }
@@ -6261,7 +6285,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Reader_OperationNotAllowedError@0x2d"
+                      "$ref": "#/components/schemas/Reader_OperationNotAllowedError@0x2e"
                     }
                   ]
                 }
@@ -6276,7 +6300,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Reader_ResourceNotFoundError@0x43"
+                      "$ref": "#/components/schemas/Reader_ResourceNotFoundError@0x44"
                     }
                   ]
                 }
@@ -6398,7 +6422,7 @@
             "schema": {
               "type": "number"
             },
-            "description": "Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.).\n\n1-indexed; ignored when no file/PDF is uploaded."
+            "description": "Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.).\n\n1-indexed, 0 is the same as 1. Accepts a page number, a list and/or ranges like `1,3,5-7`.\n\nAt most 35 pages can be selected. With multiple pages, DocLayout / OCR runs over each selected page.\n\nIgnored when the target is not a document."
           },
           {
             "name": "respondWith",
@@ -6408,7 +6432,7 @@
                 {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Search_enum@0x10"
+                      "$ref": "#/components/schemas/Search_enum@0x11"
                     }
                   ]
                 },
@@ -6426,7 +6450,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Search_PseudoBoolean@0x11"
+                  "$ref": "#/components/schemas/Search_PseudoBoolean@0x12"
                 }
               ]
             },
@@ -6438,7 +6462,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Search_enum@0x12"
+                  "$ref": "#/components/schemas/Search_enum@0x13"
                 }
               ],
               "default": "all"
@@ -6451,7 +6475,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Search_enum@0x13"
+                  "$ref": "#/components/schemas/Search_enum@0x14"
                 }
               ],
               "default": "link"
@@ -6464,7 +6488,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Search_enum@0x14"
+                  "$ref": "#/components/schemas/Search_enum@0x15"
                 }
               ]
             },
@@ -6476,7 +6500,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Search_enum@0x15"
+                  "$ref": "#/components/schemas/Search_enum@0x16"
                 }
               ],
               "default": "all"
@@ -6491,7 +6515,7 @@
                 {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Search_PseudoBoolean@0x11"
+                      "$ref": "#/components/schemas/Search_PseudoBoolean@0x12"
                     }
                   ]
                 },
@@ -6558,7 +6582,7 @@
                 {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Search_PseudoBoolean@0x11"
+                      "$ref": "#/components/schemas/Search_PseudoBoolean@0x12"
                     }
                   ]
                 },
@@ -6621,7 +6645,7 @@
                 {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Search_PseudoBoolean@0x11"
+                      "$ref": "#/components/schemas/Search_PseudoBoolean@0x12"
                     }
                   ]
                 },
@@ -6726,7 +6750,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Search_enum@0x2a"
+                  "$ref": "#/components/schemas/Search_enum@0x2b"
                 }
               ]
             },
@@ -6828,7 +6852,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Search_enum@0x25"
+                  "$ref": "#/components/schemas/Search_enum@0x26"
                 }
               ]
             },
@@ -6842,7 +6866,7 @@
                 {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Search_enum@0x26"
+                      "$ref": "#/components/schemas/Search_enum@0x27"
                     }
                   ]
                 },
@@ -6917,7 +6941,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Search_enum@0x29"
+                  "$ref": "#/components/schemas/Search_enum@0x2a"
                 }
               ],
               "default": "web"
@@ -6948,7 +6972,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Search_enum@0x2b"
+                  "$ref": "#/components/schemas/Search_enum@0x2c"
                 }
               ]
             },
@@ -7367,7 +7391,7 @@
           },
           {
             "name": "X-Page",
-            "description": "Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.).\n\n1-indexed; ignored when no file/PDF is uploaded.",
+            "description": "Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.).\n\n1-indexed, 0 is the same as 1. Accepts a page number, a list and/or ranges like `1,3,5-7`.\n\nAt most 35 pages can be selected. With multiple pages, DocLayout / OCR runs over each selected page.\n\nIgnored when the target is not a document.",
             "in": "header",
             "schema": {
               "type": "string"
@@ -7419,7 +7443,7 @@
                     "data": {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Search_Array<FormattedPageDto@0x0b>@0x33"
+                          "$ref": "#/components/schemas/Search_Array<FormattedPageDto@0x0b>@0x34"
                         }
                       ],
                       "summary": "The result payload you expect",
@@ -7442,7 +7466,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Search_OutputServerEventStream@0x34"
+                      "$ref": "#/components/schemas/Search_OutputServerEventStream@0x35"
                     }
                   ]
                 }
@@ -7457,7 +7481,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Search_ParamValidationError@0x35"
+                      "$ref": "#/components/schemas/Search_ParamValidationError@0x36"
                     }
                   ]
                 }
@@ -7474,14 +7498,14 @@
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Search_AuthenticationFailedError@0x36"
+                          "$ref": "#/components/schemas/Search_AuthenticationFailedError@0x37"
                         }
                       ]
                     },
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Search_AuthenticationRequiredError@0x37"
+                          "$ref": "#/components/schemas/Search_AuthenticationRequiredError@0x38"
                         }
                       ]
                     }
@@ -7498,7 +7522,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Search_InsufficientBalanceError@0x38"
+                      "$ref": "#/components/schemas/Search_InsufficientBalanceError@0x39"
                     }
                   ]
                 }
@@ -7513,7 +7537,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Search_AbuseAlleviationError@0x39"
+                      "$ref": "#/components/schemas/Search_AbuseAlleviationError@0x3a"
                     }
                   ]
                 }
@@ -7528,7 +7552,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Search_AssertionFailureError@0x3a"
+                      "$ref": "#/components/schemas/Search_AssertionFailureError@0x3b"
                     }
                   ]
                 }
@@ -7543,7 +7567,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Search_RateLimitTriggeredError@0x3b"
+                      "$ref": "#/components/schemas/Search_RateLimitTriggeredError@0x3c"
                     }
                   ]
                 }
@@ -7558,7 +7582,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Search_DownstreamServiceError@0x3c"
+                      "$ref": "#/components/schemas/Search_DownstreamServiceError@0x3d"
                     }
                   ]
                 }
@@ -7573,7 +7597,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Search_ServiceBadAttemptError@0x3d"
+                      "$ref": "#/components/schemas/Search_ServiceBadAttemptError@0x3e"
                     }
                   ]
                 }
@@ -7693,7 +7717,7 @@
             "schema": {
               "type": "number"
             },
-            "description": "Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.).\n\n1-indexed; ignored when no file/PDF is uploaded."
+            "description": "Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.).\n\n1-indexed, 0 is the same as 1. Accepts a page number, a list and/or ranges like `1,3,5-7`.\n\nAt most 35 pages can be selected. With multiple pages, DocLayout / OCR runs over each selected page.\n\nIgnored when the target is not a document."
           },
           {
             "name": "respondWith",
@@ -7703,7 +7727,7 @@
                 {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Search_enum@0x10"
+                      "$ref": "#/components/schemas/Search_enum@0x11"
                     }
                   ]
                 },
@@ -7721,7 +7745,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Search_PseudoBoolean@0x11"
+                  "$ref": "#/components/schemas/Search_PseudoBoolean@0x12"
                 }
               ]
             },
@@ -7733,7 +7757,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Search_enum@0x12"
+                  "$ref": "#/components/schemas/Search_enum@0x13"
                 }
               ],
               "default": "all"
@@ -7746,7 +7770,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Search_enum@0x13"
+                  "$ref": "#/components/schemas/Search_enum@0x14"
                 }
               ],
               "default": "link"
@@ -7759,7 +7783,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Search_enum@0x14"
+                  "$ref": "#/components/schemas/Search_enum@0x15"
                 }
               ]
             },
@@ -7771,7 +7795,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Search_enum@0x15"
+                  "$ref": "#/components/schemas/Search_enum@0x16"
                 }
               ],
               "default": "all"
@@ -7786,7 +7810,7 @@
                 {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Search_PseudoBoolean@0x11"
+                      "$ref": "#/components/schemas/Search_PseudoBoolean@0x12"
                     }
                   ]
                 },
@@ -7853,7 +7877,7 @@
                 {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Search_PseudoBoolean@0x11"
+                      "$ref": "#/components/schemas/Search_PseudoBoolean@0x12"
                     }
                   ]
                 },
@@ -7916,7 +7940,7 @@
                 {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Search_PseudoBoolean@0x11"
+                      "$ref": "#/components/schemas/Search_PseudoBoolean@0x12"
                     }
                   ]
                 },
@@ -8021,7 +8045,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Search_enum@0x2a"
+                  "$ref": "#/components/schemas/Search_enum@0x2b"
                 }
               ]
             },
@@ -8123,7 +8147,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Search_enum@0x25"
+                  "$ref": "#/components/schemas/Search_enum@0x26"
                 }
               ]
             },
@@ -8137,7 +8161,7 @@
                 {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Search_enum@0x26"
+                      "$ref": "#/components/schemas/Search_enum@0x27"
                     }
                   ]
                 },
@@ -8212,7 +8236,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Search_enum@0x29"
+                  "$ref": "#/components/schemas/Search_enum@0x2a"
                 }
               ],
               "default": "web"
@@ -8243,7 +8267,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Search_enum@0x2b"
+                  "$ref": "#/components/schemas/Search_enum@0x2c"
                 }
               ]
             },
@@ -8662,7 +8686,7 @@
           },
           {
             "name": "X-Page",
-            "description": "Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.).\n\n1-indexed; ignored when no file/PDF is uploaded.",
+            "description": "Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.).\n\n1-indexed, 0 is the same as 1. Accepts a page number, a list and/or ranges like `1,3,5-7`.\n\nAt most 35 pages can be selected. With multiple pages, DocLayout / OCR runs over each selected page.\n\nIgnored when the target is not a document.",
             "in": "header",
             "schema": {
               "type": "string"
@@ -8694,10 +8718,10 @@
                     "$ref": "#/components/schemas/Search_JinaEmbeddingsAuthDTO@0x0c"
                   },
                   {
-                    "$ref": "#/components/schemas/Search_CrawlerOptions@0x27"
+                    "$ref": "#/components/schemas/Search_CrawlerOptions@0x28"
                   },
                   {
-                    "$ref": "#/components/schemas/Search_GoogleSearchExplicitOperatorsDto@0x28"
+                    "$ref": "#/components/schemas/Search_GoogleSearchExplicitOperatorsDto@0x29"
                   },
                   {
                     "type": "object",
@@ -8705,7 +8729,7 @@
                       "type": {
                         "allOf": [
                           {
-                            "$ref": "#/components/schemas/Search_enum@0x29"
+                            "$ref": "#/components/schemas/Search_enum@0x2a"
                           }
                         ],
                         "default": "web",
@@ -8722,7 +8746,7 @@
                       "engine": {
                         "allOf": [
                           {
-                            "$ref": "#/components/schemas/Search_enum@0x2a"
+                            "$ref": "#/components/schemas/Search_enum@0x2b"
                           }
                         ],
                         "description": "Specify the engine to use for crawling.\n\nSupported: browser, direct, cf-browser-rendering"
@@ -8730,7 +8754,7 @@
                       "provider": {
                         "allOf": [
                           {
-                            "$ref": "#/components/schemas/Search_enum@0x2b"
+                            "$ref": "#/components/schemas/Search_enum@0x2c"
                           }
                         ],
                         "description": "Search engine to use: `google`, `bing` or `reader`."
@@ -8749,7 +8773,7 @@
                       },
                       "page": {
                         "type": "number",
-                        "description": "Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.).\n\n1-indexed; ignored when no file/PDF is uploaded."
+                        "description": "Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.).\n\n1-indexed, 0 is the same as 1. Accepts a page number, a list and/or ranges like `1,3,5-7`.\n\nAt most 35 pages can be selected. With multiple pages, DocLayout / OCR runs over each selected page.\n\nIgnored when the target is not a document."
                       },
                       "fallback": {
                         "type": "boolean",
@@ -8775,10 +8799,10 @@
                     "$ref": "#/components/schemas/Search_JinaEmbeddingsAuthDTO@0x0c"
                   },
                   {
-                    "$ref": "#/components/schemas/Search_CrawlerOptions@0x27"
+                    "$ref": "#/components/schemas/Search_CrawlerOptions@0x28"
                   },
                   {
-                    "$ref": "#/components/schemas/Search_GoogleSearchExplicitOperatorsDto@0x28"
+                    "$ref": "#/components/schemas/Search_GoogleSearchExplicitOperatorsDto@0x29"
                   },
                   {
                     "type": "object",
@@ -8786,7 +8810,7 @@
                       "type": {
                         "allOf": [
                           {
-                            "$ref": "#/components/schemas/Search_enum@0x29"
+                            "$ref": "#/components/schemas/Search_enum@0x2a"
                           }
                         ],
                         "default": "web",
@@ -8803,7 +8827,7 @@
                       "engine": {
                         "allOf": [
                           {
-                            "$ref": "#/components/schemas/Search_enum@0x2a"
+                            "$ref": "#/components/schemas/Search_enum@0x2b"
                           }
                         ],
                         "description": "Specify the engine to use for crawling.\n\nSupported: browser, direct, cf-browser-rendering"
@@ -8811,7 +8835,7 @@
                       "provider": {
                         "allOf": [
                           {
-                            "$ref": "#/components/schemas/Search_enum@0x2b"
+                            "$ref": "#/components/schemas/Search_enum@0x2c"
                           }
                         ],
                         "description": "Search engine to use: `google`, `bing` or `reader`."
@@ -8830,7 +8854,7 @@
                       },
                       "page": {
                         "type": "number",
-                        "description": "Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.).\n\n1-indexed; ignored when no file/PDF is uploaded."
+                        "description": "Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.).\n\n1-indexed, 0 is the same as 1. Accepts a page number, a list and/or ranges like `1,3,5-7`.\n\nAt most 35 pages can be selected. With multiple pages, DocLayout / OCR runs over each selected page.\n\nIgnored when the target is not a document."
                       },
                       "fallback": {
                         "type": "boolean",
@@ -8916,14 +8940,14 @@
                   },
                   "page": {
                     "type": "number",
-                    "description": "Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.).\n\n1-indexed; ignored when no file/PDF is uploaded."
+                    "description": "Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.).\n\n1-indexed, 0 is the same as 1. Accepts a page number, a list and/or ranges like `1,3,5-7`.\n\nAt most 35 pages can be selected. With multiple pages, DocLayout / OCR runs over each selected page.\n\nIgnored when the target is not a document."
                   },
                   "respondWith": {
                     "oneOf": [
                       {
                         "allOf": [
                           {
-                            "$ref": "#/components/schemas/Search_enum@0x10"
+                            "$ref": "#/components/schemas/Search_enum@0x11"
                           }
                         ]
                       },
@@ -8937,7 +8961,7 @@
                   "withGeneratedAlt": {
                     "allOf": [
                       {
-                        "$ref": "#/components/schemas/Search_PseudoBoolean@0x11"
+                        "$ref": "#/components/schemas/Search_PseudoBoolean@0x12"
                       }
                     ],
                     "description": "Enable automatic alt-text generating for images without an meaningful alt-text.\n\nNote: Does not work when `X-Respond-With` is specified"
@@ -8945,7 +8969,7 @@
                   "retainImages": {
                     "allOf": [
                       {
-                        "$ref": "#/components/schemas/Search_enum@0x12"
+                        "$ref": "#/components/schemas/Search_enum@0x13"
                       }
                     ],
                     "default": "all",
@@ -8954,7 +8978,7 @@
                   "retainMedia": {
                     "allOf": [
                       {
-                        "$ref": "#/components/schemas/Search_enum@0x13"
+                        "$ref": "#/components/schemas/Search_enum@0x14"
                       }
                     ],
                     "default": "link",
@@ -8963,7 +8987,7 @@
                   "preset": {
                     "allOf": [
                       {
-                        "$ref": "#/components/schemas/Search_enum@0x14"
+                        "$ref": "#/components/schemas/Search_enum@0x15"
                       }
                     ],
                     "description": "Apply a preset configuration for common scenarios.\n\nSupported presets:\n- reader: optimized for display to human users\n- index: optimized for semantic indexing\n- research: optimized for academic/research AI agents\n- agent: optimized for day-to-day AI agents\n- spider: optimized for recursive site crawling\n\nPreset values are applied only to options not explicitly set by the caller."
@@ -8971,7 +8995,7 @@
                   "retainLinks": {
                     "allOf": [
                       {
-                        "$ref": "#/components/schemas/Search_enum@0x15"
+                        "$ref": "#/components/schemas/Search_enum@0x16"
                       }
                     ],
                     "default": "all",
@@ -8982,7 +9006,7 @@
                       {
                         "allOf": [
                           {
-                            "$ref": "#/components/schemas/Search_PseudoBoolean@0x11"
+                            "$ref": "#/components/schemas/Search_PseudoBoolean@0x12"
                           }
                         ]
                       },
@@ -9029,7 +9053,7 @@
                       {
                         "allOf": [
                           {
-                            "$ref": "#/components/schemas/Search_PseudoBoolean@0x11"
+                            "$ref": "#/components/schemas/Search_PseudoBoolean@0x12"
                           }
                         ]
                       },
@@ -9068,7 +9092,7 @@
                       {
                         "allOf": [
                           {
-                            "$ref": "#/components/schemas/Search_PseudoBoolean@0x11"
+                            "$ref": "#/components/schemas/Search_PseudoBoolean@0x12"
                           }
                         ]
                       },
@@ -9137,7 +9161,7 @@
                   "engine": {
                     "allOf": [
                       {
-                        "$ref": "#/components/schemas/Search_enum@0x2a"
+                        "$ref": "#/components/schemas/Search_enum@0x2b"
                       }
                     ],
                     "description": "Specify the engine to use for crawling.\n\nSupported: browser, direct, cf-browser-rendering"
@@ -9191,7 +9215,7 @@
                   "respondTiming": {
                     "allOf": [
                       {
-                        "$ref": "#/components/schemas/Search_enum@0x25"
+                        "$ref": "#/components/schemas/Search_enum@0x26"
                       }
                     ],
                     "description": "Explicitly specify the respond timing. One of the following:\n\n- html: directly return unrendered HTML\n- visible-content: return immediately when any content becomes available\n- mutation-idle: wait for DOM mutations to settle and remain unchanged for at least 0.2s\n- resource-idle: wait for no additional resources that would affect page logic and content has SUCCEEDED loading in 0.5s\n- media-idle: wait for no additional resources, including media resources, has SUCCEEDED loading in 0.5s\n- network-idle: wait for full load of webpage, also known as networkidle0."
@@ -9201,7 +9225,7 @@
                       {
                         "allOf": [
                           {
-                            "$ref": "#/components/schemas/Search_enum@0x26"
+                            "$ref": "#/components/schemas/Search_enum@0x27"
                           }
                         ]
                       },
@@ -9243,7 +9267,7 @@
                   "type": {
                     "allOf": [
                       {
-                        "$ref": "#/components/schemas/Search_enum@0x29"
+                        "$ref": "#/components/schemas/Search_enum@0x2a"
                       }
                     ],
                     "default": "web",
@@ -9260,7 +9284,7 @@
                   "provider": {
                     "allOf": [
                       {
-                        "$ref": "#/components/schemas/Search_enum@0x2b"
+                        "$ref": "#/components/schemas/Search_enum@0x2c"
                       }
                     ],
                     "description": "Search engine to use: `google`, `bing` or `reader`."
@@ -9323,7 +9347,7 @@
                     "data": {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Search_Array<FormattedPageDto@0x0b>@0x33"
+                          "$ref": "#/components/schemas/Search_Array<FormattedPageDto@0x0b>@0x34"
                         }
                       ],
                       "summary": "The result payload you expect",
@@ -9346,7 +9370,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Search_OutputServerEventStream@0x34"
+                      "$ref": "#/components/schemas/Search_OutputServerEventStream@0x35"
                     }
                   ]
                 }
@@ -9361,7 +9385,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Search_ParamValidationError@0x35"
+                      "$ref": "#/components/schemas/Search_ParamValidationError@0x36"
                     }
                   ]
                 }
@@ -9378,14 +9402,14 @@
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Search_AuthenticationFailedError@0x36"
+                          "$ref": "#/components/schemas/Search_AuthenticationFailedError@0x37"
                         }
                       ]
                     },
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Search_AuthenticationRequiredError@0x37"
+                          "$ref": "#/components/schemas/Search_AuthenticationRequiredError@0x38"
                         }
                       ]
                     }
@@ -9402,7 +9426,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Search_InsufficientBalanceError@0x38"
+                      "$ref": "#/components/schemas/Search_InsufficientBalanceError@0x39"
                     }
                   ]
                 }
@@ -9417,7 +9441,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Search_AbuseAlleviationError@0x39"
+                      "$ref": "#/components/schemas/Search_AbuseAlleviationError@0x3a"
                     }
                   ]
                 }
@@ -9432,7 +9456,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Search_AssertionFailureError@0x3a"
+                      "$ref": "#/components/schemas/Search_AssertionFailureError@0x3b"
                     }
                   ]
                 }
@@ -9447,7 +9471,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Search_RateLimitTriggeredError@0x3b"
+                      "$ref": "#/components/schemas/Search_RateLimitTriggeredError@0x3c"
                     }
                   ]
                 }
@@ -9462,7 +9486,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Search_DownstreamServiceError@0x3c"
+                      "$ref": "#/components/schemas/Search_DownstreamServiceError@0x3d"
                     }
                   ]
                 }
@@ -9477,7 +9501,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Search_ServiceBadAttemptError@0x3d"
+                      "$ref": "#/components/schemas/Search_ServiceBadAttemptError@0x3e"
                     }
                   ]
                 }
@@ -9605,7 +9629,7 @@
             "schema": {
               "type": "number"
             },
-            "description": "Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.).\n\n1-indexed; ignored when no file/PDF is uploaded."
+            "description": "Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.).\n\n1-indexed, 0 is the same as 1. Accepts a page number, a list and/or ranges like `1,3,5-7`.\n\nAt most 35 pages can be selected. With multiple pages, DocLayout / OCR runs over each selected page.\n\nIgnored when the target is not a document."
           },
           {
             "name": "respondWith",
@@ -9615,7 +9639,7 @@
                 {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Search_enum@0x10"
+                      "$ref": "#/components/schemas/Search_enum@0x11"
                     }
                   ]
                 },
@@ -9633,7 +9657,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Search_PseudoBoolean@0x11"
+                  "$ref": "#/components/schemas/Search_PseudoBoolean@0x12"
                 }
               ]
             },
@@ -9645,7 +9669,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Search_enum@0x12"
+                  "$ref": "#/components/schemas/Search_enum@0x13"
                 }
               ],
               "default": "all"
@@ -9658,7 +9682,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Search_enum@0x13"
+                  "$ref": "#/components/schemas/Search_enum@0x14"
                 }
               ],
               "default": "link"
@@ -9671,7 +9695,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Search_enum@0x14"
+                  "$ref": "#/components/schemas/Search_enum@0x15"
                 }
               ]
             },
@@ -9683,7 +9707,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Search_enum@0x15"
+                  "$ref": "#/components/schemas/Search_enum@0x16"
                 }
               ],
               "default": "all"
@@ -9698,7 +9722,7 @@
                 {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Search_PseudoBoolean@0x11"
+                      "$ref": "#/components/schemas/Search_PseudoBoolean@0x12"
                     }
                   ]
                 },
@@ -9765,7 +9789,7 @@
                 {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Search_PseudoBoolean@0x11"
+                      "$ref": "#/components/schemas/Search_PseudoBoolean@0x12"
                     }
                   ]
                 },
@@ -9828,7 +9852,7 @@
                 {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Search_PseudoBoolean@0x11"
+                      "$ref": "#/components/schemas/Search_PseudoBoolean@0x12"
                     }
                   ]
                 },
@@ -9933,7 +9957,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Search_enum@0x2a"
+                  "$ref": "#/components/schemas/Search_enum@0x2b"
                 }
               ]
             },
@@ -10035,7 +10059,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Search_enum@0x25"
+                  "$ref": "#/components/schemas/Search_enum@0x26"
                 }
               ]
             },
@@ -10049,7 +10073,7 @@
                 {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Search_enum@0x26"
+                      "$ref": "#/components/schemas/Search_enum@0x27"
                     }
                   ]
                 },
@@ -10124,7 +10148,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Search_enum@0x29"
+                  "$ref": "#/components/schemas/Search_enum@0x2a"
                 }
               ],
               "default": "web"
@@ -10155,7 +10179,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Search_enum@0x2b"
+                  "$ref": "#/components/schemas/Search_enum@0x2c"
                 }
               ]
             },
@@ -10573,7 +10597,7 @@
           },
           {
             "name": "X-Page",
-            "description": "Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.).\n\n1-indexed; ignored when no file/PDF is uploaded.",
+            "description": "Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.).\n\n1-indexed, 0 is the same as 1. Accepts a page number, a list and/or ranges like `1,3,5-7`.\n\nAt most 35 pages can be selected. With multiple pages, DocLayout / OCR runs over each selected page.\n\nIgnored when the target is not a document.",
             "in": "header",
             "schema": {
               "type": "string"
@@ -10625,7 +10649,7 @@
                     "data": {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Search_Array<FormattedPageDto@0x0b>@0x3e"
+                          "$ref": "#/components/schemas/Search_Array<FormattedPageDto@0x0b>@0x3f"
                         }
                       ],
                       "summary": "The result payload you expect",
@@ -10648,7 +10672,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Search_OutputServerEventStream@0x34"
+                      "$ref": "#/components/schemas/Search_OutputServerEventStream@0x35"
                     }
                   ]
                 }
@@ -10663,7 +10687,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Search_ParamValidationError@0x35"
+                      "$ref": "#/components/schemas/Search_ParamValidationError@0x36"
                     }
                   ]
                 }
@@ -10680,14 +10704,14 @@
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Search_AuthenticationFailedError@0x36"
+                          "$ref": "#/components/schemas/Search_AuthenticationFailedError@0x37"
                         }
                       ]
                     },
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Search_AuthenticationRequiredError@0x37"
+                          "$ref": "#/components/schemas/Search_AuthenticationRequiredError@0x38"
                         }
                       ]
                     }
@@ -10704,7 +10728,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Search_InsufficientBalanceError@0x38"
+                      "$ref": "#/components/schemas/Search_InsufficientBalanceError@0x39"
                     }
                   ]
                 }
@@ -10719,7 +10743,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Search_AbuseAlleviationError@0x39"
+                      "$ref": "#/components/schemas/Search_AbuseAlleviationError@0x3a"
                     }
                   ]
                 }
@@ -10734,7 +10758,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Search_AssertionFailureError@0x3a"
+                      "$ref": "#/components/schemas/Search_AssertionFailureError@0x3b"
                     }
                   ]
                 }
@@ -10749,7 +10773,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Search_RateLimitTriggeredError@0x3b"
+                      "$ref": "#/components/schemas/Search_RateLimitTriggeredError@0x3c"
                     }
                   ]
                 }
@@ -10764,7 +10788,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Search_DownstreamServiceError@0x3c"
+                      "$ref": "#/components/schemas/Search_DownstreamServiceError@0x3d"
                     }
                   ]
                 }
@@ -10779,7 +10803,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Search_ServiceBadAttemptError@0x3d"
+                      "$ref": "#/components/schemas/Search_ServiceBadAttemptError@0x3e"
                     }
                   ]
                 }
@@ -10900,7 +10924,7 @@
             "schema": {
               "type": "number"
             },
-            "description": "Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.).\n\n1-indexed; ignored when no file/PDF is uploaded."
+            "description": "Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.).\n\n1-indexed, 0 is the same as 1. Accepts a page number, a list and/or ranges like `1,3,5-7`.\n\nAt most 35 pages can be selected. With multiple pages, DocLayout / OCR runs over each selected page.\n\nIgnored when the target is not a document."
           },
           {
             "name": "respondWith",
@@ -10910,7 +10934,7 @@
                 {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Search_enum@0x10"
+                      "$ref": "#/components/schemas/Search_enum@0x11"
                     }
                   ]
                 },
@@ -10928,7 +10952,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Search_PseudoBoolean@0x11"
+                  "$ref": "#/components/schemas/Search_PseudoBoolean@0x12"
                 }
               ]
             },
@@ -10940,7 +10964,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Search_enum@0x12"
+                  "$ref": "#/components/schemas/Search_enum@0x13"
                 }
               ],
               "default": "all"
@@ -10953,7 +10977,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Search_enum@0x13"
+                  "$ref": "#/components/schemas/Search_enum@0x14"
                 }
               ],
               "default": "link"
@@ -10966,7 +10990,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Search_enum@0x14"
+                  "$ref": "#/components/schemas/Search_enum@0x15"
                 }
               ]
             },
@@ -10978,7 +11002,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Search_enum@0x15"
+                  "$ref": "#/components/schemas/Search_enum@0x16"
                 }
               ],
               "default": "all"
@@ -10993,7 +11017,7 @@
                 {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Search_PseudoBoolean@0x11"
+                      "$ref": "#/components/schemas/Search_PseudoBoolean@0x12"
                     }
                   ]
                 },
@@ -11060,7 +11084,7 @@
                 {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Search_PseudoBoolean@0x11"
+                      "$ref": "#/components/schemas/Search_PseudoBoolean@0x12"
                     }
                   ]
                 },
@@ -11123,7 +11147,7 @@
                 {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Search_PseudoBoolean@0x11"
+                      "$ref": "#/components/schemas/Search_PseudoBoolean@0x12"
                     }
                   ]
                 },
@@ -11228,7 +11252,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Search_enum@0x2a"
+                  "$ref": "#/components/schemas/Search_enum@0x2b"
                 }
               ]
             },
@@ -11330,7 +11354,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Search_enum@0x25"
+                  "$ref": "#/components/schemas/Search_enum@0x26"
                 }
               ]
             },
@@ -11344,7 +11368,7 @@
                 {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Search_enum@0x26"
+                      "$ref": "#/components/schemas/Search_enum@0x27"
                     }
                   ]
                 },
@@ -11419,7 +11443,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Search_enum@0x29"
+                  "$ref": "#/components/schemas/Search_enum@0x2a"
                 }
               ],
               "default": "web"
@@ -11450,7 +11474,7 @@
             "schema": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Search_enum@0x2b"
+                  "$ref": "#/components/schemas/Search_enum@0x2c"
                 }
               ]
             },
@@ -11868,7 +11892,7 @@
           },
           {
             "name": "X-Page",
-            "description": "Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.).\n\n1-indexed; ignored when no file/PDF is uploaded.",
+            "description": "Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.).\n\n1-indexed, 0 is the same as 1. Accepts a page number, a list and/or ranges like `1,3,5-7`.\n\nAt most 35 pages can be selected. With multiple pages, DocLayout / OCR runs over each selected page.\n\nIgnored when the target is not a document.",
             "in": "header",
             "schema": {
               "type": "string"
@@ -11900,10 +11924,10 @@
                     "$ref": "#/components/schemas/Search_JinaEmbeddingsAuthDTO@0x0c"
                   },
                   {
-                    "$ref": "#/components/schemas/Search_CrawlerOptions@0x27"
+                    "$ref": "#/components/schemas/Search_CrawlerOptions@0x28"
                   },
                   {
-                    "$ref": "#/components/schemas/Search_GoogleSearchExplicitOperatorsDto@0x28"
+                    "$ref": "#/components/schemas/Search_GoogleSearchExplicitOperatorsDto@0x29"
                   },
                   {
                     "type": "object",
@@ -11911,7 +11935,7 @@
                       "type": {
                         "allOf": [
                           {
-                            "$ref": "#/components/schemas/Search_enum@0x29"
+                            "$ref": "#/components/schemas/Search_enum@0x2a"
                           }
                         ],
                         "default": "web",
@@ -11928,7 +11952,7 @@
                       "engine": {
                         "allOf": [
                           {
-                            "$ref": "#/components/schemas/Search_enum@0x2a"
+                            "$ref": "#/components/schemas/Search_enum@0x2b"
                           }
                         ],
                         "description": "Specify the engine to use for crawling.\n\nSupported: browser, direct, cf-browser-rendering"
@@ -11936,7 +11960,7 @@
                       "provider": {
                         "allOf": [
                           {
-                            "$ref": "#/components/schemas/Search_enum@0x2b"
+                            "$ref": "#/components/schemas/Search_enum@0x2c"
                           }
                         ],
                         "description": "Search engine to use: `google`, `bing` or `reader`."
@@ -11955,7 +11979,7 @@
                       },
                       "page": {
                         "type": "number",
-                        "description": "Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.).\n\n1-indexed; ignored when no file/PDF is uploaded."
+                        "description": "Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.).\n\n1-indexed, 0 is the same as 1. Accepts a page number, a list and/or ranges like `1,3,5-7`.\n\nAt most 35 pages can be selected. With multiple pages, DocLayout / OCR runs over each selected page.\n\nIgnored when the target is not a document."
                       },
                       "fallback": {
                         "type": "boolean",
@@ -11981,10 +12005,10 @@
                     "$ref": "#/components/schemas/Search_JinaEmbeddingsAuthDTO@0x0c"
                   },
                   {
-                    "$ref": "#/components/schemas/Search_CrawlerOptions@0x27"
+                    "$ref": "#/components/schemas/Search_CrawlerOptions@0x28"
                   },
                   {
-                    "$ref": "#/components/schemas/Search_GoogleSearchExplicitOperatorsDto@0x28"
+                    "$ref": "#/components/schemas/Search_GoogleSearchExplicitOperatorsDto@0x29"
                   },
                   {
                     "type": "object",
@@ -11992,7 +12016,7 @@
                       "type": {
                         "allOf": [
                           {
-                            "$ref": "#/components/schemas/Search_enum@0x29"
+                            "$ref": "#/components/schemas/Search_enum@0x2a"
                           }
                         ],
                         "default": "web",
@@ -12009,7 +12033,7 @@
                       "engine": {
                         "allOf": [
                           {
-                            "$ref": "#/components/schemas/Search_enum@0x2a"
+                            "$ref": "#/components/schemas/Search_enum@0x2b"
                           }
                         ],
                         "description": "Specify the engine to use for crawling.\n\nSupported: browser, direct, cf-browser-rendering"
@@ -12017,7 +12041,7 @@
                       "provider": {
                         "allOf": [
                           {
-                            "$ref": "#/components/schemas/Search_enum@0x2b"
+                            "$ref": "#/components/schemas/Search_enum@0x2c"
                           }
                         ],
                         "description": "Search engine to use: `google`, `bing` or `reader`."
@@ -12036,7 +12060,7 @@
                       },
                       "page": {
                         "type": "number",
-                        "description": "Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.).\n\n1-indexed; ignored when no file/PDF is uploaded."
+                        "description": "Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.).\n\n1-indexed, 0 is the same as 1. Accepts a page number, a list and/or ranges like `1,3,5-7`.\n\nAt most 35 pages can be selected. With multiple pages, DocLayout / OCR runs over each selected page.\n\nIgnored when the target is not a document."
                       },
                       "fallback": {
                         "type": "boolean",
@@ -12122,14 +12146,14 @@
                   },
                   "page": {
                     "type": "number",
-                    "description": "Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.).\n\n1-indexed; ignored when no file/PDF is uploaded."
+                    "description": "Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.).\n\n1-indexed, 0 is the same as 1. Accepts a page number, a list and/or ranges like `1,3,5-7`.\n\nAt most 35 pages can be selected. With multiple pages, DocLayout / OCR runs over each selected page.\n\nIgnored when the target is not a document."
                   },
                   "respondWith": {
                     "oneOf": [
                       {
                         "allOf": [
                           {
-                            "$ref": "#/components/schemas/Search_enum@0x10"
+                            "$ref": "#/components/schemas/Search_enum@0x11"
                           }
                         ]
                       },
@@ -12143,7 +12167,7 @@
                   "withGeneratedAlt": {
                     "allOf": [
                       {
-                        "$ref": "#/components/schemas/Search_PseudoBoolean@0x11"
+                        "$ref": "#/components/schemas/Search_PseudoBoolean@0x12"
                       }
                     ],
                     "description": "Enable automatic alt-text generating for images without an meaningful alt-text.\n\nNote: Does not work when `X-Respond-With` is specified"
@@ -12151,7 +12175,7 @@
                   "retainImages": {
                     "allOf": [
                       {
-                        "$ref": "#/components/schemas/Search_enum@0x12"
+                        "$ref": "#/components/schemas/Search_enum@0x13"
                       }
                     ],
                     "default": "all",
@@ -12160,7 +12184,7 @@
                   "retainMedia": {
                     "allOf": [
                       {
-                        "$ref": "#/components/schemas/Search_enum@0x13"
+                        "$ref": "#/components/schemas/Search_enum@0x14"
                       }
                     ],
                     "default": "link",
@@ -12169,7 +12193,7 @@
                   "preset": {
                     "allOf": [
                       {
-                        "$ref": "#/components/schemas/Search_enum@0x14"
+                        "$ref": "#/components/schemas/Search_enum@0x15"
                       }
                     ],
                     "description": "Apply a preset configuration for common scenarios.\n\nSupported presets:\n- reader: optimized for display to human users\n- index: optimized for semantic indexing\n- research: optimized for academic/research AI agents\n- agent: optimized for day-to-day AI agents\n- spider: optimized for recursive site crawling\n\nPreset values are applied only to options not explicitly set by the caller."
@@ -12177,7 +12201,7 @@
                   "retainLinks": {
                     "allOf": [
                       {
-                        "$ref": "#/components/schemas/Search_enum@0x15"
+                        "$ref": "#/components/schemas/Search_enum@0x16"
                       }
                     ],
                     "default": "all",
@@ -12188,7 +12212,7 @@
                       {
                         "allOf": [
                           {
-                            "$ref": "#/components/schemas/Search_PseudoBoolean@0x11"
+                            "$ref": "#/components/schemas/Search_PseudoBoolean@0x12"
                           }
                         ]
                       },
@@ -12235,7 +12259,7 @@
                       {
                         "allOf": [
                           {
-                            "$ref": "#/components/schemas/Search_PseudoBoolean@0x11"
+                            "$ref": "#/components/schemas/Search_PseudoBoolean@0x12"
                           }
                         ]
                       },
@@ -12274,7 +12298,7 @@
                       {
                         "allOf": [
                           {
-                            "$ref": "#/components/schemas/Search_PseudoBoolean@0x11"
+                            "$ref": "#/components/schemas/Search_PseudoBoolean@0x12"
                           }
                         ]
                       },
@@ -12343,7 +12367,7 @@
                   "engine": {
                     "allOf": [
                       {
-                        "$ref": "#/components/schemas/Search_enum@0x2a"
+                        "$ref": "#/components/schemas/Search_enum@0x2b"
                       }
                     ],
                     "description": "Specify the engine to use for crawling.\n\nSupported: browser, direct, cf-browser-rendering"
@@ -12397,7 +12421,7 @@
                   "respondTiming": {
                     "allOf": [
                       {
-                        "$ref": "#/components/schemas/Search_enum@0x25"
+                        "$ref": "#/components/schemas/Search_enum@0x26"
                       }
                     ],
                     "description": "Explicitly specify the respond timing. One of the following:\n\n- html: directly return unrendered HTML\n- visible-content: return immediately when any content becomes available\n- mutation-idle: wait for DOM mutations to settle and remain unchanged for at least 0.2s\n- resource-idle: wait for no additional resources that would affect page logic and content has SUCCEEDED loading in 0.5s\n- media-idle: wait for no additional resources, including media resources, has SUCCEEDED loading in 0.5s\n- network-idle: wait for full load of webpage, also known as networkidle0."
@@ -12407,7 +12431,7 @@
                       {
                         "allOf": [
                           {
-                            "$ref": "#/components/schemas/Search_enum@0x26"
+                            "$ref": "#/components/schemas/Search_enum@0x27"
                           }
                         ]
                       },
@@ -12449,7 +12473,7 @@
                   "type": {
                     "allOf": [
                       {
-                        "$ref": "#/components/schemas/Search_enum@0x29"
+                        "$ref": "#/components/schemas/Search_enum@0x2a"
                       }
                     ],
                     "default": "web",
@@ -12466,7 +12490,7 @@
                   "provider": {
                     "allOf": [
                       {
-                        "$ref": "#/components/schemas/Search_enum@0x2b"
+                        "$ref": "#/components/schemas/Search_enum@0x2c"
                       }
                     ],
                     "description": "Search engine to use: `google`, `bing` or `reader`."
@@ -12529,7 +12553,7 @@
                     "data": {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Search_Array<FormattedPageDto@0x0b>@0x3e"
+                          "$ref": "#/components/schemas/Search_Array<FormattedPageDto@0x0b>@0x3f"
                         }
                       ],
                       "summary": "The result payload you expect",
@@ -12552,7 +12576,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Search_OutputServerEventStream@0x34"
+                      "$ref": "#/components/schemas/Search_OutputServerEventStream@0x35"
                     }
                   ]
                 }
@@ -12567,7 +12591,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Search_ParamValidationError@0x35"
+                      "$ref": "#/components/schemas/Search_ParamValidationError@0x36"
                     }
                   ]
                 }
@@ -12584,14 +12608,14 @@
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Search_AuthenticationFailedError@0x36"
+                          "$ref": "#/components/schemas/Search_AuthenticationFailedError@0x37"
                         }
                       ]
                     },
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/Search_AuthenticationRequiredError@0x37"
+                          "$ref": "#/components/schemas/Search_AuthenticationRequiredError@0x38"
                         }
                       ]
                     }
@@ -12608,7 +12632,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Search_InsufficientBalanceError@0x38"
+                      "$ref": "#/components/schemas/Search_InsufficientBalanceError@0x39"
                     }
                   ]
                 }
@@ -12623,7 +12647,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Search_AbuseAlleviationError@0x39"
+                      "$ref": "#/components/schemas/Search_AbuseAlleviationError@0x3a"
                     }
                   ]
                 }
@@ -12638,7 +12662,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Search_AssertionFailureError@0x3a"
+                      "$ref": "#/components/schemas/Search_AssertionFailureError@0x3b"
                     }
                   ]
                 }
@@ -12653,7 +12677,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Search_RateLimitTriggeredError@0x3b"
+                      "$ref": "#/components/schemas/Search_RateLimitTriggeredError@0x3c"
                     }
                   ]
                 }
@@ -12668,7 +12692,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Search_DownstreamServiceError@0x3c"
+                      "$ref": "#/components/schemas/Search_DownstreamServiceError@0x3d"
                     }
                   ]
                 }
@@ -12683,7 +12707,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/schemas/Search_ServiceBadAttemptError@0x3d"
+                      "$ref": "#/components/schemas/Search_ServiceBadAttemptError@0x3e"
                     }
                   ]
                 }
@@ -14283,7 +14307,7 @@
       "Reader_JinaEmbeddingsAuthDTO@0x0b": {
         "title": "JinaEmbeddingsAuthDTO"
       },
-      "Reader_CrawlerOptions@0x26": {
+      "Reader_CrawlerOptions@0x27": {
         "title": "CrawlerOptions",
         "type": "object",
         "properties": {
@@ -14349,16 +14373,20 @@
             "description": "Base64-encoded file (PDF, DOC, XLS, PPT, ...) to convert instead of a URL."
           },
           "page": {
-            "type": "number",
-            "summary": "Steer which page to return for document files (1-indexed).",
-            "description": "Steer which page to return for document files (1-indexed).\n\n- Some validators will be applied on value(s): (v) =&gt; Number.isInteger(v) &amp;&amp; v &gt;= 1"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Reader_PageSelection@0x0f"
+              }
+            ],
+            "summary": "Steer which page(s) to return for document files. See PageSelection.",
+            "description": "Steer which page(s) to return for document files. See PageSelection."
           },
           "respondWith": {
             "oneOf": [
               {
                 "allOf": [
                   {
-                    "$ref": "#/components/schemas/Reader_enum@0x0f"
+                    "$ref": "#/components/schemas/Reader_enum@0x10"
                   }
                 ]
               },
@@ -14372,7 +14400,7 @@
           "withGeneratedAlt": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/Reader_PseudoBoolean@0x10"
+                "$ref": "#/components/schemas/Reader_PseudoBoolean@0x11"
               }
             ],
             "description": "Enable automatic alt-text generating for images without an meaningful alt-text.\n\nNote: Does not work when `X-Respond-With` is specified"
@@ -14380,7 +14408,7 @@
           "retainImages": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/Reader_enum@0x11"
+                "$ref": "#/components/schemas/Reader_enum@0x12"
               }
             ],
             "default": "all",
@@ -14389,7 +14417,7 @@
           "retainMedia": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/Reader_enum@0x12"
+                "$ref": "#/components/schemas/Reader_enum@0x13"
               }
             ],
             "default": "link",
@@ -14398,7 +14426,7 @@
           "preset": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/Reader_enum@0x13"
+                "$ref": "#/components/schemas/Reader_enum@0x14"
               }
             ],
             "description": "Apply a preset configuration for common scenarios.\n\nSupported presets:\n- reader: optimized for display to human users\n- index: optimized for semantic indexing\n- research: optimized for academic/research AI agents\n- agent: optimized for day-to-day AI agents\n- spider: optimized for recursive site crawling\n\nPreset values are applied only to options not explicitly set by the caller."
@@ -14406,7 +14434,7 @@
           "retainLinks": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/Reader_enum@0x14"
+                "$ref": "#/components/schemas/Reader_enum@0x15"
               }
             ],
             "default": "all",
@@ -14417,7 +14445,7 @@
               {
                 "allOf": [
                   {
-                    "$ref": "#/components/schemas/Reader_PseudoBoolean@0x10"
+                    "$ref": "#/components/schemas/Reader_PseudoBoolean@0x11"
                   }
                 ]
               },
@@ -14464,7 +14492,7 @@
               {
                 "allOf": [
                   {
-                    "$ref": "#/components/schemas/Reader_PseudoBoolean@0x10"
+                    "$ref": "#/components/schemas/Reader_PseudoBoolean@0x11"
                   }
                 ]
               },
@@ -14512,7 +14540,7 @@
               {
                 "allOf": [
                   {
-                    "$ref": "#/components/schemas/Reader_PseudoBoolean@0x10"
+                    "$ref": "#/components/schemas/Reader_PseudoBoolean@0x11"
                   }
                 ]
               },
@@ -14556,7 +14584,7 @@
           "storageState": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/Reader_StorageState@0x19"
+                "$ref": "#/components/schemas/Reader_StorageState@0x1a"
               }
             ]
           },
@@ -14593,7 +14621,7 @@
               {
                 "allOf": [
                   {
-                    "$ref": "#/components/schemas/Reader_enum@0x1a"
+                    "$ref": "#/components/schemas/Reader_enum@0x1b"
                   }
                 ]
               },
@@ -14640,7 +14668,7 @@
           "viewport": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/Reader_Viewport@0x1b"
+                "$ref": "#/components/schemas/Reader_Viewport@0x1c"
               }
             ]
           },
@@ -14665,21 +14693,21 @@
           "markdown": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/Reader_TurnDownTweakableOptions@0x22"
+                "$ref": "#/components/schemas/Reader_TurnDownTweakableOptions@0x23"
               }
             ]
           },
           "ocr": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/Reader_OCRPreferences@0x23"
+                "$ref": "#/components/schemas/Reader_OCRPreferences@0x24"
               }
             ]
           },
           "respondTiming": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/Reader_enum@0x24"
+                "$ref": "#/components/schemas/Reader_enum@0x25"
               }
             ],
             "description": "Explicitly specify the respond timing. One of the following:\n\n- html: directly return unrendered HTML\n- visible-content: return immediately when any content becomes available\n- mutation-idle: wait for DOM mutations to settle and remain unchanged for at least 0.2s\n- resource-idle: wait for no additional resources that would affect page logic and content has SUCCEEDED loading in 0.5s\n- media-idle: wait for no additional resources, including media resources, has SUCCEEDED loading in 0.5s\n- network-idle: wait for full load of webpage, also known as networkidle0."
@@ -14689,7 +14717,7 @@
               {
                 "allOf": [
                   {
-                    "$ref": "#/components/schemas/Reader_enum@0x25"
+                    "$ref": "#/components/schemas/Reader_enum@0x26"
                   }
                 ]
               },
@@ -14750,7 +14778,42 @@
         "type": "string",
         "format": "binary"
       },
-      "Reader_enum@0x0f": {
+      "Reader_PageSelection@0x0f": {
+        "title": "PageSelection",
+        "anyOf": [
+          {
+            "type": "integer",
+            "minimum": 0
+          },
+          {
+            "type": "string",
+            "format": "page-selection"
+          },
+          {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                {
+                  "type": "string",
+                  "format": "page-selection"
+                }
+              ]
+            }
+          }
+        ],
+        "description": "Selection of document pages (1-indexed, 0 is the same as 1).\n\nAccepts a page number, a list and/or ranges like `1,3,5-7`.\n\nAt most 35 pages can be selected.",
+        "examples": [
+          3,
+          "0",
+          "1,3,5",
+          "1-3,4-6"
+        ]
+      },
+      "Reader_enum@0x10": {
         "type": "string",
         "enum": [
           "content",
@@ -14771,7 +14834,7 @@
         ],
         "description": "Enum<\"content\" | \"markdown\" | \"html\" | \"text\" | \"pageshot\" | \"screenshot\" | \"vlm\" | \"readerlm-v2\" | \"frontmatter\" | \"readability\" | \"...>"
       },
-      "Reader_PseudoBoolean@0x10": {
+      "Reader_PseudoBoolean@0x11": {
         "title": "PseudoBoolean",
         "anyOf": [
           {
@@ -14809,7 +14872,7 @@
           "disabled"
         ]
       },
-      "Reader_enum@0x11": {
+      "Reader_enum@0x12": {
         "type": "string",
         "enum": [
           "none",
@@ -14820,7 +14883,7 @@
         ],
         "description": "Enum<\"none\" | \"all\" | \"alt\" | \"all_p\" | \"alt_p\">"
       },
-      "Reader_enum@0x12": {
+      "Reader_enum@0x13": {
         "type": "string",
         "enum": [
           "none",
@@ -14831,7 +14894,7 @@
         ],
         "description": "Enum<\"none\" | \"text\" | \"link\" | \"image\" | \"html\">"
       },
-      "Reader_enum@0x13": {
+      "Reader_enum@0x14": {
         "type": "string",
         "enum": [
           "reader",
@@ -14848,7 +14911,7 @@
         ],
         "description": "Enum<\"reader\" | \"index\" | \"research\" | \"agent\" | \"spider\" | \"ocr\" | \"ocr+\" | \"ocr++\" | \"pdf\" | \"pdf+\" | \"pdf++\">"
       },
-      "Reader_enum@0x14": {
+      "Reader_enum@0x15": {
         "type": "string",
         "enum": [
           "none",
@@ -14858,7 +14921,7 @@
         ],
         "description": "Enum<\"none\" | \"all\" | \"text\" | \"gpt-oss\">"
       },
-      "Reader_StorageState@0x19": {
+      "Reader_StorageState@0x1a": {
         "title": "StorageState",
         "type": "object",
         "properties": {
@@ -14867,7 +14930,7 @@
             "items": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Reader_Cookie@0x16"
+                  "$ref": "#/components/schemas/Reader_Cookie@0x17"
                 }
               ]
             },
@@ -14878,7 +14941,7 @@
             "items": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Reader_LocalStorageOrigin@0x18"
+                  "$ref": "#/components/schemas/Reader_LocalStorageOrigin@0x19"
                 }
               ]
             },
@@ -14886,7 +14949,7 @@
           }
         }
       },
-      "Reader_Cookie@0x16": {
+      "Reader_Cookie@0x17": {
         "title": "Cookie",
         "type": "object",
         "properties": {
@@ -14920,7 +14983,7 @@
               {
                 "allOf": [
                   {
-                    "$ref": "#/components/schemas/Reader_enum@0x15"
+                    "$ref": "#/components/schemas/Reader_enum@0x16"
                   }
                 ]
               },
@@ -14935,7 +14998,7 @@
           "value"
         ]
       },
-      "Reader_enum@0x15": {
+      "Reader_enum@0x16": {
         "type": "string",
         "enum": [
           "Strict",
@@ -14944,7 +15007,7 @@
         ],
         "description": "Enum<\"Strict\" | \"Lax\" | \"None\">"
       },
-      "Reader_LocalStorageOrigin@0x18": {
+      "Reader_LocalStorageOrigin@0x19": {
         "title": "LocalStorageOrigin",
         "type": "object",
         "properties": {
@@ -14957,7 +15020,7 @@
             "items": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Reader_LocalStorageItem@0x17"
+                  "$ref": "#/components/schemas/Reader_LocalStorageItem@0x18"
                 }
               ]
             },
@@ -14968,7 +15031,7 @@
           "origin"
         ]
       },
-      "Reader_LocalStorageItem@0x17": {
+      "Reader_LocalStorageItem@0x18": {
         "title": "LocalStorageItem",
         "type": "object",
         "properties": {
@@ -14986,7 +15049,7 @@
           "value"
         ]
       },
-      "Reader_enum@0x1a": {
+      "Reader_enum@0x1b": {
         "type": "string",
         "enum": [
           "auto",
@@ -14996,7 +15059,7 @@
         ],
         "description": "Enum<\"auto\" | \"browser\" | \"curl\" | \"cf-browser-rendering\">"
       },
-      "Reader_Viewport@0x1b": {
+      "Reader_Viewport@0x1c": {
         "title": "Viewport",
         "type": "object",
         "properties": {
@@ -15022,14 +15085,14 @@
           }
         }
       },
-      "Reader_TurnDownTweakableOptions@0x22": {
+      "Reader_TurnDownTweakableOptions@0x23": {
         "title": "TurnDownTweakableOptions",
         "type": "object",
         "properties": {
           "headingStyle": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/Reader_enum@0x1c"
+                "$ref": "#/components/schemas/Reader_enum@0x1d"
               }
             ],
             "summary": "Turndown options > headingStyle",
@@ -15043,7 +15106,7 @@
           "bulletListMarker": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/Reader_enum@0x1d"
+                "$ref": "#/components/schemas/Reader_enum@0x1e"
               }
             ],
             "summary": "Turndown options > bulletListMarker",
@@ -15052,7 +15115,7 @@
           "emDelimiter": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/Reader_enum@0x1e"
+                "$ref": "#/components/schemas/Reader_enum@0x1f"
               }
             ],
             "summary": "Turndown options > emDelimiter",
@@ -15061,7 +15124,7 @@
           "strongDelimiter": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/Reader_enum@0x1f"
+                "$ref": "#/components/schemas/Reader_enum@0x20"
               }
             ],
             "summary": "Turndown options > strongDelimiter",
@@ -15070,7 +15133,7 @@
           "linkStyle": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/Reader_enum@0x20"
+                "$ref": "#/components/schemas/Reader_enum@0x21"
               }
             ],
             "summary": "Turndown options > linkStyle",
@@ -15079,7 +15142,7 @@
           "linkReferenceStyle": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/Reader_enum@0x21"
+                "$ref": "#/components/schemas/Reader_enum@0x22"
               }
             ],
             "summary": "Turndown options > linkReferenceStyle",
@@ -15087,7 +15150,7 @@
           }
         }
       },
-      "Reader_enum@0x1c": {
+      "Reader_enum@0x1d": {
         "type": "string",
         "enum": [
           "setext",
@@ -15095,7 +15158,7 @@
         ],
         "description": "Enum<\"setext\" | \"atx\">"
       },
-      "Reader_enum@0x1d": {
+      "Reader_enum@0x1e": {
         "type": "string",
         "enum": [
           "-",
@@ -15104,7 +15167,7 @@
         ],
         "description": "Enum<\"-\" | \"+\" | \"*\">"
       },
-      "Reader_enum@0x1e": {
+      "Reader_enum@0x1f": {
         "type": "string",
         "enum": [
           "_",
@@ -15112,7 +15175,7 @@
         ],
         "description": "Enum<\"_\" | \"*\">"
       },
-      "Reader_enum@0x1f": {
+      "Reader_enum@0x20": {
         "type": "string",
         "enum": [
           "__",
@@ -15120,7 +15183,7 @@
         ],
         "description": "Enum<\"__\" | \"**\">"
       },
-      "Reader_enum@0x20": {
+      "Reader_enum@0x21": {
         "type": "string",
         "enum": [
           "inlined",
@@ -15129,7 +15192,7 @@
         ],
         "description": "Enum<\"inlined\" | \"referenced\" | \"discarded\">"
       },
-      "Reader_enum@0x21": {
+      "Reader_enum@0x22": {
         "type": "string",
         "enum": [
           "full",
@@ -15139,7 +15202,7 @@
         ],
         "description": "Enum<\"full\" | \"collapsed\" | \"shortcut\" | \"discarded\">"
       },
-      "Reader_OCRPreferences@0x23": {
+      "Reader_OCRPreferences@0x24": {
         "title": "OCRPreferences",
         "type": "object",
         "properties": {
@@ -15172,7 +15235,7 @@
           }
         }
       },
-      "Reader_enum@0x24": {
+      "Reader_enum@0x25": {
         "type": "string",
         "enum": [
           "html",
@@ -15184,7 +15247,7 @@
         ],
         "description": "Enum<\"html\" | \"visible-content\" | \"mutation-idle\" | \"resource-idle\" | \"media-idle\" | \"network-idle\">"
       },
-      "Reader_enum@0x25": {
+      "Reader_enum@0x26": {
         "type": "string",
         "enum": [
           "true",
@@ -15202,7 +15265,7 @@
         ],
         "description": "Enum<\"true\" | \"h1\" | \"h2\" | \"h3\" | \"h4\" | \"h5\" | \"structured\" | \"s1\" | \"s2\" | \"s3\" | \"s4\" | \"s5\">"
       },
-      "Reader_CrawlerOptionsHeaderOnly@0x39": {
+      "Reader_CrawlerOptionsHeaderOnly@0x3a": {
         "title": "CrawlerOptionsHeaderOnly",
         "type": "object",
         "properties": {
@@ -15268,16 +15331,20 @@
             "description": "Base64-encoded file (PDF, DOC, XLS, PPT, ...) to convert instead of a URL."
           },
           "page": {
-            "type": "number",
-            "summary": "Steer which page to return for document files (1-indexed).",
-            "description": "Steer which page to return for document files (1-indexed).\n\n- Some validators will be applied on value(s): (v) =&gt; Number.isInteger(v) &amp;&amp; v &gt;= 1"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Reader_PageSelection@0x0f"
+              }
+            ],
+            "summary": "Steer which page(s) to return for document files. See PageSelection.",
+            "description": "Steer which page(s) to return for document files. See PageSelection."
           },
           "respondWith": {
             "oneOf": [
               {
                 "allOf": [
                   {
-                    "$ref": "#/components/schemas/Reader_enum@0x0f"
+                    "$ref": "#/components/schemas/Reader_enum@0x10"
                   }
                 ]
               },
@@ -15291,7 +15358,7 @@
           "withGeneratedAlt": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/Reader_PseudoBoolean@0x10"
+                "$ref": "#/components/schemas/Reader_PseudoBoolean@0x11"
               }
             ],
             "description": "Enable automatic alt-text generating for images without an meaningful alt-text.\n\nNote: Does not work when `X-Respond-With` is specified"
@@ -15299,7 +15366,7 @@
           "retainImages": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/Reader_enum@0x11"
+                "$ref": "#/components/schemas/Reader_enum@0x12"
               }
             ],
             "default": "all",
@@ -15308,7 +15375,7 @@
           "retainMedia": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/Reader_enum@0x12"
+                "$ref": "#/components/schemas/Reader_enum@0x13"
               }
             ],
             "default": "link",
@@ -15317,7 +15384,7 @@
           "preset": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/Reader_enum@0x13"
+                "$ref": "#/components/schemas/Reader_enum@0x14"
               }
             ],
             "description": "Apply a preset configuration for common scenarios.\n\nSupported presets:\n- reader: optimized for display to human users\n- index: optimized for semantic indexing\n- research: optimized for academic/research AI agents\n- agent: optimized for day-to-day AI agents\n- spider: optimized for recursive site crawling\n\nPreset values are applied only to options not explicitly set by the caller."
@@ -15325,7 +15392,7 @@
           "retainLinks": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/Reader_enum@0x14"
+                "$ref": "#/components/schemas/Reader_enum@0x15"
               }
             ],
             "default": "all",
@@ -15336,7 +15403,7 @@
               {
                 "allOf": [
                   {
-                    "$ref": "#/components/schemas/Reader_PseudoBoolean@0x10"
+                    "$ref": "#/components/schemas/Reader_PseudoBoolean@0x11"
                   }
                 ]
               },
@@ -15383,7 +15450,7 @@
               {
                 "allOf": [
                   {
-                    "$ref": "#/components/schemas/Reader_PseudoBoolean@0x10"
+                    "$ref": "#/components/schemas/Reader_PseudoBoolean@0x11"
                   }
                 ]
               },
@@ -15431,7 +15498,7 @@
               {
                 "allOf": [
                   {
-                    "$ref": "#/components/schemas/Reader_PseudoBoolean@0x10"
+                    "$ref": "#/components/schemas/Reader_PseudoBoolean@0x11"
                   }
                 ]
               },
@@ -15475,7 +15542,7 @@
           "storageState": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/Reader_StorageState@0x19"
+                "$ref": "#/components/schemas/Reader_StorageState@0x1a"
               }
             ]
           },
@@ -15512,7 +15579,7 @@
               {
                 "allOf": [
                   {
-                    "$ref": "#/components/schemas/Reader_enum@0x1a"
+                    "$ref": "#/components/schemas/Reader_enum@0x1b"
                   }
                 ]
               },
@@ -15559,7 +15626,7 @@
           "viewport": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/Reader_Viewport@0x1b"
+                "$ref": "#/components/schemas/Reader_Viewport@0x1c"
               }
             ]
           },
@@ -15584,21 +15651,21 @@
           "markdown": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/Reader_TurnDownTweakableOptions@0x22"
+                "$ref": "#/components/schemas/Reader_TurnDownTweakableOptions@0x23"
               }
             ]
           },
           "ocr": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/Reader_OCRPreferences@0x23"
+                "$ref": "#/components/schemas/Reader_OCRPreferences@0x24"
               }
             ]
           },
           "respondTiming": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/Reader_enum@0x24"
+                "$ref": "#/components/schemas/Reader_enum@0x25"
               }
             ],
             "description": "Explicitly specify the respond timing. One of the following:\n\n- html: directly return unrendered HTML\n- visible-content: return immediately when any content becomes available\n- mutation-idle: wait for DOM mutations to settle and remain unchanged for at least 0.2s\n- resource-idle: wait for no additional resources that would affect page logic and content has SUCCEEDED loading in 0.5s\n- media-idle: wait for no additional resources, including media resources, has SUCCEEDED loading in 0.5s\n- network-idle: wait for full load of webpage, also known as networkidle0."
@@ -15608,7 +15675,7 @@
               {
                 "allOf": [
                   {
-                    "$ref": "#/components/schemas/Reader_enum@0x25"
+                    "$ref": "#/components/schemas/Reader_enum@0x26"
                   }
                 ]
               },
@@ -15631,7 +15698,7 @@
           }
         }
       },
-      "Reader_ParamValidationError@0x27": {
+      "Reader_ParamValidationError@0x28": {
         "title": "ParamValidationError",
         "type": "object",
         "properties": {
@@ -15665,7 +15732,7 @@
           "message"
         ]
       },
-      "Reader_DataStreamBrokenError@0x28": {
+      "Reader_DataStreamBrokenError@0x29": {
         "title": "DataStreamBrokenError",
         "type": "object",
         "properties": {
@@ -15699,7 +15766,7 @@
           "message"
         ]
       },
-      "Reader_AuthenticationFailedError@0x29": {
+      "Reader_AuthenticationFailedError@0x2a": {
         "title": "AuthenticationFailedError",
         "type": "object",
         "properties": {
@@ -15733,7 +15800,7 @@
           "message"
         ]
       },
-      "Reader_AuthenticationRequiredError@0x2a": {
+      "Reader_AuthenticationRequiredError@0x2b": {
         "title": "AuthenticationRequiredError",
         "type": "object",
         "properties": {
@@ -15767,7 +15834,7 @@
           "message"
         ]
       },
-      "Reader_TierFeatureConstraintError@0x2b": {
+      "Reader_TierFeatureConstraintError@0x2c": {
         "title": "TierFeatureConstraintError",
         "type": "object",
         "properties": {
@@ -15801,7 +15868,7 @@
           "message"
         ]
       },
-      "Reader_InsufficientBalanceError@0x2c": {
+      "Reader_InsufficientBalanceError@0x2d": {
         "title": "InsufficientBalanceError",
         "type": "object",
         "properties": {
@@ -15835,7 +15902,7 @@
           "message"
         ]
       },
-      "Reader_OperationNotAllowedError@0x2d": {
+      "Reader_OperationNotAllowedError@0x2e": {
         "title": "OperationNotAllowedError",
         "type": "object",
         "properties": {
@@ -15869,7 +15936,7 @@
           "message"
         ]
       },
-      "Reader_AbuseAlleviationError@0x2e": {
+      "Reader_AbuseAlleviationError@0x2f": {
         "title": "AbuseAlleviationError",
         "type": "object",
         "properties": {
@@ -15903,7 +15970,7 @@
           "message"
         ]
       },
-      "Reader_ResourcePolicyDenyError@0x2f": {
+      "Reader_ResourcePolicyDenyError@0x30": {
         "title": "ResourcePolicyDenyError",
         "type": "object",
         "properties": {
@@ -15937,7 +16004,7 @@
           "message"
         ]
       },
-      "Reader_BudgetExceededError@0x30": {
+      "Reader_BudgetExceededError@0x31": {
         "title": "BudgetExceededError",
         "type": "object",
         "properties": {
@@ -15971,7 +16038,7 @@
           "message"
         ]
       },
-      "Reader_TargetFileTooLargeError@0x31": {
+      "Reader_TargetFileTooLargeError@0x32": {
         "title": "TargetFileTooLargeError",
         "type": "object",
         "properties": {
@@ -16005,7 +16072,7 @@
           "message"
         ]
       },
-      "Reader_SubmittedDataMalformedError@0x32": {
+      "Reader_SubmittedDataMalformedError@0x33": {
         "title": "SubmittedDataMalformedError",
         "type": "object",
         "properties": {
@@ -16039,7 +16106,7 @@
           "message"
         ]
       },
-      "Reader_DownstreamServiceFailureError@0x33": {
+      "Reader_DownstreamServiceFailureError@0x34": {
         "title": "DownstreamServiceFailureError",
         "type": "object",
         "properties": {
@@ -16073,7 +16140,7 @@
           "message"
         ]
       },
-      "Reader_AssertionFailureError@0x34": {
+      "Reader_AssertionFailureError@0x35": {
         "title": "AssertionFailureError",
         "type": "object",
         "properties": {
@@ -16107,7 +16174,7 @@
           "message"
         ]
       },
-      "Reader_RateLimitTriggeredError@0x35": {
+      "Reader_RateLimitTriggeredError@0x36": {
         "title": "RateLimitTriggeredError",
         "type": "object",
         "properties": {
@@ -16152,7 +16219,7 @@
           "message"
         ]
       },
-      "Reader_HarmfulContentError@0x36": {
+      "Reader_HarmfulContentError@0x37": {
         "title": "HarmfulContentError",
         "type": "object",
         "properties": {
@@ -16186,7 +16253,7 @@
           "message"
         ]
       },
-      "Reader_DownstreamServiceError@0x37": {
+      "Reader_DownstreamServiceError@0x38": {
         "title": "DownstreamServiceError",
         "type": "object",
         "properties": {
@@ -16220,7 +16287,7 @@
           "message"
         ]
       },
-      "Reader_ServiceNodeResourceDrainError@0x38": {
+      "Reader_ServiceNodeResourceDrainError@0x39": {
         "title": "ServiceNodeResourceDrainError",
         "type": "object",
         "properties": {
@@ -16254,7 +16321,7 @@
           "message"
         ]
       },
-      "Reader_FormattedPageDto@0x41": {
+      "Reader_FormattedPageDto@0x42": {
         "title": "FormattedPageDto",
         "type": "object",
         "properties": {
@@ -16274,7 +16341,7 @@
           "chunks": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/Reader_Array<string>@0x3a"
+                "$ref": "#/components/schemas/Reader_Array<string>@0x3b"
               }
             ]
           },
@@ -16306,14 +16373,14 @@
               {
                 "allOf": [
                   {
-                    "$ref": "#/components/schemas/Reader_Record<string|symbol, string>@0x3b"
+                    "$ref": "#/components/schemas/Reader_Record<string|symbol, string>@0x3c"
                   }
                 ]
               },
               {
                 "allOf": [
                   {
-                    "$ref": "#/components/schemas/Reader_Array<string>@0x3c"
+                    "$ref": "#/components/schemas/Reader_Array<string>@0x3d"
                   }
                 ]
               }
@@ -16328,14 +16395,14 @@
               {
                 "allOf": [
                   {
-                    "$ref": "#/components/schemas/Reader_Record<string|symbol, string>@0x3d"
+                    "$ref": "#/components/schemas/Reader_Record<string|symbol, string>@0x3e"
                   }
                 ]
               },
               {
                 "allOf": [
                   {
-                    "$ref": "#/components/schemas/Reader_Array<string>@0x3e"
+                    "$ref": "#/components/schemas/Reader_Array<string>@0x3f"
                   }
                 ]
               }
@@ -16353,7 +16420,7 @@
               {
                 "allOf": [
                   {
-                    "$ref": "#/components/schemas/Reader_Record<string|symbol, string>@0x3f"
+                    "$ref": "#/components/schemas/Reader_Record<string|symbol, string>@0x40"
                   }
                 ]
               }
@@ -16368,7 +16435,7 @@
               {
                 "allOf": [
                   {
-                    "$ref": "#/components/schemas/Reader_Record<string|symbol, Record<string|symbol, Record<string|symbol, string|object>@0x08|object>@0x09|object>@0x40"
+                    "$ref": "#/components/schemas/Reader_Record<string|symbol, Record<string|symbol, Record<string|symbol, string|object>@0x08|object>@0x09|object>@0x41"
                   }
                 ]
               }
@@ -16389,14 +16456,14 @@
           "url"
         ]
       },
-      "Reader_Array<string>@0x3a": {
+      "Reader_Array<string>@0x3b": {
         "title": "Array<string>",
         "type": "array",
         "items": {
           "type": "string"
         }
       },
-      "Reader_Record<string|symbol, string>@0x3b": {
+      "Reader_Record<string|symbol, string>@0x3c": {
         "title": "Record<string|symbol, string>",
         "type": "object",
         "properties": {},
@@ -16404,14 +16471,14 @@
           "type": "string"
         }
       },
-      "Reader_Array<string>@0x3c": {
+      "Reader_Array<string>@0x3d": {
         "title": "Array<string>",
         "type": "array",
         "items": {
           "type": "string"
         }
       },
-      "Reader_Record<string|symbol, string>@0x3d": {
+      "Reader_Record<string|symbol, string>@0x3e": {
         "title": "Record<string|symbol, string>",
         "type": "object",
         "properties": {},
@@ -16419,14 +16486,14 @@
           "type": "string"
         }
       },
-      "Reader_Array<string>@0x3e": {
+      "Reader_Array<string>@0x3f": {
         "title": "Array<string>",
         "type": "array",
         "items": {
           "type": "string"
         }
       },
-      "Reader_Record<string|symbol, string>@0x3f": {
+      "Reader_Record<string|symbol, string>@0x40": {
         "title": "Record<string|symbol, string>",
         "type": "object",
         "properties": {},
@@ -16434,7 +16501,7 @@
           "type": "string"
         }
       },
-      "Reader_Record<string|symbol, Record<string|symbol, Record<string|symbol, string|object>@0x08|object>@0x09|object>@0x40": {
+      "Reader_Record<string|symbol, Record<string|symbol, Record<string|symbol, string|object>@0x08|object>@0x09|object>@0x41": {
         "title": "Record<string|symbol, Record<string|symbol, Record<string|symbol, string|object>@0x08|object>@0x09|object>",
         "type": "object",
         "properties": {},
@@ -16490,12 +16557,12 @@
           ]
         }
       },
-      "Reader_OutputServerEventStream@0x42": {
+      "Reader_OutputServerEventStream@0x43": {
         "type": "string",
         "format": "binary",
         "description": "Binary data (stream)"
       },
-      "Reader_ResourceNotFoundError@0x43": {
+      "Reader_ResourceNotFoundError@0x44": {
         "title": "ResourceNotFoundError",
         "type": "object",
         "properties": {
@@ -16532,7 +16599,7 @@
       "Search_JinaEmbeddingsAuthDTO@0x0c": {
         "title": "JinaEmbeddingsAuthDTO"
       },
-      "Search_CrawlerOptions@0x27": {
+      "Search_CrawlerOptions@0x28": {
         "title": "CrawlerOptions",
         "type": "object",
         "properties": {
@@ -16598,16 +16665,20 @@
             "description": "Base64-encoded file (PDF, DOC, XLS, PPT, ...) to convert instead of a URL."
           },
           "page": {
-            "type": "number",
-            "summary": "Steer which page to return for document files (1-indexed).",
-            "description": "Steer which page to return for document files (1-indexed).\n\n- Some validators will be applied on value(s): (v) =&gt; Number.isInteger(v) &amp;&amp; v &gt;= 1"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Search_PageSelection@0x10"
+              }
+            ],
+            "summary": "Steer which page(s) to return for document files. See PageSelection.",
+            "description": "Steer which page(s) to return for document files. See PageSelection."
           },
           "respondWith": {
             "oneOf": [
               {
                 "allOf": [
                   {
-                    "$ref": "#/components/schemas/Search_enum@0x10"
+                    "$ref": "#/components/schemas/Search_enum@0x11"
                   }
                 ]
               },
@@ -16621,7 +16692,7 @@
           "withGeneratedAlt": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/Search_PseudoBoolean@0x11"
+                "$ref": "#/components/schemas/Search_PseudoBoolean@0x12"
               }
             ],
             "description": "Enable automatic alt-text generating for images without an meaningful alt-text.\n\nNote: Does not work when `X-Respond-With` is specified"
@@ -16629,7 +16700,7 @@
           "retainImages": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/Search_enum@0x12"
+                "$ref": "#/components/schemas/Search_enum@0x13"
               }
             ],
             "default": "all",
@@ -16638,7 +16709,7 @@
           "retainMedia": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/Search_enum@0x13"
+                "$ref": "#/components/schemas/Search_enum@0x14"
               }
             ],
             "default": "link",
@@ -16647,7 +16718,7 @@
           "preset": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/Search_enum@0x14"
+                "$ref": "#/components/schemas/Search_enum@0x15"
               }
             ],
             "description": "Apply a preset configuration for common scenarios.\n\nSupported presets:\n- reader: optimized for display to human users\n- index: optimized for semantic indexing\n- research: optimized for academic/research AI agents\n- agent: optimized for day-to-day AI agents\n- spider: optimized for recursive site crawling\n\nPreset values are applied only to options not explicitly set by the caller."
@@ -16655,7 +16726,7 @@
           "retainLinks": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/Search_enum@0x15"
+                "$ref": "#/components/schemas/Search_enum@0x16"
               }
             ],
             "default": "all",
@@ -16666,7 +16737,7 @@
               {
                 "allOf": [
                   {
-                    "$ref": "#/components/schemas/Search_PseudoBoolean@0x11"
+                    "$ref": "#/components/schemas/Search_PseudoBoolean@0x12"
                   }
                 ]
               },
@@ -16713,7 +16784,7 @@
               {
                 "allOf": [
                   {
-                    "$ref": "#/components/schemas/Search_PseudoBoolean@0x11"
+                    "$ref": "#/components/schemas/Search_PseudoBoolean@0x12"
                   }
                 ]
               },
@@ -16761,7 +16832,7 @@
               {
                 "allOf": [
                   {
-                    "$ref": "#/components/schemas/Search_PseudoBoolean@0x11"
+                    "$ref": "#/components/schemas/Search_PseudoBoolean@0x12"
                   }
                 ]
               },
@@ -16805,7 +16876,7 @@
           "storageState": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/Search_StorageState@0x1a"
+                "$ref": "#/components/schemas/Search_StorageState@0x1b"
               }
             ]
           },
@@ -16842,7 +16913,7 @@
               {
                 "allOf": [
                   {
-                    "$ref": "#/components/schemas/Search_enum@0x1b"
+                    "$ref": "#/components/schemas/Search_enum@0x1c"
                   }
                 ]
               },
@@ -16889,7 +16960,7 @@
           "viewport": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/Search_Viewport@0x1c"
+                "$ref": "#/components/schemas/Search_Viewport@0x1d"
               }
             ]
           },
@@ -16914,21 +16985,21 @@
           "markdown": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/Search_TurnDownTweakableOptions@0x23"
+                "$ref": "#/components/schemas/Search_TurnDownTweakableOptions@0x24"
               }
             ]
           },
           "ocr": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/Search_OCRPreferences@0x24"
+                "$ref": "#/components/schemas/Search_OCRPreferences@0x25"
               }
             ]
           },
           "respondTiming": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/Search_enum@0x25"
+                "$ref": "#/components/schemas/Search_enum@0x26"
               }
             ],
             "description": "Explicitly specify the respond timing. One of the following:\n\n- html: directly return unrendered HTML\n- visible-content: return immediately when any content becomes available\n- mutation-idle: wait for DOM mutations to settle and remain unchanged for at least 0.2s\n- resource-idle: wait for no additional resources that would affect page logic and content has SUCCEEDED loading in 0.5s\n- media-idle: wait for no additional resources, including media resources, has SUCCEEDED loading in 0.5s\n- network-idle: wait for full load of webpage, also known as networkidle0."
@@ -16938,7 +17009,7 @@
               {
                 "allOf": [
                   {
-                    "$ref": "#/components/schemas/Search_enum@0x26"
+                    "$ref": "#/components/schemas/Search_enum@0x27"
                   }
                 ]
               },
@@ -16999,7 +17070,42 @@
         "type": "string",
         "format": "binary"
       },
-      "Search_enum@0x10": {
+      "Search_PageSelection@0x10": {
+        "title": "PageSelection",
+        "anyOf": [
+          {
+            "type": "integer",
+            "minimum": 0
+          },
+          {
+            "type": "string",
+            "format": "page-selection"
+          },
+          {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                {
+                  "type": "string",
+                  "format": "page-selection"
+                }
+              ]
+            }
+          }
+        ],
+        "description": "Selection of document pages (1-indexed, 0 is the same as 1).\n\nAccepts a page number, a list and/or ranges like `1,3,5-7`.\n\nAt most 35 pages can be selected.",
+        "examples": [
+          3,
+          "0",
+          "1,3,5",
+          "1-3,4-6"
+        ]
+      },
+      "Search_enum@0x11": {
         "type": "string",
         "enum": [
           "content",
@@ -17020,7 +17126,7 @@
         ],
         "description": "Enum<\"content\" | \"markdown\" | \"html\" | \"text\" | \"pageshot\" | \"screenshot\" | \"vlm\" | \"readerlm-v2\" | \"frontmatter\" | \"readability\" | \"...>"
       },
-      "Search_PseudoBoolean@0x11": {
+      "Search_PseudoBoolean@0x12": {
         "title": "PseudoBoolean",
         "anyOf": [
           {
@@ -17058,7 +17164,7 @@
           "disabled"
         ]
       },
-      "Search_enum@0x12": {
+      "Search_enum@0x13": {
         "type": "string",
         "enum": [
           "none",
@@ -17069,7 +17175,7 @@
         ],
         "description": "Enum<\"none\" | \"all\" | \"alt\" | \"all_p\" | \"alt_p\">"
       },
-      "Search_enum@0x13": {
+      "Search_enum@0x14": {
         "type": "string",
         "enum": [
           "none",
@@ -17080,7 +17186,7 @@
         ],
         "description": "Enum<\"none\" | \"text\" | \"link\" | \"image\" | \"html\">"
       },
-      "Search_enum@0x14": {
+      "Search_enum@0x15": {
         "type": "string",
         "enum": [
           "reader",
@@ -17097,7 +17203,7 @@
         ],
         "description": "Enum<\"reader\" | \"index\" | \"research\" | \"agent\" | \"spider\" | \"ocr\" | \"ocr+\" | \"ocr++\" | \"pdf\" | \"pdf+\" | \"pdf++\">"
       },
-      "Search_enum@0x15": {
+      "Search_enum@0x16": {
         "type": "string",
         "enum": [
           "none",
@@ -17107,7 +17213,7 @@
         ],
         "description": "Enum<\"none\" | \"all\" | \"text\" | \"gpt-oss\">"
       },
-      "Search_StorageState@0x1a": {
+      "Search_StorageState@0x1b": {
         "title": "StorageState",
         "type": "object",
         "properties": {
@@ -17116,7 +17222,7 @@
             "items": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Search_Cookie@0x17"
+                  "$ref": "#/components/schemas/Search_Cookie@0x18"
                 }
               ]
             },
@@ -17127,7 +17233,7 @@
             "items": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Search_LocalStorageOrigin@0x19"
+                  "$ref": "#/components/schemas/Search_LocalStorageOrigin@0x1a"
                 }
               ]
             },
@@ -17135,7 +17241,7 @@
           }
         }
       },
-      "Search_Cookie@0x17": {
+      "Search_Cookie@0x18": {
         "title": "Cookie",
         "type": "object",
         "properties": {
@@ -17169,7 +17275,7 @@
               {
                 "allOf": [
                   {
-                    "$ref": "#/components/schemas/Search_enum@0x16"
+                    "$ref": "#/components/schemas/Search_enum@0x17"
                   }
                 ]
               },
@@ -17184,7 +17290,7 @@
           "value"
         ]
       },
-      "Search_enum@0x16": {
+      "Search_enum@0x17": {
         "type": "string",
         "enum": [
           "Strict",
@@ -17193,7 +17299,7 @@
         ],
         "description": "Enum<\"Strict\" | \"Lax\" | \"None\">"
       },
-      "Search_LocalStorageOrigin@0x19": {
+      "Search_LocalStorageOrigin@0x1a": {
         "title": "LocalStorageOrigin",
         "type": "object",
         "properties": {
@@ -17206,7 +17312,7 @@
             "items": {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/Search_LocalStorageItem@0x18"
+                  "$ref": "#/components/schemas/Search_LocalStorageItem@0x19"
                 }
               ]
             },
@@ -17217,7 +17323,7 @@
           "origin"
         ]
       },
-      "Search_LocalStorageItem@0x18": {
+      "Search_LocalStorageItem@0x19": {
         "title": "LocalStorageItem",
         "type": "object",
         "properties": {
@@ -17235,7 +17341,7 @@
           "value"
         ]
       },
-      "Search_enum@0x1b": {
+      "Search_enum@0x1c": {
         "type": "string",
         "enum": [
           "auto",
@@ -17245,7 +17351,7 @@
         ],
         "description": "Enum<\"auto\" | \"browser\" | \"curl\" | \"cf-browser-rendering\">"
       },
-      "Search_Viewport@0x1c": {
+      "Search_Viewport@0x1d": {
         "title": "Viewport",
         "type": "object",
         "properties": {
@@ -17271,14 +17377,14 @@
           }
         }
       },
-      "Search_TurnDownTweakableOptions@0x23": {
+      "Search_TurnDownTweakableOptions@0x24": {
         "title": "TurnDownTweakableOptions",
         "type": "object",
         "properties": {
           "headingStyle": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/Search_enum@0x1d"
+                "$ref": "#/components/schemas/Search_enum@0x1e"
               }
             ],
             "summary": "Turndown options > headingStyle",
@@ -17292,7 +17398,7 @@
           "bulletListMarker": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/Search_enum@0x1e"
+                "$ref": "#/components/schemas/Search_enum@0x1f"
               }
             ],
             "summary": "Turndown options > bulletListMarker",
@@ -17301,7 +17407,7 @@
           "emDelimiter": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/Search_enum@0x1f"
+                "$ref": "#/components/schemas/Search_enum@0x20"
               }
             ],
             "summary": "Turndown options > emDelimiter",
@@ -17310,7 +17416,7 @@
           "strongDelimiter": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/Search_enum@0x20"
+                "$ref": "#/components/schemas/Search_enum@0x21"
               }
             ],
             "summary": "Turndown options > strongDelimiter",
@@ -17319,7 +17425,7 @@
           "linkStyle": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/Search_enum@0x21"
+                "$ref": "#/components/schemas/Search_enum@0x22"
               }
             ],
             "summary": "Turndown options > linkStyle",
@@ -17328,7 +17434,7 @@
           "linkReferenceStyle": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/Search_enum@0x22"
+                "$ref": "#/components/schemas/Search_enum@0x23"
               }
             ],
             "summary": "Turndown options > linkReferenceStyle",
@@ -17336,7 +17442,7 @@
           }
         }
       },
-      "Search_enum@0x1d": {
+      "Search_enum@0x1e": {
         "type": "string",
         "enum": [
           "setext",
@@ -17344,7 +17450,7 @@
         ],
         "description": "Enum<\"setext\" | \"atx\">"
       },
-      "Search_enum@0x1e": {
+      "Search_enum@0x1f": {
         "type": "string",
         "enum": [
           "-",
@@ -17353,7 +17459,7 @@
         ],
         "description": "Enum<\"-\" | \"+\" | \"*\">"
       },
-      "Search_enum@0x1f": {
+      "Search_enum@0x20": {
         "type": "string",
         "enum": [
           "_",
@@ -17361,7 +17467,7 @@
         ],
         "description": "Enum<\"_\" | \"*\">"
       },
-      "Search_enum@0x20": {
+      "Search_enum@0x21": {
         "type": "string",
         "enum": [
           "__",
@@ -17369,7 +17475,7 @@
         ],
         "description": "Enum<\"__\" | \"**\">"
       },
-      "Search_enum@0x21": {
+      "Search_enum@0x22": {
         "type": "string",
         "enum": [
           "inlined",
@@ -17378,7 +17484,7 @@
         ],
         "description": "Enum<\"inlined\" | \"referenced\" | \"discarded\">"
       },
-      "Search_enum@0x22": {
+      "Search_enum@0x23": {
         "type": "string",
         "enum": [
           "full",
@@ -17388,7 +17494,7 @@
         ],
         "description": "Enum<\"full\" | \"collapsed\" | \"shortcut\" | \"discarded\">"
       },
-      "Search_OCRPreferences@0x24": {
+      "Search_OCRPreferences@0x25": {
         "title": "OCRPreferences",
         "type": "object",
         "properties": {
@@ -17421,7 +17527,7 @@
           }
         }
       },
-      "Search_enum@0x25": {
+      "Search_enum@0x26": {
         "type": "string",
         "enum": [
           "html",
@@ -17433,7 +17539,7 @@
         ],
         "description": "Enum<\"html\" | \"visible-content\" | \"mutation-idle\" | \"resource-idle\" | \"media-idle\" | \"network-idle\">"
       },
-      "Search_enum@0x26": {
+      "Search_enum@0x27": {
         "type": "string",
         "enum": [
           "true",
@@ -17451,7 +17557,7 @@
         ],
         "description": "Enum<\"true\" | \"h1\" | \"h2\" | \"h3\" | \"h4\" | \"h5\" | \"structured\" | \"s1\" | \"s2\" | \"s3\" | \"s4\" | \"s5\">"
       },
-      "Search_GoogleSearchExplicitOperatorsDto@0x28": {
+      "Search_GoogleSearchExplicitOperatorsDto@0x29": {
         "title": "GoogleSearchExplicitOperatorsDto",
         "type": "object",
         "properties": {
@@ -17497,7 +17603,7 @@
           }
         }
       },
-      "Search_enum@0x29": {
+      "Search_enum@0x2a": {
         "type": "string",
         "enum": [
           "web",
@@ -17505,15 +17611,6 @@
           "news"
         ],
         "description": "Enum<\"web\" | \"images\" | \"news\">"
-      },
-      "Search_enum@0x2a": {
-        "type": "string",
-        "enum": [
-          "google",
-          "bing",
-          "reader"
-        ],
-        "description": "Enum<\"google\" | \"bing\" | \"reader\">"
       },
       "Search_enum@0x2b": {
         "type": "string",
@@ -17524,7 +17621,16 @@
         ],
         "description": "Enum<\"google\" | \"bing\" | \"reader\">"
       },
-      "Search_Array<FormattedPageDto@0x0b>@0x33": {
+      "Search_enum@0x2c": {
+        "type": "string",
+        "enum": [
+          "google",
+          "bing",
+          "reader"
+        ],
+        "description": "Enum<\"google\" | \"bing\" | \"reader\">"
+      },
+      "Search_Array<FormattedPageDto@0x0b>@0x34": {
         "title": "Array<FormattedPageDto@0x0b>",
         "type": "array",
         "items": {
@@ -17555,7 +17661,7 @@
           "chunks": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/Search_Array<string>@0x2c"
+                "$ref": "#/components/schemas/Search_Array<string>@0x2d"
               }
             ]
           },
@@ -17587,14 +17693,14 @@
               {
                 "allOf": [
                   {
-                    "$ref": "#/components/schemas/Search_Record<string|symbol, string>@0x2d"
+                    "$ref": "#/components/schemas/Search_Record<string|symbol, string>@0x2e"
                   }
                 ]
               },
               {
                 "allOf": [
                   {
-                    "$ref": "#/components/schemas/Search_Array<string>@0x2e"
+                    "$ref": "#/components/schemas/Search_Array<string>@0x2f"
                   }
                 ]
               }
@@ -17609,14 +17715,14 @@
               {
                 "allOf": [
                   {
-                    "$ref": "#/components/schemas/Search_Record<string|symbol, string>@0x2f"
+                    "$ref": "#/components/schemas/Search_Record<string|symbol, string>@0x30"
                   }
                 ]
               },
               {
                 "allOf": [
                   {
-                    "$ref": "#/components/schemas/Search_Array<string>@0x30"
+                    "$ref": "#/components/schemas/Search_Array<string>@0x31"
                   }
                 ]
               }
@@ -17634,7 +17740,7 @@
               {
                 "allOf": [
                   {
-                    "$ref": "#/components/schemas/Search_Record<string|symbol, string>@0x31"
+                    "$ref": "#/components/schemas/Search_Record<string|symbol, string>@0x32"
                   }
                 ]
               }
@@ -17649,7 +17755,7 @@
               {
                 "allOf": [
                   {
-                    "$ref": "#/components/schemas/Search_Record<string|symbol, Record<string|symbol, Record<string|symbol, string|object>@0x08|object>@0x09|object>@0x32"
+                    "$ref": "#/components/schemas/Search_Record<string|symbol, Record<string|symbol, Record<string|symbol, string|object>@0x08|object>@0x09|object>@0x33"
                   }
                 ]
               }
@@ -17670,14 +17776,14 @@
           "url"
         ]
       },
-      "Search_Array<string>@0x2c": {
+      "Search_Array<string>@0x2d": {
         "title": "Array<string>",
         "type": "array",
         "items": {
           "type": "string"
         }
       },
-      "Search_Record<string|symbol, string>@0x2d": {
+      "Search_Record<string|symbol, string>@0x2e": {
         "title": "Record<string|symbol, string>",
         "type": "object",
         "properties": {},
@@ -17685,14 +17791,14 @@
           "type": "string"
         }
       },
-      "Search_Array<string>@0x2e": {
+      "Search_Array<string>@0x2f": {
         "title": "Array<string>",
         "type": "array",
         "items": {
           "type": "string"
         }
       },
-      "Search_Record<string|symbol, string>@0x2f": {
+      "Search_Record<string|symbol, string>@0x30": {
         "title": "Record<string|symbol, string>",
         "type": "object",
         "properties": {},
@@ -17700,14 +17806,14 @@
           "type": "string"
         }
       },
-      "Search_Array<string>@0x30": {
+      "Search_Array<string>@0x31": {
         "title": "Array<string>",
         "type": "array",
         "items": {
           "type": "string"
         }
       },
-      "Search_Record<string|symbol, string>@0x31": {
+      "Search_Record<string|symbol, string>@0x32": {
         "title": "Record<string|symbol, string>",
         "type": "object",
         "properties": {},
@@ -17715,7 +17821,7 @@
           "type": "string"
         }
       },
-      "Search_Record<string|symbol, Record<string|symbol, Record<string|symbol, string|object>@0x08|object>@0x09|object>@0x32": {
+      "Search_Record<string|symbol, Record<string|symbol, Record<string|symbol, string|object>@0x08|object>@0x09|object>@0x33": {
         "title": "Record<string|symbol, Record<string|symbol, Record<string|symbol, string|object>@0x08|object>@0x09|object>",
         "type": "object",
         "properties": {},
@@ -17771,12 +17877,12 @@
           ]
         }
       },
-      "Search_OutputServerEventStream@0x34": {
+      "Search_OutputServerEventStream@0x35": {
         "type": "string",
         "format": "binary",
         "description": "Binary data (stream)"
       },
-      "Search_ParamValidationError@0x35": {
+      "Search_ParamValidationError@0x36": {
         "title": "ParamValidationError",
         "type": "object",
         "properties": {
@@ -17810,7 +17916,7 @@
           "message"
         ]
       },
-      "Search_AuthenticationFailedError@0x36": {
+      "Search_AuthenticationFailedError@0x37": {
         "title": "AuthenticationFailedError",
         "type": "object",
         "properties": {
@@ -17844,7 +17950,7 @@
           "message"
         ]
       },
-      "Search_AuthenticationRequiredError@0x37": {
+      "Search_AuthenticationRequiredError@0x38": {
         "title": "AuthenticationRequiredError",
         "type": "object",
         "properties": {
@@ -17878,7 +17984,7 @@
           "message"
         ]
       },
-      "Search_InsufficientBalanceError@0x38": {
+      "Search_InsufficientBalanceError@0x39": {
         "title": "InsufficientBalanceError",
         "type": "object",
         "properties": {
@@ -17912,7 +18018,7 @@
           "message"
         ]
       },
-      "Search_AbuseAlleviationError@0x39": {
+      "Search_AbuseAlleviationError@0x3a": {
         "title": "AbuseAlleviationError",
         "type": "object",
         "properties": {
@@ -17946,7 +18052,7 @@
           "message"
         ]
       },
-      "Search_AssertionFailureError@0x3a": {
+      "Search_AssertionFailureError@0x3b": {
         "title": "AssertionFailureError",
         "type": "object",
         "properties": {
@@ -17980,7 +18086,7 @@
           "message"
         ]
       },
-      "Search_RateLimitTriggeredError@0x3b": {
+      "Search_RateLimitTriggeredError@0x3c": {
         "title": "RateLimitTriggeredError",
         "type": "object",
         "properties": {
@@ -18025,7 +18131,7 @@
           "message"
         ]
       },
-      "Search_DownstreamServiceError@0x3c": {
+      "Search_DownstreamServiceError@0x3d": {
         "title": "DownstreamServiceError",
         "type": "object",
         "properties": {
@@ -18059,7 +18165,7 @@
           "message"
         ]
       },
-      "Search_ServiceBadAttemptError@0x3d": {
+      "Search_ServiceBadAttemptError@0x3e": {
         "title": "ServiceBadAttemptError",
         "type": "object",
         "properties": {
@@ -18093,7 +18199,7 @@
           "message"
         ]
       },
-      "Search_Array<FormattedPageDto@0x0b>@0x3e": {
+      "Search_Array<FormattedPageDto@0x0b>@0x3f": {
         "title": "Array<FormattedPageDto@0x0b>",
         "type": "array",
         "items": {
