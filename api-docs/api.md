@@ -562,7 +562,7 @@ Parameters:
 - `base` (query, "initial" | "final", default "initial"): Select base modes of relative URLs. Supported: initial, final
 - `pdf` (query, string): Base64 encoded PDF.
 - `file` (query, string): Base64-encoded file (PDF, DOC, XLS, PPT, ...) to convert instead of a URL.
-- `page` (query, number): Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.). 1-indexed, 0 is the same as 1. Accepts a page number, a list and/or ranges like `1,3,5-7`. At most 35 pages can be selected. With multiple pages, DocLayout / OCR runs over each selected page. Ignored when the target is not a document.
+- `page` (query, number): Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.). 1-indexed; ignored when no file/PDF is uploaded.
 - `respondWith` (query, "content" | "markdown" | "html" | "text" | "pageshot" | "screenshot" | "vlm" | "readerlm-v2" | "frontmatter" | "readability" | "jina-ocr-v1" | "jina-ocr" | ... (15 values) | string, default "content"): Specifies the (non-default) form of the crawled data you prefer. Supported formats: - markdown - html - text - pageshot - screenshot - content - frontmatter - any combination of the above - vlm - jina-ocr-v1 - jina-ocr - readerlm-v2 Default: content
 - `withGeneratedAlt` (query, boolean | string): Enable automatic alt-text generating for images without an meaningful alt-text. Note: Does not work when `X-Respond-With` is specified
 - `retainImages` (query, "none" | "all" | "alt" | "all_p" | "alt_p", default "all"): Image retention modes. Supported modes: - all: all images - none: no images - alt: only alt text - all_p: all images and with generated alt text - alt_p: only alt text and with generated alt
@@ -664,7 +664,7 @@ Parameters:
 - `X-Md-Strong-Delimiter` (header, string): Strong delimiter of the generated markdown. This is an option passed through to [Turndown](https://github.com/mixmark-io/turndown?tab=readme-ov-file#options). Supported: **, __
 - `X-Md-Link-Style` (header, string): Link style of the generated markdown. This is an option passed through to [Turndown](https://github.com/mixmark-io/turndown?tab=readme-ov-file#options). Supported: inlined, referenced, discarded
 - `X-Md-Link-Reference-Style` (header, string): Link reference style of the generated markdown. This is an option passed through to [Turndown](https://github.com/mixmark-io/turndown?tab=readme-ov-file#options). Supported: full, collapsed, shortcut, discarded
-- `X-Page` (header, string): Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.). 1-indexed, 0 is the same as 1. Accepts a page number, a list and/or ranges like `1,3,5-7`. At most 35 pages can be selected. With multiple pages, DocLayout / OCR runs over each selected page. Ignored when the target is not a document.
+- `X-Page` (header, string): Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.). 1-indexed; ignored when no file/PDF is uploaded.
 - `X-Preload-Url` (header, string): URL to preload before scraping. Ignored when no URL is provided.
 - `X-No-Service-Worker` (header, string): Disable service workers when running the browser. Useful for bypassing service-worker-based caching or interception.
 
@@ -695,7 +695,7 @@ Parameters:
 - `base` (query, "initial" | "final", default "initial"): Select base modes of relative URLs. Supported: initial, final
 - `pdf` (query, string): Base64 encoded PDF.
 - `file` (query, string): Base64-encoded file (PDF, DOC, XLS, PPT, ...) to convert instead of a URL.
-- `page` (query, number): Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.). 1-indexed, 0 is the same as 1. Accepts a page number, a list and/or ranges like `1,3,5-7`. At most 35 pages can be selected. With multiple pages, DocLayout / OCR runs over each selected page. Ignored when the target is not a document.
+- `page` (query, number): Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.). 1-indexed; ignored when no file/PDF is uploaded.
 - `respondWith` (query, "content" | "markdown" | "html" | "text" | "pageshot" | "screenshot" | "vlm" | "readerlm-v2" | "frontmatter" | "readability" | "jina-ocr-v1" | "jina-ocr" | ... (15 values) | string, default "content"): Specifies the (non-default) form of the crawled data you prefer. Supported formats: - markdown - html - text - pageshot - screenshot - content - frontmatter - any combination of the above - vlm - jina-ocr-v1 - jina-ocr - readerlm-v2 Default: content
 - `withGeneratedAlt` (query, boolean | string): Enable automatic alt-text generating for images without an meaningful alt-text. Note: Does not work when `X-Respond-With` is specified
 - `retainImages` (query, "none" | "all" | "alt" | "all_p" | "alt_p", default "all"): Image retention modes. Supported modes: - all: all images - none: no images - alt: only alt text - all_p: all images and with generated alt text - alt_p: only alt text and with generated alt
@@ -797,7 +797,7 @@ Parameters:
 - `X-Md-Strong-Delimiter` (header, string): Strong delimiter of the generated markdown. This is an option passed through to [Turndown](https://github.com/mixmark-io/turndown?tab=readme-ov-file#options). Supported: **, __
 - `X-Md-Link-Style` (header, string): Link style of the generated markdown. This is an option passed through to [Turndown](https://github.com/mixmark-io/turndown?tab=readme-ov-file#options). Supported: inlined, referenced, discarded
 - `X-Md-Link-Reference-Style` (header, string): Link reference style of the generated markdown. This is an option passed through to [Turndown](https://github.com/mixmark-io/turndown?tab=readme-ov-file#options). Supported: full, collapsed, shortcut, discarded
-- `X-Page` (header, string): Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.). 1-indexed, 0 is the same as 1. Accepts a page number, a list and/or ranges like `1,3,5-7`. At most 35 pages can be selected. With multiple pages, DocLayout / OCR runs over each selected page. Ignored when the target is not a document.
+- `X-Page` (header, string): Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.). 1-indexed; ignored when no file/PDF is uploaded.
 - `X-Preload-Url` (header, string): URL to preload before scraping. Ignored when no URL is provided.
 - `X-No-Service-Worker` (header, string): Disable service workers when running the browser. Useful for bypassing service-worker-based caching or interception.
 
@@ -809,7 +809,7 @@ Request body (`application/json`):
 - `base` ("initial" | "final", default "initial"): Select base modes of relative URLs. Supported: initial, final
 - `pdf` (string): Base64 encoded PDF.
 - `file` (string): Base64-encoded file (PDF, DOC, XLS, PPT, ...) to convert instead of a URL.
-- `page` (number): Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.). 1-indexed, 0 is the same as 1. Accepts a page number, a list and/or ranges like `1,3,5-7`. At most 35 pages can be selected. With multiple pages, DocLayout / OCR runs over each selected page. Ignored when the target is not a document.
+- `page` (number): Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.). 1-indexed; ignored when no file/PDF is uploaded.
 - `respondWith` ("content" | "markdown" | "html" | "text" | "pageshot" | "screenshot" | "vlm" | "readerlm-v2" | "frontmatter" | "readability" | "jina-ocr-v1" | "jina-ocr" | ... (15 values) | string, default "content"): Specifies the (non-default) form of the crawled data you prefer. Supported formats: - markdown - html - text - pageshot - screenshot - content - frontmatter - any combination of the above - vlm - jina-ocr-v1 - jina-ocr - readerlm-v2 Default: content
 - `withGeneratedAlt` (boolean | string): Enable automatic alt-text generating for images without an meaningful alt-text. Note: Does not work when `X-Respond-With` is specified
 - `retainImages` ("none" | "all" | "alt" | "all_p" | "alt_p", default "all"): Image retention modes. Supported modes: - all: all images - none: no images - alt: only alt text - all_p: all images and with generated alt text - alt_p: only alt text and with generated alt
