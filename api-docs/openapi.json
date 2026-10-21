@@ -6320,6 +6320,690 @@
         }
       ]
     },
+    "/echo/{rest}": {
+      "get": {
+        "tags": [
+          "Reader"
+        ],
+        "parameters": [
+          {
+            "name": "rest",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "ReaderEnvelopeWrappedObject",
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number",
+                      "summary": "Envelope code.\n\nMirror of HTTP status code",
+                      "description": "[REQUIRED]\n\nEnvelope code.\n\nMirror of HTTP status code",
+                      "default": 200
+                    },
+                    "status": {
+                      "type": "number",
+                      "summary": "Envelope status.\n\nIn extension to HTTP status code",
+                      "description": "[REQUIRED]\n\nEnvelope status.\n\nIn extension to HTTP status code",
+                      "default": 20000
+                    },
+                    "data": {
+                      "description": "The result payload you expect",
+                      "nullable": true,
+                      "summary": "The result payload you expect"
+                    },
+                    "meta": {
+                      "description": "The metadata that the payload sometimes came with",
+                      "nullable": true,
+                      "summary": "The metadata that the payload sometimes came with"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "status"
+                  ],
+                  "primitive": true
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "summary": "echo",
+        "description": "Echo back the details of the incoming HTTP request, with the Cloudflare-reported country of the client IP.",
+        "operationId": "reader_get_echo_rest"
+      },
+      "post": {
+        "tags": [
+          "Reader"
+        ],
+        "parameters": [
+          {
+            "name": "rest",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": []
+              }
+            },
+            "multipart/form-data": {
+              "schema": {
+                "allOf": []
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "ReaderEnvelopeWrappedObject",
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number",
+                      "summary": "Envelope code.\n\nMirror of HTTP status code",
+                      "description": "[REQUIRED]\n\nEnvelope code.\n\nMirror of HTTP status code",
+                      "default": 200
+                    },
+                    "status": {
+                      "type": "number",
+                      "summary": "Envelope status.\n\nIn extension to HTTP status code",
+                      "description": "[REQUIRED]\n\nEnvelope status.\n\nIn extension to HTTP status code",
+                      "default": 20000
+                    },
+                    "data": {
+                      "description": "The result payload you expect",
+                      "nullable": true,
+                      "summary": "The result payload you expect"
+                    },
+                    "meta": {
+                      "description": "The metadata that the payload sometimes came with",
+                      "nullable": true,
+                      "summary": "The metadata that the payload sometimes came with"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "status"
+                  ],
+                  "primitive": true
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "summary": "echo",
+        "description": "Echo back the details of the incoming HTTP request, with the Cloudflare-reported country of the client IP.",
+        "operationId": "reader_post_echo_rest"
+      },
+      "put": {
+        "tags": [
+          "Reader"
+        ],
+        "parameters": [
+          {
+            "name": "rest",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": []
+              }
+            },
+            "multipart/form-data": {
+              "schema": {
+                "allOf": []
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "ReaderEnvelopeWrappedObject",
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number",
+                      "summary": "Envelope code.\n\nMirror of HTTP status code",
+                      "description": "[REQUIRED]\n\nEnvelope code.\n\nMirror of HTTP status code",
+                      "default": 200
+                    },
+                    "status": {
+                      "type": "number",
+                      "summary": "Envelope status.\n\nIn extension to HTTP status code",
+                      "description": "[REQUIRED]\n\nEnvelope status.\n\nIn extension to HTTP status code",
+                      "default": 20000
+                    },
+                    "data": {
+                      "description": "The result payload you expect",
+                      "nullable": true,
+                      "summary": "The result payload you expect"
+                    },
+                    "meta": {
+                      "description": "The metadata that the payload sometimes came with",
+                      "nullable": true,
+                      "summary": "The metadata that the payload sometimes came with"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "status"
+                  ],
+                  "primitive": true
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "summary": "echo",
+        "description": "Echo back the details of the incoming HTTP request, with the Cloudflare-reported country of the client IP.",
+        "operationId": "reader_put_echo_rest"
+      },
+      "patch": {
+        "tags": [
+          "Reader"
+        ],
+        "parameters": [
+          {
+            "name": "rest",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": []
+              }
+            },
+            "multipart/form-data": {
+              "schema": {
+                "allOf": []
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "ReaderEnvelopeWrappedObject",
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number",
+                      "summary": "Envelope code.\n\nMirror of HTTP status code",
+                      "description": "[REQUIRED]\n\nEnvelope code.\n\nMirror of HTTP status code",
+                      "default": 200
+                    },
+                    "status": {
+                      "type": "number",
+                      "summary": "Envelope status.\n\nIn extension to HTTP status code",
+                      "description": "[REQUIRED]\n\nEnvelope status.\n\nIn extension to HTTP status code",
+                      "default": 20000
+                    },
+                    "data": {
+                      "description": "The result payload you expect",
+                      "nullable": true,
+                      "summary": "The result payload you expect"
+                    },
+                    "meta": {
+                      "description": "The metadata that the payload sometimes came with",
+                      "nullable": true,
+                      "summary": "The metadata that the payload sometimes came with"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "status"
+                  ],
+                  "primitive": true
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "summary": "echo",
+        "description": "Echo back the details of the incoming HTTP request, with the Cloudflare-reported country of the client IP.",
+        "operationId": "reader_patch_echo_rest"
+      },
+      "delete": {
+        "tags": [
+          "Reader"
+        ],
+        "parameters": [
+          {
+            "name": "rest",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "ReaderEnvelopeWrappedObject",
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number",
+                      "summary": "Envelope code.\n\nMirror of HTTP status code",
+                      "description": "[REQUIRED]\n\nEnvelope code.\n\nMirror of HTTP status code",
+                      "default": 200
+                    },
+                    "status": {
+                      "type": "number",
+                      "summary": "Envelope status.\n\nIn extension to HTTP status code",
+                      "description": "[REQUIRED]\n\nEnvelope status.\n\nIn extension to HTTP status code",
+                      "default": 20000
+                    },
+                    "data": {
+                      "description": "The result payload you expect",
+                      "nullable": true,
+                      "summary": "The result payload you expect"
+                    },
+                    "meta": {
+                      "description": "The metadata that the payload sometimes came with",
+                      "nullable": true,
+                      "summary": "The metadata that the payload sometimes came with"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "status"
+                  ],
+                  "primitive": true
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "summary": "echo",
+        "description": "Echo back the details of the incoming HTTP request, with the Cloudflare-reported country of the client IP.",
+        "operationId": "reader_delete_echo_rest"
+      },
+      "servers": [
+        {
+          "url": "https://r.jina.ai"
+        }
+      ]
+    },
+    "/echo": {
+      "get": {
+        "tags": [
+          "Reader"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "ReaderEnvelopeWrappedObject",
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number",
+                      "summary": "Envelope code.\n\nMirror of HTTP status code",
+                      "description": "[REQUIRED]\n\nEnvelope code.\n\nMirror of HTTP status code",
+                      "default": 200
+                    },
+                    "status": {
+                      "type": "number",
+                      "summary": "Envelope status.\n\nIn extension to HTTP status code",
+                      "description": "[REQUIRED]\n\nEnvelope status.\n\nIn extension to HTTP status code",
+                      "default": 20000
+                    },
+                    "data": {
+                      "description": "The result payload you expect",
+                      "nullable": true,
+                      "summary": "The result payload you expect"
+                    },
+                    "meta": {
+                      "description": "The metadata that the payload sometimes came with",
+                      "nullable": true,
+                      "summary": "The metadata that the payload sometimes came with"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "status"
+                  ],
+                  "primitive": true
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "summary": "echoAtRoot",
+        "description": "Echo back the details of the incoming HTTP request, with the Cloudflare-reported country of the client IP.",
+        "operationId": "reader_get_echo"
+      },
+      "post": {
+        "tags": [
+          "Reader"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": []
+              }
+            },
+            "multipart/form-data": {
+              "schema": {
+                "allOf": []
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "ReaderEnvelopeWrappedObject",
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number",
+                      "summary": "Envelope code.\n\nMirror of HTTP status code",
+                      "description": "[REQUIRED]\n\nEnvelope code.\n\nMirror of HTTP status code",
+                      "default": 200
+                    },
+                    "status": {
+                      "type": "number",
+                      "summary": "Envelope status.\n\nIn extension to HTTP status code",
+                      "description": "[REQUIRED]\n\nEnvelope status.\n\nIn extension to HTTP status code",
+                      "default": 20000
+                    },
+                    "data": {
+                      "description": "The result payload you expect",
+                      "nullable": true,
+                      "summary": "The result payload you expect"
+                    },
+                    "meta": {
+                      "description": "The metadata that the payload sometimes came with",
+                      "nullable": true,
+                      "summary": "The metadata that the payload sometimes came with"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "status"
+                  ],
+                  "primitive": true
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "summary": "echoAtRoot",
+        "description": "Echo back the details of the incoming HTTP request, with the Cloudflare-reported country of the client IP.",
+        "operationId": "reader_post_echo"
+      },
+      "put": {
+        "tags": [
+          "Reader"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": []
+              }
+            },
+            "multipart/form-data": {
+              "schema": {
+                "allOf": []
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "ReaderEnvelopeWrappedObject",
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number",
+                      "summary": "Envelope code.\n\nMirror of HTTP status code",
+                      "description": "[REQUIRED]\n\nEnvelope code.\n\nMirror of HTTP status code",
+                      "default": 200
+                    },
+                    "status": {
+                      "type": "number",
+                      "summary": "Envelope status.\n\nIn extension to HTTP status code",
+                      "description": "[REQUIRED]\n\nEnvelope status.\n\nIn extension to HTTP status code",
+                      "default": 20000
+                    },
+                    "data": {
+                      "description": "The result payload you expect",
+                      "nullable": true,
+                      "summary": "The result payload you expect"
+                    },
+                    "meta": {
+                      "description": "The metadata that the payload sometimes came with",
+                      "nullable": true,
+                      "summary": "The metadata that the payload sometimes came with"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "status"
+                  ],
+                  "primitive": true
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "summary": "echoAtRoot",
+        "description": "Echo back the details of the incoming HTTP request, with the Cloudflare-reported country of the client IP.",
+        "operationId": "reader_put_echo"
+      },
+      "patch": {
+        "tags": [
+          "Reader"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": []
+              }
+            },
+            "multipart/form-data": {
+              "schema": {
+                "allOf": []
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "ReaderEnvelopeWrappedObject",
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number",
+                      "summary": "Envelope code.\n\nMirror of HTTP status code",
+                      "description": "[REQUIRED]\n\nEnvelope code.\n\nMirror of HTTP status code",
+                      "default": 200
+                    },
+                    "status": {
+                      "type": "number",
+                      "summary": "Envelope status.\n\nIn extension to HTTP status code",
+                      "description": "[REQUIRED]\n\nEnvelope status.\n\nIn extension to HTTP status code",
+                      "default": 20000
+                    },
+                    "data": {
+                      "description": "The result payload you expect",
+                      "nullable": true,
+                      "summary": "The result payload you expect"
+                    },
+                    "meta": {
+                      "description": "The metadata that the payload sometimes came with",
+                      "nullable": true,
+                      "summary": "The metadata that the payload sometimes came with"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "status"
+                  ],
+                  "primitive": true
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "summary": "echoAtRoot",
+        "description": "Echo back the details of the incoming HTTP request, with the Cloudflare-reported country of the client IP.",
+        "operationId": "reader_patch_echo"
+      },
+      "delete": {
+        "tags": [
+          "Reader"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "ReaderEnvelopeWrappedObject",
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number",
+                      "summary": "Envelope code.\n\nMirror of HTTP status code",
+                      "description": "[REQUIRED]\n\nEnvelope code.\n\nMirror of HTTP status code",
+                      "default": 200
+                    },
+                    "status": {
+                      "type": "number",
+                      "summary": "Envelope status.\n\nIn extension to HTTP status code",
+                      "description": "[REQUIRED]\n\nEnvelope status.\n\nIn extension to HTTP status code",
+                      "default": 20000
+                    },
+                    "data": {
+                      "description": "The result payload you expect",
+                      "nullable": true,
+                      "summary": "The result payload you expect"
+                    },
+                    "meta": {
+                      "description": "The metadata that the payload sometimes came with",
+                      "nullable": true,
+                      "summary": "The metadata that the payload sometimes came with"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "status"
+                  ],
+                  "primitive": true
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "summary": "echoAtRoot",
+        "description": "Echo back the details of the incoming HTTP request, with the Cloudflare-reported country of the client IP.",
+        "operationId": "reader_delete_echo"
+      },
+      "servers": [
+        {
+          "url": "https://r.jina.ai"
+        }
+      ]
+    },
     "/{q}": {
       "get": {
         "tags": [

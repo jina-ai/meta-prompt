@@ -415,6 +415,129 @@ Responses:
 - `500`: Internal Server Error
 - `503`: Service Unavailable
 
+#### GET https://r.jina.ai/echo/{rest}
+
+**echo**
+
+Echo back the details of the incoming HTTP request, with the Cloudflare-reported country of the client IP.
+
+Parameters:
+- `rest` (path, any, required)
+
+Responses:
+- `200`: OK
+
+#### PUT https://r.jina.ai/echo/{rest}
+
+**echo**
+
+Echo back the details of the incoming HTTP request, with the Cloudflare-reported country of the client IP.
+
+Parameters:
+- `rest` (path, any, required)
+
+Request body (`application/json`):
+- 
+
+Responses:
+- `200`: OK
+
+#### POST https://r.jina.ai/echo/{rest}
+
+**echo**
+
+Echo back the details of the incoming HTTP request, with the Cloudflare-reported country of the client IP.
+
+Parameters:
+- `rest` (path, any, required)
+
+Request body (`application/json`):
+- 
+
+Responses:
+- `200`: OK
+
+#### DELETE https://r.jina.ai/echo/{rest}
+
+**echo**
+
+Echo back the details of the incoming HTTP request, with the Cloudflare-reported country of the client IP.
+
+Parameters:
+- `rest` (path, any, required)
+
+Responses:
+- `200`: OK
+
+#### PATCH https://r.jina.ai/echo/{rest}
+
+**echo**
+
+Echo back the details of the incoming HTTP request, with the Cloudflare-reported country of the client IP.
+
+Parameters:
+- `rest` (path, any, required)
+
+Request body (`application/json`):
+- 
+
+Responses:
+- `200`: OK
+
+#### GET https://r.jina.ai/echo
+
+**echoAtRoot**
+
+Echo back the details of the incoming HTTP request, with the Cloudflare-reported country of the client IP.
+
+Responses:
+- `200`: OK
+
+#### PUT https://r.jina.ai/echo
+
+**echoAtRoot**
+
+Echo back the details of the incoming HTTP request, with the Cloudflare-reported country of the client IP.
+
+Request body (`application/json`):
+- 
+
+Responses:
+- `200`: OK
+
+#### POST https://r.jina.ai/echo
+
+**echoAtRoot**
+
+Echo back the details of the incoming HTTP request, with the Cloudflare-reported country of the client IP.
+
+Request body (`application/json`):
+- 
+
+Responses:
+- `200`: OK
+
+#### DELETE https://r.jina.ai/echo
+
+**echoAtRoot**
+
+Echo back the details of the incoming HTTP request, with the Cloudflare-reported country of the client IP.
+
+Responses:
+- `200`: OK
+
+#### PATCH https://r.jina.ai/echo
+
+**echoAtRoot**
+
+Echo back the details of the incoming HTTP request, with the Cloudflare-reported country of the client IP.
+
+Request body (`application/json`):
+- 
+
+Responses:
+- `200`: OK
+
 ## Search API (s.jina.ai)
 
 ### Search

@@ -2,7 +2,7 @@
 
 Visible operations only. Add the missing texts to `api-docs/overrides.mjs`; they survive every rebuild.
 
-28 of 464 parameters and body fields have no description.
+33 of 469 parameters and body fields have no description.
 
 ## POST r.jina.ai/
 
@@ -13,6 +13,26 @@ Visible operations only. Add the missing texts to `api-docs/overrides.mjs`; they
 
 - query `instruction`
 - query `zeroDataRetention`
+
+## GET r.jina.ai/echo/{rest}
+
+- path `rest`
+
+## PUT r.jina.ai/echo/{rest}
+
+- path `rest`
+
+## POST r.jina.ai/echo/{rest}
+
+- path `rest`
+
+## DELETE r.jina.ai/echo/{rest}
+
+- path `rest`
+
+## PATCH r.jina.ai/echo/{rest}
+
+- path `rest`
 
 ## GET s.jina.ai/{q}
 
