@@ -2,15 +2,17 @@
 
 Visible operations only. Add the missing texts to `api-docs/overrides.mjs`; they survive every rebuild.
 
-33 of 469 parameters and body fields have no description.
+35 of 471 parameters and body fields have no description.
 
 ## POST r.jina.ai/
 
+- query `webBotAuth`
 - query `instruction`
 - query `zeroDataRetention`
 
 ## GET r.jina.ai/{url}
 
+- query `webBotAuth`
 - query `instruction`
 - query `zeroDataRetention`
 
