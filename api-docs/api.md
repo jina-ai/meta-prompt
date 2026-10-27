@@ -583,7 +583,7 @@ Parameters:
 - `base` (query, "initial" | "final", default "initial"): Select base modes of relative URLs. Supported: initial, final
 - `pdf` (query, string): Base64 encoded PDF.
 - `file` (query, string): Base64-encoded file (PDF, DOC, XLS, PPT, ...) to convert instead of a URL.
-- `page` (query, number): Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.). 1-indexed, 0 is the same as 1. Accepts a page number, a list and/or ranges like `1,3,5-7`. At most 35 pages can be selected. With multiple pages, DocLayout / OCR runs over each selected page. Ignored when the target is not a document.
+- `page` (query, number): Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.). 1-indexed; ignored when no file/PDF is uploaded.
 - `respondWith` (query, "content" | "markdown" | "html" | "text" | "pageshot" | "screenshot" | "vlm" | "readerlm-v2" | "frontmatter" | "readability" | "jina-ocr-v1" | "jina-ocr" | ... (15 values) | string, default "content"): Specifies the (non-default) form of the crawled data you prefer. Supported formats: - markdown - html - text - pageshot - screenshot - content - frontmatter - any combination of the above - vlm - jina-ocr-v1 - jina-ocr - readerlm-v2 Default: content
 - `withGeneratedAlt` (query, boolean | string): Enable automatic alt-text generating for images without an meaningful alt-text. Note: Does not work when `X-Respond-With` is specified
 - `retainImages` (query, "none" | "all" | "alt" | "all_p" | "alt_p", default "all"): Image retention modes. Supported modes: - all: all images - none: no images - alt: only alt text - all_p: all images and with generated alt text - alt_p: only alt text and with generated alt
@@ -604,7 +604,6 @@ Parameters:
 - `withIframe` (query, boolean | string | string): Enable filling iframe contents into main. (violates standards)
 - `withShadowDom` (query, boolean | string): Enable filling shadow dom contents into main. (violates standards)
 - `skipCertVerification` (query, boolean | string): Enable skipping SSL certificate verification. (violates security best practices)
-- `webBotAuth` (query, boolean | string | "authority" | "target-uri")
 - `setCookies` (query, any | string): Cookies to send when fetching each result page, for pages that need a login. Requests with cookies are not cached.
 - `exportStorageState` (query, boolean | string): Export the browser storage state (cookies and per-origin localStorage) accumulated during the crawl. When enabled, the JSON response includes a `storageState` field whose shape mirrors the `storageState` request option, so it can be fed back into a subsequent request. Requires the browser engine and disables caching.
 - `proxyUrl` (query, string): Specifies your custom proxy if you prefer to use one. Supported protocols: - http - https - socks4 - socks5 For authentication, https://user:pass@host:port
@@ -621,7 +620,7 @@ Parameters:
 - `assertStatusCode` (query, number): Assert the HTTP status code of the crawled page. If the actual status code does not match the asserted one, the request is rejected with 422 Unprocessable Entity.
 - `instruction` (query, string)
 - `jsonSchema` (query, any): Can be any value - string, number, boolean, array or object.
-- `robotsTxt` (query, boolean | string | string): Load and conform to the respective robot.txt on the target origin. Optionally specify a bot UA to check against.
+- `robotsTxt` (query, string): Load and conform to the respective robot.txt on the target origin. Optionally specify a bot UA to check against.
 - `zeroDataRetention` (query, boolean | string)
 - `respondTiming` (query, "html" | "visible-content" | "mutation-idle" | "resource-idle" | "media-idle" | "network-idle"): Explicitly specify the respond timing. One of the following: - html: directly return unrendered HTML - visible-content: return immediately when any content becomes available - mutation-idle: wait for DOM mutations to settle and remain unchanged for at least 0.2s - resource-idle: wait for no additional resources that would affect page logic and content has SUCCEEDED loading in 0.5s - media-idle: wait for no additional resources, including media resources, has SUCCEEDED loading in 0.5s - network-idle: wait for full load of webpage, also known as networkidle0.
 - `markdownChunking` (query, "true" | "h1" | "h2" | "h3" | "h4" | "h5" | "structured" | "s1" | "s2" | "s3" | "s4" | "s5" | string): Opt-in markdown chunking. Supported values: - true - h1 - h2 - h3 - h4 - h5 - structured - s1 - s2 - s3 - s4 - s5 Note if you are expecting text return, the chunking is done by injecting character \u001D
@@ -686,7 +685,7 @@ Parameters:
 - `X-Md-Strong-Delimiter` (header, string): Strong delimiter of the generated markdown. This is an option passed through to [Turndown](https://github.com/mixmark-io/turndown?tab=readme-ov-file#options). Supported: **, __
 - `X-Md-Link-Style` (header, string): Link style of the generated markdown. This is an option passed through to [Turndown](https://github.com/mixmark-io/turndown?tab=readme-ov-file#options). Supported: inlined, referenced, discarded
 - `X-Md-Link-Reference-Style` (header, string): Link reference style of the generated markdown. This is an option passed through to [Turndown](https://github.com/mixmark-io/turndown?tab=readme-ov-file#options). Supported: full, collapsed, shortcut, discarded
-- `X-Page` (header, string): Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.). 1-indexed, 0 is the same as 1. Accepts a page number, a list and/or ranges like `1,3,5-7`. At most 35 pages can be selected. With multiple pages, DocLayout / OCR runs over each selected page. Ignored when the target is not a document.
+- `X-Page` (header, string): Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.). 1-indexed; ignored when no file/PDF is uploaded.
 - `X-Preload-Url` (header, string): URL to preload before scraping. Ignored when no URL is provided.
 - `X-No-Service-Worker` (header, string): Disable service workers when running the browser. Useful for bypassing service-worker-based caching or interception.
 
@@ -717,7 +716,7 @@ Parameters:
 - `base` (query, "initial" | "final", default "initial"): Select base modes of relative URLs. Supported: initial, final
 - `pdf` (query, string): Base64 encoded PDF.
 - `file` (query, string): Base64-encoded file (PDF, DOC, XLS, PPT, ...) to convert instead of a URL.
-- `page` (query, number): Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.). 1-indexed, 0 is the same as 1. Accepts a page number, a list and/or ranges like `1,3,5-7`. At most 35 pages can be selected. With multiple pages, DocLayout / OCR runs over each selected page. Ignored when the target is not a document.
+- `page` (query, number): Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.). 1-indexed; ignored when no file/PDF is uploaded.
 - `respondWith` (query, "content" | "markdown" | "html" | "text" | "pageshot" | "screenshot" | "vlm" | "readerlm-v2" | "frontmatter" | "readability" | "jina-ocr-v1" | "jina-ocr" | ... (15 values) | string, default "content"): Specifies the (non-default) form of the crawled data you prefer. Supported formats: - markdown - html - text - pageshot - screenshot - content - frontmatter - any combination of the above - vlm - jina-ocr-v1 - jina-ocr - readerlm-v2 Default: content
 - `withGeneratedAlt` (query, boolean | string): Enable automatic alt-text generating for images without an meaningful alt-text. Note: Does not work when `X-Respond-With` is specified
 - `retainImages` (query, "none" | "all" | "alt" | "all_p" | "alt_p", default "all"): Image retention modes. Supported modes: - all: all images - none: no images - alt: only alt text - all_p: all images and with generated alt text - alt_p: only alt text and with generated alt
@@ -738,7 +737,6 @@ Parameters:
 - `withIframe` (query, boolean | string | string): Enable filling iframe contents into main. (violates standards)
 - `withShadowDom` (query, boolean | string): Enable filling shadow dom contents into main. (violates standards)
 - `skipCertVerification` (query, boolean | string): Enable skipping SSL certificate verification. (violates security best practices)
-- `webBotAuth` (query, boolean | string | "authority" | "target-uri")
 - `setCookies` (query, any | string): Cookies to send when fetching each result page, for pages that need a login. Requests with cookies are not cached.
 - `exportStorageState` (query, boolean | string): Export the browser storage state (cookies and per-origin localStorage) accumulated during the crawl. When enabled, the JSON response includes a `storageState` field whose shape mirrors the `storageState` request option, so it can be fed back into a subsequent request. Requires the browser engine and disables caching.
 - `proxyUrl` (query, string): Specifies your custom proxy if you prefer to use one. Supported protocols: - http - https - socks4 - socks5 For authentication, https://user:pass@host:port
@@ -755,7 +753,7 @@ Parameters:
 - `assertStatusCode` (query, number): Assert the HTTP status code of the crawled page. If the actual status code does not match the asserted one, the request is rejected with 422 Unprocessable Entity.
 - `instruction` (query, string)
 - `jsonSchema` (query, any): Can be any value - string, number, boolean, array or object.
-- `robotsTxt` (query, boolean | string | string): Load and conform to the respective robot.txt on the target origin. Optionally specify a bot UA to check against.
+- `robotsTxt` (query, string): Load and conform to the respective robot.txt on the target origin. Optionally specify a bot UA to check against.
 - `zeroDataRetention` (query, boolean | string)
 - `respondTiming` (query, "html" | "visible-content" | "mutation-idle" | "resource-idle" | "media-idle" | "network-idle"): Explicitly specify the respond timing. One of the following: - html: directly return unrendered HTML - visible-content: return immediately when any content becomes available - mutation-idle: wait for DOM mutations to settle and remain unchanged for at least 0.2s - resource-idle: wait for no additional resources that would affect page logic and content has SUCCEEDED loading in 0.5s - media-idle: wait for no additional resources, including media resources, has SUCCEEDED loading in 0.5s - network-idle: wait for full load of webpage, also known as networkidle0.
 - `markdownChunking` (query, "true" | "h1" | "h2" | "h3" | "h4" | "h5" | "structured" | "s1" | "s2" | "s3" | "s4" | "s5" | string): Opt-in markdown chunking. Supported values: - true - h1 - h2 - h3 - h4 - h5 - structured - s1 - s2 - s3 - s4 - s5 Note if you are expecting text return, the chunking is done by injecting character \u001D
@@ -820,7 +818,7 @@ Parameters:
 - `X-Md-Strong-Delimiter` (header, string): Strong delimiter of the generated markdown. This is an option passed through to [Turndown](https://github.com/mixmark-io/turndown?tab=readme-ov-file#options). Supported: **, __
 - `X-Md-Link-Style` (header, string): Link style of the generated markdown. This is an option passed through to [Turndown](https://github.com/mixmark-io/turndown?tab=readme-ov-file#options). Supported: inlined, referenced, discarded
 - `X-Md-Link-Reference-Style` (header, string): Link reference style of the generated markdown. This is an option passed through to [Turndown](https://github.com/mixmark-io/turndown?tab=readme-ov-file#options). Supported: full, collapsed, shortcut, discarded
-- `X-Page` (header, string): Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.). 1-indexed, 0 is the same as 1. Accepts a page number, a list and/or ranges like `1,3,5-7`. At most 35 pages can be selected. With multiple pages, DocLayout / OCR runs over each selected page. Ignored when the target is not a document.
+- `X-Page` (header, string): Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.). 1-indexed; ignored when no file/PDF is uploaded.
 - `X-Preload-Url` (header, string): URL to preload before scraping. Ignored when no URL is provided.
 - `X-No-Service-Worker` (header, string): Disable service workers when running the browser. Useful for bypassing service-worker-based caching or interception.
 
@@ -832,7 +830,7 @@ Request body (`application/json`):
 - `base` ("initial" | "final", default "initial"): Select base modes of relative URLs. Supported: initial, final
 - `pdf` (string): Base64 encoded PDF.
 - `file` (string): Base64-encoded file (PDF, DOC, XLS, PPT, ...) to convert instead of a URL.
-- `page` (number): Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.). 1-indexed, 0 is the same as 1. Accepts a page number, a list and/or ranges like `1,3,5-7`. At most 35 pages can be selected. With multiple pages, DocLayout / OCR runs over each selected page. Ignored when the target is not a document.
+- `page` (number): Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.). 1-indexed; ignored when no file/PDF is uploaded.
 - `respondWith` ("content" | "markdown" | "html" | "text" | "pageshot" | "screenshot" | "vlm" | "readerlm-v2" | "frontmatter" | "readability" | "jina-ocr-v1" | "jina-ocr" | ... (15 values) | string, default "content"): Specifies the (non-default) form of the crawled data you prefer. Supported formats: - markdown - html - text - pageshot - screenshot - content - frontmatter - any combination of the above - vlm - jina-ocr-v1 - jina-ocr - readerlm-v2 Default: content
 - `withGeneratedAlt` (boolean | string): Enable automatic alt-text generating for images without an meaningful alt-text. Note: Does not work when `X-Respond-With` is specified
 - `retainImages` ("none" | "all" | "alt" | "all_p" | "alt_p", default "all"): Image retention modes. Supported modes: - all: all images - none: no images - alt: only alt text - all_p: all images and with generated alt text - alt_p: only alt text and with generated alt
@@ -853,7 +851,6 @@ Request body (`application/json`):
 - `withIframe` (boolean | string | string): Enable filling iframe contents into main. (violates standards)
 - `withShadowDom` (boolean | string): Enable filling shadow dom contents into main. (violates standards)
 - `skipCertVerification` (boolean | string): Enable skipping SSL certificate verification. (violates security best practices)
-- `webBotAuth` (boolean | string | "authority" | "target-uri")
 - `setCookies` (array<any | string>): Cookies to send when fetching each result page, for pages that need a login. Requests with cookies are not cached.
 - `storageState` (StorageState)
   - `cookies` (array<Cookie>, default [])
@@ -890,7 +887,7 @@ Request body (`application/json`):
   - `hasTouch` (boolean)
 - `instruction` (string)
 - `jsonSchema` (any): Can be any value - string, number, boolean, array or object.
-- `robotsTxt` (boolean | string | string): Load and conform to the respective robot.txt on the target origin. Optionally specify a bot UA to check against.
+- `robotsTxt` (string): Load and conform to the respective robot.txt on the target origin. Optionally specify a bot UA to check against.
 - `zeroDataRetention` (boolean | string)
 - `markdown` (TurnDownTweakableOptions)
   - `headingStyle` ("setext" | "atx"): Turndown options > headingStyle
