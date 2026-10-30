@@ -98,7 +98,7 @@ Parameters:
 - `preloadUrl` (query, string): URL to preload before scraping. Ignored when no URL is provided.
 - `noServiceWorker` (query, boolean | string): Disable service workers when running the browser. Useful for bypassing service-worker-based caching or interception.
 - `html` (query, string): Raw HTML to convert, instead of fetching a URL. Used when no `url` is given.
-- `base` (query, "initial" | "final", default "initial"): Select base modes of relative URLs. Supported: initial, final
+- `base` (query, "initial" | "final", default "final"): Select base modes of relative URLs. Supported: initial, final
 - `pdf` (query, string): Base64 encoded PDF.
 - `file` (query, string): Base64-encoded file (PDF, DOC, XLS, PPT, ...) to convert instead of a URL.
 - `page` (query, integer | string | array<integer | string>): Steer which page(s) to return for document files. See PageSelection.
@@ -198,7 +198,7 @@ Request body (`application/json`):
 - `preloadUrl` (string): URL to preload before scraping. Ignored when no URL is provided.
 - `noServiceWorker` (boolean | string): Disable service workers when running the browser. Useful for bypassing service-worker-based caching or interception.
 - `html` (string): Raw HTML to convert, instead of fetching a URL. Used when no `url` is given.
-- `base` ("initial" | "final", default "initial"): Select base modes of relative URLs. Supported: initial, final
+- `base` ("initial" | "final", default "final"): Select base modes of relative URLs. Supported: initial, final
 - `pdf` (string): Base64 encoded PDF.
 - `file` (string): Base64-encoded file (PDF, DOC, XLS, PPT, ...) to convert instead of a URL.
 - `page` (integer | string | array<integer | string>): Steer which page(s) to return for document files. See PageSelection.
@@ -309,7 +309,7 @@ Parameters:
 - `preloadUrl` (query, string): URL to preload before scraping. Ignored when no URL is provided.
 - `noServiceWorker` (query, boolean | string): Disable service workers when running the browser. Useful for bypassing service-worker-based caching or interception.
 - `html` (query, string): Raw HTML to convert, instead of fetching a URL. Used when no `url` is given.
-- `base` (query, "initial" | "final", default "initial"): Select base modes of relative URLs. Supported: initial, final
+- `base` (query, "initial" | "final", default "final"): Select base modes of relative URLs. Supported: initial, final
 - `pdf` (query, string): Base64 encoded PDF.
 - `file` (query, string): Base64-encoded file (PDF, DOC, XLS, PPT, ...) to convert instead of a URL.
 - `page` (query, integer | string | array<integer | string>): Steer which page(s) to return for document files. See PageSelection.
@@ -580,7 +580,7 @@ Parameters:
 - `preloadUrl` (query, string): URL to preload before scraping. Ignored when no URL is provided.
 - `noServiceWorker` (query, boolean | string): Disable service workers when running the browser. Useful for bypassing service-worker-based caching or interception.
 - `html` (query, string): Raw HTML to convert, instead of fetching a URL. Used when no `url` is given.
-- `base` (query, "initial" | "final", default "initial"): Select base modes of relative URLs. Supported: initial, final
+- `base` (query, "initial" | "final", default "final"): Select base modes of relative URLs. Supported: initial, final
 - `pdf` (query, string): Base64 encoded PDF.
 - `file` (query, string): Base64-encoded file (PDF, DOC, XLS, PPT, ...) to convert instead of a URL.
 - `page` (query, number): Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.). 1-indexed, 0 is the same as 1. Accepts a page number, a list and/or ranges like `1,3,5-7`. At most 35 pages can be selected. With multiple pages, DocLayout / OCR runs over each selected page. Ignored when the target is not a document.
@@ -714,7 +714,7 @@ Parameters:
 - `preloadUrl` (query, string): URL to preload before scraping. Ignored when no URL is provided.
 - `noServiceWorker` (query, boolean | string): Disable service workers when running the browser. Useful for bypassing service-worker-based caching or interception.
 - `html` (query, string): Raw HTML to convert, instead of fetching a URL. Used when no `url` is given.
-- `base` (query, "initial" | "final", default "initial"): Select base modes of relative URLs. Supported: initial, final
+- `base` (query, "initial" | "final", default "final"): Select base modes of relative URLs. Supported: initial, final
 - `pdf` (query, string): Base64 encoded PDF.
 - `file` (query, string): Base64-encoded file (PDF, DOC, XLS, PPT, ...) to convert instead of a URL.
 - `page` (query, number): Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.). 1-indexed, 0 is the same as 1. Accepts a page number, a list and/or ranges like `1,3,5-7`. At most 35 pages can be selected. With multiple pages, DocLayout / OCR runs over each selected page. Ignored when the target is not a document.
@@ -829,7 +829,7 @@ Request body (`application/json`):
 - `preloadUrl` (string): URL to preload before scraping. Ignored when no URL is provided.
 - `noServiceWorker` (boolean | string): Disable service workers when running the browser. Useful for bypassing service-worker-based caching or interception.
 - `html` (string): Raw HTML to convert, instead of fetching a URL. Used when no `url` is given.
-- `base` ("initial" | "final", default "initial"): Select base modes of relative URLs. Supported: initial, final
+- `base` ("initial" | "final", default "final"): Select base modes of relative URLs. Supported: initial, final
 - `pdf` (string): Base64 encoded PDF.
 - `file` (string): Base64-encoded file (PDF, DOC, XLS, PPT, ...) to convert instead of a URL.
 - `page` (number): Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.). 1-indexed, 0 is the same as 1. Accepts a page number, a list and/or ranges like `1,3,5-7`. At most 35 pages can be selected. With multiple pages, DocLayout / OCR runs over each selected page. Ignored when the target is not a document.

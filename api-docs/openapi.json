@@ -62,7 +62,7 @@
                   "$ref": "#/components/schemas/Reader_enum@0x0d"
                 }
               ],
-              "default": "initial"
+              "default": "final"
             },
             "description": "Select base modes of relative URLs.\n\nSupported: initial, final"
           },
@@ -1385,7 +1385,7 @@
                   "$ref": "#/components/schemas/Reader_enum@0x0d"
                 }
               ],
-              "default": "initial"
+              "default": "final"
             },
             "description": "Select base modes of relative URLs.\n\nSupported: initial, final"
           },
@@ -2391,7 +2391,7 @@
                         "$ref": "#/components/schemas/Reader_enum@0x0d"
                       }
                     ],
-                    "default": "initial",
+                    "default": "final",
                     "description": "Select base modes of relative URLs.\n\nSupported: initial, final"
                   },
                   "pdf": {
@@ -3140,7 +3140,7 @@
                   "$ref": "#/components/schemas/Reader_enum@0x0d"
                 }
               ],
-              "default": "initial"
+              "default": "final"
             },
             "description": "Select base modes of relative URLs.\n\nSupported: initial, final"
           },
@@ -4444,7 +4444,7 @@
                   "$ref": "#/components/schemas/Reader_enum@0x0d"
                 }
               ],
-              "default": "initial"
+              "default": "final"
             },
             "description": "Select base modes of relative URLs.\n\nSupported: initial, final"
           },
@@ -5450,7 +5450,7 @@
                         "$ref": "#/components/schemas/Reader_enum@0x0d"
                       }
                     ],
-                    "default": "initial",
+                    "default": "final",
                     "description": "Select base modes of relative URLs.\n\nSupported: initial, final"
                   },
                   "pdf": {
@@ -7303,7 +7303,7 @@
                   "$ref": "#/components/schemas/Search_enum@0x0e"
                 }
               ],
-              "default": "initial"
+              "default": "final"
             },
             "description": "Select base modes of relative URLs.\n\nSupported: initial, final"
           },
@@ -8631,7 +8631,7 @@
                   "$ref": "#/components/schemas/Search_enum@0x0e"
                 }
               ],
-              "default": "initial"
+              "default": "final"
             },
             "description": "Select base modes of relative URLs.\n\nSupported: initial, final"
           },
@@ -9901,7 +9901,7 @@
                         "$ref": "#/components/schemas/Search_enum@0x0e"
                       }
                     ],
-                    "default": "initial",
+                    "default": "final",
                     "description": "Select base modes of relative URLs.\n\nSupported: initial, final"
                   },
                   "pdf": {
@@ -10605,7 +10605,7 @@
                   "$ref": "#/components/schemas/Search_enum@0x0e"
                 }
               ],
-              "default": "initial"
+              "default": "final"
             },
             "description": "Select base modes of relative URLs.\n\nSupported: initial, final"
           },
@@ -11933,7 +11933,7 @@
                   "$ref": "#/components/schemas/Search_enum@0x0e"
                 }
               ],
-              "default": "initial"
+              "default": "final"
             },
             "description": "Select base modes of relative URLs.\n\nSupported: initial, final"
           },
@@ -13202,7 +13202,7 @@
                         "$ref": "#/components/schemas/Search_enum@0x0e"
                       }
                     ],
-                    "default": "initial",
+                    "default": "final",
                     "description": "Select base modes of relative URLs.\n\nSupported: initial, final"
                   },
                   "pdf": {
@@ -15459,7 +15459,7 @@
                 "$ref": "#/components/schemas/Reader_enum@0x0d"
               }
             ],
-            "default": "initial",
+            "default": "final",
             "description": "Select base modes of relative URLs.\n\nSupported: initial, final"
           },
           "pdf": {
@@ -16454,7 +16454,7 @@
                 "$ref": "#/components/schemas/Reader_enum@0x0d"
               }
             ],
-            "default": "initial",
+            "default": "final",
             "description": "Select base modes of relative URLs.\n\nSupported: initial, final"
           },
           "pdf": {
@@ -17817,7 +17817,7 @@
                 "$ref": "#/components/schemas/Search_enum@0x0e"
               }
             ],
-            "default": "initial",
+            "default": "final",
             "description": "Select base modes of relative URLs.\n\nSupported: initial, final"
           },
           "pdf": {
