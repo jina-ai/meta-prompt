@@ -17523,6 +17523,9 @@
             "type": "string",
             "description": "The URL to read. Not needed when the URL is already in the path (`https://r.jina.ai/<url>`)."
           },
+          "finalUrl": {
+            "type": "string"
+          },
           "content": {
             "type": "string"
           },
@@ -18879,6 +18882,9 @@
           "url": {
             "type": "string",
             "description": "The URL to read. Not needed when the URL is already in the path (`https://r.jina.ai/<url>`)."
+          },
+          "finalUrl": {
+            "type": "string"
           },
           "content": {
             "type": "string"
