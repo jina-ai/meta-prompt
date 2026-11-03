@@ -440,7 +440,7 @@ Parameters:
 - `rest` (path, any, required)
 
 Request body (`application/json`):
-- 
+- any
 
 Responses:
 - `200`: OK
@@ -455,7 +455,7 @@ Parameters:
 - `rest` (path, any, required)
 
 Request body (`application/json`):
-- 
+- any
 
 Responses:
 - `200`: OK
@@ -482,7 +482,7 @@ Parameters:
 - `rest` (path, any, required)
 
 Request body (`application/json`):
-- 
+- any
 
 Responses:
 - `200`: OK
@@ -503,7 +503,7 @@ Responses:
 Echo back the details of the incoming HTTP request, with the Cloudflare-reported country of the client IP.
 
 Request body (`application/json`):
-- 
+- any
 
 Responses:
 - `200`: OK
@@ -515,7 +515,7 @@ Responses:
 Echo back the details of the incoming HTTP request, with the Cloudflare-reported country of the client IP.
 
 Request body (`application/json`):
-- 
+- any
 
 Responses:
 - `200`: OK
@@ -536,7 +536,7 @@ Responses:
 Echo back the details of the incoming HTTP request, with the Cloudflare-reported country of the client IP.
 
 Request body (`application/json`):
-- 
+- any
 
 Responses:
 - `200`: OK
