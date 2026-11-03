@@ -6582,16 +6582,8 @@
         ],
         "requestBody": {
           "content": {
-            "application/json": {
-              "schema": {
-                "allOf": []
-              }
-            },
-            "multipart/form-data": {
-              "schema": {
-                "allOf": []
-              }
-            },
+            "application/json": {},
+            "multipart/form-data": {},
             "application/x-www-form-urlencoded": {
               "schema": {
                 "type": "object",
@@ -6660,16 +6652,8 @@
         ],
         "requestBody": {
           "content": {
-            "application/json": {
-              "schema": {
-                "allOf": []
-              }
-            },
-            "multipart/form-data": {
-              "schema": {
-                "allOf": []
-              }
-            },
+            "application/json": {},
+            "multipart/form-data": {},
             "application/x-www-form-urlencoded": {
               "schema": {
                 "type": "object",
@@ -6738,16 +6722,8 @@
         ],
         "requestBody": {
           "content": {
-            "application/json": {
-              "schema": {
-                "allOf": []
-              }
-            },
-            "multipart/form-data": {
-              "schema": {
-                "allOf": []
-              }
-            },
+            "application/json": {},
+            "multipart/form-data": {},
             "application/x-www-form-urlencoded": {
               "schema": {
                 "type": "object",
@@ -6927,16 +6903,8 @@
         "parameters": [],
         "requestBody": {
           "content": {
-            "application/json": {
-              "schema": {
-                "allOf": []
-              }
-            },
-            "multipart/form-data": {
-              "schema": {
-                "allOf": []
-              }
-            },
+            "application/json": {},
+            "multipart/form-data": {},
             "application/x-www-form-urlencoded": {
               "schema": {
                 "type": "object",
@@ -6999,16 +6967,8 @@
         "parameters": [],
         "requestBody": {
           "content": {
-            "application/json": {
-              "schema": {
-                "allOf": []
-              }
-            },
-            "multipart/form-data": {
-              "schema": {
-                "allOf": []
-              }
-            },
+            "application/json": {},
+            "multipart/form-data": {},
             "application/x-www-form-urlencoded": {
               "schema": {
                 "type": "object",
@@ -7071,16 +7031,8 @@
         "parameters": [],
         "requestBody": {
           "content": {
-            "application/json": {
-              "schema": {
-                "allOf": []
-              }
-            },
-            "multipart/form-data": {
-              "schema": {
-                "allOf": []
-              }
-            },
+            "application/json": {},
+            "multipart/form-data": {},
             "application/x-www-form-urlencoded": {
               "schema": {
                 "type": "object",
