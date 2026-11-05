@@ -6148,6 +6148,1760 @@
         }
       ]
     },
+    "/read": {
+      "post": {
+        "tags": [
+          "Reader"
+        ],
+        "parameters": [
+          {
+            "name": "url",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The URL to read. Not needed when the URL is already in the path (`https://r.jina.ai/<url>`)."
+          },
+          {
+            "name": "preloadUrl",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "URL to preload before scraping.\n\nIgnored when no URL is provided."
+          },
+          {
+            "name": "noServiceWorker",
+            "in": "query",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Reader_PseudoBooleanLoose@0x0c"
+                }
+              ]
+            },
+            "description": "Disable service workers when running the browser.\n\nUseful for bypassing service-worker-based caching or interception."
+          },
+          {
+            "name": "html",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Raw HTML to convert, instead of fetching a URL. Used when no `url` is given."
+          },
+          {
+            "name": "base",
+            "in": "query",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Reader_enum@0x0d"
+                }
+              ],
+              "default": "final"
+            },
+            "description": "Select base modes of relative URLs.\n\nSupported: initial, final"
+          },
+          {
+            "name": "pdf",
+            "in": "query",
+            "schema": {
+              "anyOf": [
+                {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Reader_FancyFile@0x0e"
+                    }
+                  ]
+                },
+                {
+                  "type": "string"
+                }
+              ],
+              "summary": "Base64 encoded PDF.",
+              "description": "Base64 encoded PDF."
+            }
+          },
+          {
+            "name": "file",
+            "in": "query",
+            "schema": {
+              "anyOf": [
+                {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Reader_FancyFile@0x0e"
+                    }
+                  ]
+                },
+                {
+                  "type": "string"
+                }
+              ],
+              "summary": "Base64 encoded file.",
+              "description": "Base64 encoded file."
+            },
+            "description": "Base64-encoded file (PDF, DOC, XLS, PPT, ...) to convert instead of a URL."
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Reader_PageSelection@0x0f"
+                }
+              ],
+              "summary": "Steer which page(s) to return for document files. See PageSelection.",
+              "description": "Steer which page(s) to return for document files. See PageSelection."
+            }
+          },
+          {
+            "name": "respondWith",
+            "in": "query",
+            "schema": {
+              "anyOf": [
+                {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Reader_enum@0x10"
+                    }
+                  ]
+                },
+                {
+                  "type": "string"
+                }
+              ],
+              "default": "content"
+            },
+            "description": "Specifies the (non-default) form of the crawled data you prefer.\n\nSupported formats: \n- markdown\n- html\n- text\n- pageshot\n- screenshot\n- content\n- frontmatter\n- any combination of the above\n- vlm\n- jina-ocr-v1\n- jina-ocr\n- readerlm-v2\n\nDefault: content"
+          },
+          {
+            "name": "withGeneratedAlt",
+            "in": "query",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Reader_PseudoBoolean@0x11"
+                }
+              ]
+            },
+            "description": "Enable automatic alt-text generating for images without an meaningful alt-text.\n\nNote: Does not work when `X-Respond-With` is specified"
+          },
+          {
+            "name": "retainImages",
+            "in": "query",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Reader_enum@0x12"
+                }
+              ],
+              "default": "all"
+            },
+            "description": "Image retention modes.\n\nSupported modes: \n- all: all images\n- none: no images\n- alt: only alt text\n- all_p: all images and with generated alt text\n- alt_p: only alt text and with generated alt"
+          },
+          {
+            "name": "retainMedia",
+            "in": "query",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Reader_enum@0x13"
+                }
+              ],
+              "default": "link"
+            },
+            "description": "Media retention modes for video, audio, and embedded video iframes.\n\nSupported modes: \n- none: no media\n- text: plain label, e.g. `Video 1`\n- link: markdown link, e.g. `[Video 1](url)` (default)\n- image: markdown image syntax, e.g. `![Video 1](url)`\n- html: original HTML with irrelevant attributes (class, id, style, data-*, aria-*) stripped"
+          },
+          {
+            "name": "preset",
+            "in": "query",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Reader_enum@0x14"
+                }
+              ]
+            },
+            "description": "Apply a preset configuration for common scenarios.\n\nSupported presets:\n- reader: optimized for display to human users\n- index: optimized for semantic indexing\n- research: optimized for academic/research AI agents\n- agent: optimized for day-to-day AI agents\n- spider: optimized for recursive site crawling\n\nPreset values are applied only to options not explicitly set by the caller."
+          },
+          {
+            "name": "retainLinks",
+            "in": "query",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Reader_enum@0x15"
+                }
+              ],
+              "default": "all"
+            },
+            "description": "Link retention modes.\n\nSupported modes: \n- all: all links\n- none: no links\n- text: only link text\n- gpt-oss: gpt-oss link citation format `【{id}†.*】`"
+          },
+          {
+            "name": "withLinksSummary",
+            "in": "query",
+            "schema": {
+              "anyOf": [
+                {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Reader_PseudoBoolean@0x11"
+                    }
+                  ]
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "Enable dedicated summary section for hyper links on the page."
+          },
+          {
+            "name": "withImagesSummary",
+            "in": "query",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Reader_PseudoBooleanLoose@0x0c"
+                }
+              ]
+            },
+            "description": "Enable dedicated summary section for images on the page."
+          },
+          {
+            "name": "noCache",
+            "in": "query",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Reader_PseudoBooleanLoose@0x0c"
+                }
+              ]
+            },
+            "description": "Ignores internal cache if this header is specified with a value.\n\nEquivalent to X-Cache-Tolerance: 0"
+          },
+          {
+            "name": "removeOverlay",
+            "in": "query",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Reader_PseudoBooleanLoose@0x0c"
+                }
+              ]
+            },
+            "description": "Specify whether to remove overlay elements from the page."
+          },
+          {
+            "name": "detachInvisibles",
+            "in": "query",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Reader_PseudoBooleanLoose@0x0c"
+                }
+              ]
+            },
+            "description": "Temporarily detach elements with computed `display:none` before snapshotting, then restore them.\n\nRequires the browser engine and disables caching."
+          },
+          {
+            "name": "noGfm",
+            "in": "query",
+            "schema": {
+              "anyOf": [
+                {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Reader_PseudoBoolean@0x11"
+                    }
+                  ]
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "Opt out of GitHub Flavored Markdown. `true` disables GFM; `table` drops only GFM tables and keeps the table HTML."
+          },
+          {
+            "name": "cacheTolerance",
+            "in": "query",
+            "schema": {
+              "type": "number"
+            },
+            "description": "Sets internal cache tolerance in seconds if this header is specified with a integer."
+          },
+          {
+            "name": "targetSelector",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Specifies a CSS selector for return target instead of the full html.\n\nImplies `X-Wait-For-Selector: (same selector)`"
+          },
+          {
+            "name": "waitForSelector",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Specifies a CSS selector to wait for the appearance of such an element before returning.\n\nExample: `X-Wait-For-Selector: .content-block`"
+          },
+          {
+            "name": "removeSelector",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Specifies a CSS selector to remove elements from the full html.\n\nExample `X-Remove-Selector: nav`"
+          },
+          {
+            "name": "keepImgDataUrl",
+            "in": "query",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Reader_PseudoBooleanLoose@0x0c"
+                }
+              ]
+            },
+            "description": "Keep data-url as it instead of transforming them to object-url. (Only applicable when targeting markdown format)\n\nExample `X-Keep-Img-Data-Url: true`"
+          },
+          {
+            "name": "withIframe",
+            "in": "query",
+            "schema": {
+              "anyOf": [
+                {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Reader_PseudoBoolean@0x11"
+                    }
+                  ]
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "Enable filling iframe contents into main. (violates standards)"
+          },
+          {
+            "name": "withShadowDom",
+            "in": "query",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Reader_PseudoBooleanLoose@0x0c"
+                }
+              ]
+            },
+            "description": "Enable filling shadow dom contents into main. (violates standards)"
+          },
+          {
+            "name": "skipCertVerification",
+            "in": "query",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Reader_PseudoBooleanLoose@0x0c"
+                }
+              ]
+            },
+            "description": "Enable skipping SSL certificate verification. (violates security best practices)"
+          },
+          {
+            "name": "webBotAuth",
+            "in": "query",
+            "schema": {
+              "anyOf": [
+                {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Reader_PseudoBoolean@0x11"
+                    }
+                  ]
+                },
+                {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Reader_enum@0x16"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "name": "setCookies",
+            "in": "query",
+            "schema": {
+              "anyOf": [
+                {
+                  "description": "Can be any value - string, number, boolean, array or object.",
+                  "nullable": true
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "Cookies to send when fetching the URL, for pages that need a login. Requests with cookies are not cached."
+          },
+          {
+            "name": "exportStorageState",
+            "in": "query",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Reader_PseudoBooleanLoose@0x0c"
+                }
+              ]
+            },
+            "description": "Export the browser storage state (cookies and per-origin localStorage) accumulated during the crawl.\n\nWhen enabled, the JSON response includes a `storageState` field whose shape mirrors the `storageState` request option, so it can be fed back into a subsequent request.\n\nRequires the browser engine and disables caching."
+          },
+          {
+            "name": "proxyUrl",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Specifies your custom proxy if you prefer to use one.\n\nSupported protocols: \n- http\n- https\n- socks4\n- socks5\n\nFor authentication, https://user:pass@host:port"
+          },
+          {
+            "name": "proxyResources",
+            "in": "query",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Reader_PseudoBooleanLoose@0x0c"
+                }
+              ]
+            },
+            "description": "Whether to load resources like image/style/scripts via the proxy server."
+          },
+          {
+            "name": "proxy",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Use a proxy server provided by us.\n\nOptionally specify two-letter country code."
+          },
+          {
+            "name": "userAgent",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Override User-Agent.\n\nSeveral special values: \n- browser: use the internal browser UA\n- auto: pass-through your UA if it starts with `Mozilla/5.0`, otherwise use the internal browser UA\n- inherit / pass-through: use the User-Agent from the request context if applicable\n- bot: Use a pre-defined bot User-Agent from this service\n- diversify: Use a diversified browser User-Agent\n\nOr specify your own user agent string.\n\nNote: anonymous users specifying a browser UA will have no effect and will fall back to the internal browser UA.\n\nDefault: browser"
+          },
+          {
+            "name": "engine",
+            "in": "query",
+            "schema": {
+              "anyOf": [
+                {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Reader_enum@0x1c"
+                    }
+                  ]
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "Specify the engine to use for crawling.\n\nSupported: browser, direct, cf-browser-rendering"
+          },
+          {
+            "name": "injectPageScript",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "JavaScript to run in the page before extraction, inline or as a URL, e.g. to change the DOM."
+          },
+          {
+            "name": "injectFrameScript",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Like `injectPageScript`, for frames."
+          },
+          {
+            "name": "timeout",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "description": "- Some validators will be applied on value(s): (v) =&gt; v &gt; 0 &amp;&amp; v &lt;= 180"
+            }
+          },
+          {
+            "name": "locale",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Specify browser locale for the page."
+          },
+          {
+            "name": "referer",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Specify referer for the page."
+          },
+          {
+            "name": "tokenBudget",
+            "in": "query",
+            "schema": {
+              "type": "number"
+            },
+            "description": "Specify a budget in tokens.\n\nIf the resulting token cost exceeds the budget, the request is rejected.\n\nNote this parameter is ignored for the search endpoint."
+          },
+          {
+            "name": "assertStatusCode",
+            "in": "query",
+            "schema": {
+              "type": "number"
+            },
+            "description": "Assert the HTTP status code of the crawled page. If the actual status code does not match the asserted one, the request is rejected with 422 Unprocessable Entity."
+          },
+          {
+            "name": "instruction",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "jsonSchema",
+            "in": "query",
+            "schema": {
+              "description": "Can be any value - string, number, boolean, array or object.",
+              "nullable": true
+            }
+          },
+          {
+            "name": "robotsTxt",
+            "in": "query",
+            "schema": {
+              "anyOf": [
+                {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Reader_PseudoBoolean@0x11"
+                    }
+                  ]
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "Load and conform to the respective robot.txt on the target origin.\n\nOptionally specify a bot UA to check against."
+          },
+          {
+            "name": "zeroDataRetention",
+            "in": "query",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Reader_PseudoBooleanLoose@0x0c"
+                }
+              ]
+            }
+          },
+          {
+            "name": "respondTiming",
+            "in": "query",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Reader_enum@0x26"
+                }
+              ]
+            },
+            "description": "Explicitly specify the respond timing. One of the following:\n\n- html: directly return unrendered HTML\n- visible-content: return immediately when any content becomes available\n- mutation-idle: wait for DOM mutations to settle and remain unchanged for at least 0.2s\n- resource-idle: wait for no additional resources that would affect page logic and content has SUCCEEDED loading in 0.5s\n- media-idle: wait for no additional resources, including media resources, has SUCCEEDED loading in 0.5s\n- network-idle: wait for full load of webpage, also known as networkidle0."
+          },
+          {
+            "name": "markdownChunking",
+            "in": "query",
+            "schema": {
+              "anyOf": [
+                {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Reader_enum@0x27"
+                    }
+                  ]
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "Opt-in markdown chunking.\n\nSupported values: \n- true\n- h1\n- h2\n- h3\n- h4\n- h5\n- structured\n- s1\n- s2\n- s3\n- s4\n- s5\n\nNote if you are expecting text return, the chunking is done by injecting character \\u001D"
+          },
+          {
+            "name": "maxTokens",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "description": "- Some validators will be applied on value(s): (v) =&gt; v &gt;= 500"
+            }
+          },
+          {
+            "name": "Accept",
+            "description": "Specifies your preference for the response format.\n\nSupported formats: \n- text/event-stream\n- application/json or text/json\n- text/plain",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Cache-Tolerance",
+            "description": "Sets internal cache tolerance in seconds if this header is specified with a integer.",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-No-Cache",
+            "description": "Ignores internal cache if this header is specified with a value.\n\nEquivalent to X-Cache-Tolerance: 0",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Respond-With",
+            "description": "Specifies the (non-default) form of the crawled data you prefer.\n\nSupported formats: \n- markdown\n- html\n- text\n- pageshot\n- screenshot\n- content\n- frontmatter\n- any combination of the above\n- vlm\n- jina-ocr-v1\n- jina-ocr\n- readerlm-v2\n\nDefault: content",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Wait-For-Selector",
+            "description": "Specifies a CSS selector to wait for the appearance of such an element before returning.\n\nExample: `X-Wait-For-Selector: .content-block`",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Target-Selector",
+            "description": "Specifies a CSS selector for return target instead of the full html.\n\nImplies `X-Wait-For-Selector: (same selector)`",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Remove-Selector",
+            "description": "Specifies a CSS selector to remove elements from the full html.\n\nExample `X-Remove-Selector: nav`",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Keep-Img-Data-Url",
+            "description": "Keep data-url as it instead of transforming them to object-url. (Only applicable when targeting markdown format)\n\nExample `X-Keep-Img-Data-Url: true`",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Proxy-Url",
+            "description": "Specifies your custom proxy if you prefer to use one.\n\nSupported protocols: \n- http\n- https\n- socks4\n- socks5\n\nFor authentication, https://user:pass@host:port",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Proxy-Resources",
+            "description": "Whether to load resources like image/style/scripts via the proxy server.",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Proxy",
+            "description": "Use a proxy server provided by us.\n\nOptionally specify two-letter country code.",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Robots-Txt",
+            "description": "Load and conform to the respective robot.txt on the target origin.\n\nOptionally specify a bot UA to check against.",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNT",
+            "description": "When set to 1, prevent the result of this request to be cached in the system.",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Set-Cookie",
+            "description": "Sets cookie(s) to the headless browser for your request. \n\nSyntax is the same with standard Set-Cookie",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Export-Storage-State",
+            "description": "Export the browser storage state (cookies and per-origin localStorage) accumulated during the crawl.\n\nWhen enabled, the JSON response includes a `storageState` field whose shape mirrors the `storageState` request option, so it can be fed back into a subsequent request.\n\nRequires the browser engine and disables caching.",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-With-Generated-Alt",
+            "description": "Enable automatic alt-text generating for images without an meaningful alt-text.\n\nNote: Does not work when `X-Respond-With` is specified",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-With-Images-Summary",
+            "description": "Enable dedicated summary section for images on the page.",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-With-links-Summary",
+            "description": "Enable dedicated summary section for hyper links on the page.",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Retain-Links",
+            "description": "Link retention modes.\n\nSupported modes: \n- all: all links\n- none: no links\n- text: only link text\n- gpt-oss: gpt-oss link citation format `【{id}†.*】`",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Retain-Images",
+            "description": "Image retention modes.\n\nSupported modes: \n- all: all images\n- none: no images\n- alt: only alt text\n- all_p: all images and with generated alt text\n- alt_p: only alt text and with generated alt",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Retain-Media",
+            "description": "Media retention modes for video, audio, and embedded video iframes.\n\nSupported modes: \n- none: no media\n- text: plain label, e.g. `Video 1`\n- link: markdown link, e.g. `[Video 1](url)` (default)\n- image: markdown image syntax, e.g. `![Video 1](url)`\n- html: original HTML with irrelevant attributes (class, id, style, data-*, aria-*) stripped",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Preset",
+            "description": "Apply a preset configuration for common scenarios.\n\nSupported presets:\n- reader: optimized for display to human users\n- index: optimized for semantic indexing\n- research: optimized for academic/research AI agents\n- agent: optimized for day-to-day AI agents\n- spider: optimized for recursive site crawling\n\nPreset values are applied only to options not explicitly set by the caller.",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-With-Iframe",
+            "description": "Enable filling iframe contents into main. (violates standards)",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-With-Shadow-Dom",
+            "description": "Enable filling shadow dom contents into main. (violates standards)",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Skip-Cert-Verification",
+            "description": "Enable skipping SSL certificate verification. (violates security best practices)",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-User-Agent",
+            "description": "Override User-Agent.\n\nSeveral special values: \n- browser: use the internal browser UA\n- auto: pass-through your UA if it starts with `Mozilla/5.0`, otherwise use the internal browser UA\n- inherit / pass-through: use the User-Agent from the request context if applicable\n- bot: Use a pre-defined bot User-Agent from this service\n- diversify: Use a diversified browser User-Agent\n\nOr specify your own user agent string.\n\nNote: anonymous users specifying a browser UA will have no effect and will fall back to the internal browser UA.\n\nDefault: browser",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Timeout",
+            "description": "Specify timeout in seconds. Max 180.",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Locale",
+            "description": "Specify browser locale for the page.",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Referer",
+            "description": "Specify referer for the page.",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Token-Budget",
+            "description": "Specify a budget in tokens.\n\nIf the resulting token cost exceeds the budget, the request is rejected.\n\nNote this parameter is ignored for the search endpoint.",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Max-Tokens",
+            "description": "Trim the response content at a maximum number of tokens.",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Assert-Status-Code",
+            "description": "Assert the HTTP status code of the crawled page. If the actual status code does not match the asserted one, the request is rejected with 422 Unprocessable Entity.",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Respond-Timing",
+            "description": "Explicitly specify the respond timing. One of the following:\n\n- html: directly return unrendered HTML\n- visible-content: return immediately when any content becomes available\n- mutation-idle: wait for DOM mutations to settle and remain unchanged for at least 0.2s\n- resource-idle: wait for no additional resources that would affect page logic and content has SUCCEEDED loading in 0.5s\n- media-idle: wait for no additional resources, including media resources, has SUCCEEDED loading in 0.5s\n- network-idle: wait for full load of webpage, also known as networkidle0.",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Engine",
+            "description": "Specify the engine to use for crawling.\n\nSupported: browser, direct, cf-browser-rendering",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Base",
+            "description": "Select base modes of relative URLs.\n\nSupported: initial, final",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Remove-Overlay",
+            "description": "Specify whether to remove overlay elements from the page.",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Detach-Invisibles",
+            "description": "Temporarily detach elements with computed `display:none` before snapshotting, then restore them.\n\nRequires the browser engine and disables caching.",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Markdown-Chunking",
+            "description": "Opt-in markdown chunking.\n\nSupported values: \n- true\n- h1\n- h2\n- h3\n- h4\n- h5\n- structured\n- s1\n- s2\n- s3\n- s4\n- s5\n\nNote if you are expecting text return, the chunking is done by injecting character \\u001D",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Md-Heading-Style",
+            "description": "Heading style of the generated markdown.\n\nThis is an option passed through to [Turndown](https://github.com/mixmark-io/turndown?tab=readme-ov-file#options).\n\nSupported: setext, atx",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Md-Hr",
+            "description": "Hr text of the generated markdown.\n\nThis is an option passed through to [Turndown](https://github.com/mixmark-io/turndown?tab=readme-ov-file#options).",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Md-Bullet-List-Marker",
+            "description": "Bullet list marker of the generated markdown.\n\nThis is an option passed through to [Turndown](https://github.com/mixmark-io/turndown?tab=readme-ov-file#options).\n\nSupported: -, +, *",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Md-Em-Delimiter",
+            "description": "Em delimiter of the generated markdown.\n\nThis is an option passed through to [Turndown](https://github.com/mixmark-io/turndown?tab=readme-ov-file#options).\n\nSupported: _, *",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Md-Strong-Delimiter",
+            "description": "Strong delimiter of the generated markdown.\n\nThis is an option passed through to [Turndown](https://github.com/mixmark-io/turndown?tab=readme-ov-file#options).\n\nSupported: **, __",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Md-Link-Style",
+            "description": "Link style of the generated markdown.\n\nThis is an option passed through to [Turndown](https://github.com/mixmark-io/turndown?tab=readme-ov-file#options).\n\nSupported: inlined, referenced, discarded",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Md-Link-Reference-Style",
+            "description": "Link reference style of the generated markdown.\n\nThis is an option passed through to [Turndown](https://github.com/mixmark-io/turndown?tab=readme-ov-file#options).\n\nSupported: full, collapsed, shortcut, discarded",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Page",
+            "description": "Steer which page to return for uploaded files (PDF, DOC, XLS, PPT, etc.).\n\n1-indexed, 0 is the same as 1. Accepts a page number, a list and/or ranges like `1,3,5-7`.\n\nAt most 35 pages can be selected. With multiple pages, DocLayout / OCR runs over each selected page.\n\nIgnored when the target is not a document.",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Preload-Url",
+            "description": "URL to preload before scraping.\n\nIgnored when no URL is provided.",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-No-Service-Worker",
+            "description": "Disable service workers when running the browser.\n\nUseful for bypassing service-worker-based caching or interception.",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/Reader_JinaEmbeddingsAuthDTO@0x0b"
+                  },
+                  {
+                    "$ref": "#/components/schemas/Reader_CrawlerOptionsHeaderOnly@0x3b"
+                  },
+                  {
+                    "$ref": "#/components/schemas/Reader_CrawlerOptions@0x28"
+                  }
+                ]
+              }
+            },
+            "multipart/form-data": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/Reader_JinaEmbeddingsAuthDTO@0x0b"
+                  },
+                  {
+                    "$ref": "#/components/schemas/Reader_CrawlerOptionsHeaderOnly@0x3b"
+                  },
+                  {
+                    "$ref": "#/components/schemas/Reader_CrawlerOptions@0x28"
+                  }
+                ]
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "url": {
+                    "type": "string",
+                    "description": "The URL to read. Not needed when the URL is already in the path (`https://r.jina.ai/<url>`)."
+                  },
+                  "preloadUrl": {
+                    "type": "string",
+                    "description": "URL to preload before scraping.\n\nIgnored when no URL is provided."
+                  },
+                  "noServiceWorker": {
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/Reader_PseudoBooleanLoose@0x0c"
+                      }
+                    ],
+                    "description": "Disable service workers when running the browser.\n\nUseful for bypassing service-worker-based caching or interception."
+                  },
+                  "html": {
+                    "type": "string",
+                    "description": "Raw HTML to convert, instead of fetching a URL. Used when no `url` is given."
+                  },
+                  "base": {
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/Reader_enum@0x0d"
+                      }
+                    ],
+                    "default": "final",
+                    "description": "Select base modes of relative URLs.\n\nSupported: initial, final"
+                  },
+                  "pdf": {
+                    "anyOf": [
+                      {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/Reader_FancyFile@0x0e"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "string"
+                      }
+                    ],
+                    "summary": "Base64 encoded PDF.",
+                    "description": "Base64 encoded PDF."
+                  },
+                  "file": {
+                    "anyOf": [
+                      {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/Reader_FancyFile@0x0e"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "string"
+                      }
+                    ],
+                    "summary": "Base64 encoded file.",
+                    "description": "Base64-encoded file (PDF, DOC, XLS, PPT, ...) to convert instead of a URL."
+                  },
+                  "page": {
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/Reader_PageSelection@0x0f"
+                      }
+                    ],
+                    "summary": "Steer which page(s) to return for document files. See PageSelection.",
+                    "description": "Steer which page(s) to return for document files. See PageSelection."
+                  },
+                  "respondWith": {
+                    "anyOf": [
+                      {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/Reader_enum@0x10"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "string"
+                      }
+                    ],
+                    "default": "content",
+                    "description": "Specifies the (non-default) form of the crawled data you prefer.\n\nSupported formats: \n- markdown\n- html\n- text\n- pageshot\n- screenshot\n- content\n- frontmatter\n- any combination of the above\n- vlm\n- jina-ocr-v1\n- jina-ocr\n- readerlm-v2\n\nDefault: content"
+                  },
+                  "withGeneratedAlt": {
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/Reader_PseudoBoolean@0x11"
+                      }
+                    ],
+                    "description": "Enable automatic alt-text generating for images without an meaningful alt-text.\n\nNote: Does not work when `X-Respond-With` is specified"
+                  },
+                  "retainImages": {
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/Reader_enum@0x12"
+                      }
+                    ],
+                    "default": "all",
+                    "description": "Image retention modes.\n\nSupported modes: \n- all: all images\n- none: no images\n- alt: only alt text\n- all_p: all images and with generated alt text\n- alt_p: only alt text and with generated alt"
+                  },
+                  "retainMedia": {
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/Reader_enum@0x13"
+                      }
+                    ],
+                    "default": "link",
+                    "description": "Media retention modes for video, audio, and embedded video iframes.\n\nSupported modes: \n- none: no media\n- text: plain label, e.g. `Video 1`\n- link: markdown link, e.g. `[Video 1](url)` (default)\n- image: markdown image syntax, e.g. `![Video 1](url)`\n- html: original HTML with irrelevant attributes (class, id, style, data-*, aria-*) stripped"
+                  },
+                  "preset": {
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/Reader_enum@0x14"
+                      }
+                    ],
+                    "description": "Apply a preset configuration for common scenarios.\n\nSupported presets:\n- reader: optimized for display to human users\n- index: optimized for semantic indexing\n- research: optimized for academic/research AI agents\n- agent: optimized for day-to-day AI agents\n- spider: optimized for recursive site crawling\n\nPreset values are applied only to options not explicitly set by the caller."
+                  },
+                  "retainLinks": {
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/Reader_enum@0x15"
+                      }
+                    ],
+                    "default": "all",
+                    "description": "Link retention modes.\n\nSupported modes: \n- all: all links\n- none: no links\n- text: only link text\n- gpt-oss: gpt-oss link citation format `【{id}†.*】`"
+                  },
+                  "withLinksSummary": {
+                    "anyOf": [
+                      {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/Reader_PseudoBoolean@0x11"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "string"
+                      }
+                    ],
+                    "description": "Enable dedicated summary section for hyper links on the page."
+                  },
+                  "withImagesSummary": {
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/Reader_PseudoBooleanLoose@0x0c"
+                      }
+                    ],
+                    "description": "Enable dedicated summary section for images on the page."
+                  },
+                  "noCache": {
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/Reader_PseudoBooleanLoose@0x0c"
+                      }
+                    ],
+                    "description": "Ignores internal cache if this header is specified with a value.\n\nEquivalent to X-Cache-Tolerance: 0"
+                  },
+                  "removeOverlay": {
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/Reader_PseudoBooleanLoose@0x0c"
+                      }
+                    ],
+                    "description": "Specify whether to remove overlay elements from the page."
+                  },
+                  "detachInvisibles": {
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/Reader_PseudoBooleanLoose@0x0c"
+                      }
+                    ],
+                    "description": "Temporarily detach elements with computed `display:none` before snapshotting, then restore them.\n\nRequires the browser engine and disables caching."
+                  },
+                  "noGfm": {
+                    "anyOf": [
+                      {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/Reader_PseudoBoolean@0x11"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "string"
+                      }
+                    ],
+                    "description": "Opt out of GitHub Flavored Markdown. `true` disables GFM; `table` drops only GFM tables and keeps the table HTML."
+                  },
+                  "cacheTolerance": {
+                    "type": "number",
+                    "description": "Sets internal cache tolerance in seconds if this header is specified with a integer."
+                  },
+                  "targetSelector": {
+                    "type": "string",
+                    "description": "Specifies a CSS selector for return target instead of the full html.\n\nImplies `X-Wait-For-Selector: (same selector)`"
+                  },
+                  "waitForSelector": {
+                    "type": "string",
+                    "description": "Specifies a CSS selector to wait for the appearance of such an element before returning.\n\nExample: `X-Wait-For-Selector: .content-block`"
+                  },
+                  "removeSelector": {
+                    "type": "string",
+                    "description": "Specifies a CSS selector to remove elements from the full html.\n\nExample `X-Remove-Selector: nav`"
+                  },
+                  "keepImgDataUrl": {
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/Reader_PseudoBooleanLoose@0x0c"
+                      }
+                    ],
+                    "description": "Keep data-url as it instead of transforming them to object-url. (Only applicable when targeting markdown format)\n\nExample `X-Keep-Img-Data-Url: true`"
+                  },
+                  "withIframe": {
+                    "anyOf": [
+                      {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/Reader_PseudoBoolean@0x11"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "string"
+                      }
+                    ],
+                    "description": "Enable filling iframe contents into main. (violates standards)"
+                  },
+                  "withShadowDom": {
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/Reader_PseudoBooleanLoose@0x0c"
+                      }
+                    ],
+                    "description": "Enable filling shadow dom contents into main. (violates standards)"
+                  },
+                  "skipCertVerification": {
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/Reader_PseudoBooleanLoose@0x0c"
+                      }
+                    ],
+                    "description": "Enable skipping SSL certificate verification. (violates security best practices)"
+                  },
+                  "webBotAuth": {
+                    "anyOf": [
+                      {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/Reader_PseudoBoolean@0x11"
+                          }
+                        ]
+                      },
+                      {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/Reader_enum@0x16"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "setCookies": {
+                    "anyOf": [
+                      {
+                        "description": "Can be any value - string, number, boolean, array or object.",
+                        "nullable": true
+                      },
+                      {
+                        "type": "string"
+                      }
+                    ],
+                    "description": "Cookies to send when fetching the URL, for pages that need a login. Requests with cookies are not cached."
+                  },
+                  "exportStorageState": {
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/Reader_PseudoBooleanLoose@0x0c"
+                      }
+                    ],
+                    "description": "Export the browser storage state (cookies and per-origin localStorage) accumulated during the crawl.\n\nWhen enabled, the JSON response includes a `storageState` field whose shape mirrors the `storageState` request option, so it can be fed back into a subsequent request.\n\nRequires the browser engine and disables caching."
+                  },
+                  "proxyUrl": {
+                    "type": "string",
+                    "description": "Specifies your custom proxy if you prefer to use one.\n\nSupported protocols: \n- http\n- https\n- socks4\n- socks5\n\nFor authentication, https://user:pass@host:port"
+                  },
+                  "proxyResources": {
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/Reader_PseudoBooleanLoose@0x0c"
+                      }
+                    ],
+                    "description": "Whether to load resources like image/style/scripts via the proxy server."
+                  },
+                  "proxy": {
+                    "type": "string",
+                    "description": "Use a proxy server provided by us.\n\nOptionally specify two-letter country code."
+                  },
+                  "userAgent": {
+                    "type": "string",
+                    "description": "Override User-Agent.\n\nSeveral special values: \n- browser: use the internal browser UA\n- auto: pass-through your UA if it starts with `Mozilla/5.0`, otherwise use the internal browser UA\n- inherit / pass-through: use the User-Agent from the request context if applicable\n- bot: Use a pre-defined bot User-Agent from this service\n- diversify: Use a diversified browser User-Agent\n\nOr specify your own user agent string.\n\nNote: anonymous users specifying a browser UA will have no effect and will fall back to the internal browser UA.\n\nDefault: browser"
+                  },
+                  "engine": {
+                    "anyOf": [
+                      {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/Reader_enum@0x1c"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "string"
+                      }
+                    ],
+                    "description": "Specify the engine to use for crawling.\n\nSupported: browser, direct, cf-browser-rendering"
+                  },
+                  "injectPageScript": {
+                    "type": "string",
+                    "description": "JavaScript to run in the page before extraction, inline or as a URL, e.g. to change the DOM."
+                  },
+                  "injectFrameScript": {
+                    "type": "string",
+                    "description": "Like `injectPageScript`, for frames."
+                  },
+                  "timeout": {
+                    "type": "number",
+                    "description": "- Some validators will be applied on value(s): (v) =&gt; v &gt; 0 &amp;&amp; v &lt;= 180"
+                  },
+                  "locale": {
+                    "type": "string",
+                    "description": "Specify browser locale for the page."
+                  },
+                  "referer": {
+                    "type": "string",
+                    "description": "Specify referer for the page."
+                  },
+                  "tokenBudget": {
+                    "type": "number",
+                    "description": "Specify a budget in tokens.\n\nIf the resulting token cost exceeds the budget, the request is rejected.\n\nNote this parameter is ignored for the search endpoint."
+                  },
+                  "assertStatusCode": {
+                    "type": "number",
+                    "description": "Assert the HTTP status code of the crawled page. If the actual status code does not match the asserted one, the request is rejected with 422 Unprocessable Entity."
+                  },
+                  "instruction": {
+                    "type": "string"
+                  },
+                  "jsonSchema": {
+                    "description": "Can be any value - string, number, boolean, array or object.",
+                    "nullable": true
+                  },
+                  "robotsTxt": {
+                    "anyOf": [
+                      {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/Reader_PseudoBoolean@0x11"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "string"
+                      }
+                    ],
+                    "description": "Load and conform to the respective robot.txt on the target origin.\n\nOptionally specify a bot UA to check against."
+                  },
+                  "zeroDataRetention": {
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/Reader_PseudoBooleanLoose@0x0c"
+                      }
+                    ]
+                  },
+                  "respondTiming": {
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/Reader_enum@0x26"
+                      }
+                    ],
+                    "description": "Explicitly specify the respond timing. One of the following:\n\n- html: directly return unrendered HTML\n- visible-content: return immediately when any content becomes available\n- mutation-idle: wait for DOM mutations to settle and remain unchanged for at least 0.2s\n- resource-idle: wait for no additional resources that would affect page logic and content has SUCCEEDED loading in 0.5s\n- media-idle: wait for no additional resources, including media resources, has SUCCEEDED loading in 0.5s\n- network-idle: wait for full load of webpage, also known as networkidle0."
+                  },
+                  "markdownChunking": {
+                    "anyOf": [
+                      {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/Reader_enum@0x27"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "string"
+                      }
+                    ],
+                    "description": "Opt-in markdown chunking.\n\nSupported values: \n- true\n- h1\n- h2\n- h3\n- h4\n- h5\n- structured\n- s1\n- s2\n- s3\n- s4\n- s5\n\nNote if you are expecting text return, the chunking is done by injecting character \\u001D"
+                  },
+                  "maxTokens": {
+                    "type": "number",
+                    "description": "- Some validators will be applied on value(s): (v) =&gt; v &gt;= 500"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "title": "ReaderEnvelopeWrappedFormattedPageDto",
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number",
+                      "summary": "Envelope code.\n\nMirror of HTTP status code",
+                      "description": "[REQUIRED]\n\nEnvelope code.\n\nMirror of HTTP status code",
+                      "default": 200
+                    },
+                    "status": {
+                      "type": "number",
+                      "summary": "Envelope status.\n\nIn extension to HTTP status code",
+                      "description": "[REQUIRED]\n\nEnvelope status.\n\nIn extension to HTTP status code",
+                      "default": 20000
+                    },
+                    "data": {
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/Reader_FormattedPageDto@0x43"
+                        }
+                      ],
+                      "summary": "The result payload you expect",
+                      "description": "The result payload you expect"
+                    },
+                    "meta": {
+                      "description": "The metadata that the payload sometimes came with",
+                      "nullable": true,
+                      "summary": "The metadata that the payload sometimes came with"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "status"
+                  ],
+                  "primitive": true
+                }
+              },
+              "text/event-stream": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Reader_OutputServerEventStream@0x44"
+                    }
+                  ]
+                }
+              }
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/Reader_ParamValidationError@0x29"
+                        }
+                      ]
+                    },
+                    {
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/Reader_DataStreamBrokenError@0x2a"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            },
+            "headers": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/Reader_AuthenticationFailedError@0x2b"
+                        }
+                      ]
+                    },
+                    {
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/Reader_AuthenticationRequiredError@0x2c"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            },
+            "headers": {}
+          },
+          "402": {
+            "description": "Payment Required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/Reader_TierFeatureConstraintError@0x2d"
+                        }
+                      ]
+                    },
+                    {
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/Reader_InsufficientBalanceError@0x2e"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            },
+            "headers": {}
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/Reader_OperationNotAllowedError@0x2f"
+                        }
+                      ]
+                    },
+                    {
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/Reader_AbuseAlleviationError@0x30"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            },
+            "headers": {}
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/Reader_ResourcePolicyDenyError@0x31"
+                        }
+                      ]
+                    },
+                    {
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/Reader_BudgetExceededError@0x32"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            },
+            "headers": {}
+          },
+          "413": {
+            "description": "Payload Too Large",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Reader_TargetFileTooLargeError@0x33"
+                    }
+                  ]
+                }
+              }
+            },
+            "headers": {}
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/Reader_SubmittedDataMalformedError@0x34"
+                        }
+                      ]
+                    },
+                    {
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/Reader_DownstreamServiceFailureError@0x35"
+                        }
+                      ]
+                    },
+                    {
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/Reader_AssertionFailureError@0x36"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            },
+            "headers": {}
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Reader_RateLimitTriggeredError@0x37"
+                    }
+                  ]
+                }
+              }
+            },
+            "headers": {}
+          },
+          "451": {
+            "description": "Unavailable For Legal Reasons",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Reader_HarmfulContentError@0x38"
+                    }
+                  ]
+                }
+              }
+            },
+            "headers": {}
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Reader_DownstreamServiceError@0x39"
+                    }
+                  ]
+                }
+              }
+            },
+            "headers": {}
+          },
+          "503": {
+            "description": "Service Unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Reader_ServiceNodeResourceDrainError@0x3a"
+                    }
+                  ]
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "summary": "readDedicatedEntrypoint",
+        "description": "Dedicated entrypoint for the read service.",
+        "operationId": "reader_post_read",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {}
+        ]
+      },
+      "servers": [
+        {
+          "url": "https://r.jina.ai"
+        }
+      ]
+    },
     "/ephemeral/{encodedFid}": {
       "get": {
         "tags": [
